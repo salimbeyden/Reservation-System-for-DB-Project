@@ -5,7 +5,7 @@ import yaml
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
-    with open("config.yaml", "r") as f:
+    with open("create_db/config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config
 

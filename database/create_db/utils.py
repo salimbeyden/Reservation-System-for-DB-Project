@@ -5,7 +5,7 @@ import yaml
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
-    with open("create_db/config.yaml", "r") as f:
+    with open("../database/create_db/config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config
 
@@ -61,3 +61,20 @@ def create_db():
     mycursor.execute("SHOW TABLES")
     for table in mycursor:
         print(f"- {table[0]}")
+
+
+def create_stable_tables():
+    config = read_config()
+
+    table_script = config["stabletables_path"]
+
+    # .sql dosyasından sorguyu oku
+    with open(table_script, "r") as tables_file:
+        sql_insert = tables_file.read()
+
+    # Sorguyu çalıştır
+    mycursor.execute(sql_insert)
+    mydb.commit()
+
+    print("Values inserted into 'sport' table successfully!")
+

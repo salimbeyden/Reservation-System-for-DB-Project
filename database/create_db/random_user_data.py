@@ -19,34 +19,34 @@ def get_random_faculty_department():
     
 
     if(faculty = "İnsaat Fakültesi"):
-        department = [1]
+        department = random.choice([])
     elif(faculty = "Mimarlik Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Makina Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Makina Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Elektrik-Elektronik Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Denizcilik Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Kimya-Metalurji Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "İşletme Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Ucak ve Uzay Bilimleri Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Tekstil Teknolojileri ve Tasarim Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Maden Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Gemi Insaati ve Deniz Bilimleri Fakültesi"):
-        department = []
+        department = random.choice([])
     elif(faculty = "Bilgisayar ve Bilisim Fakültesi"):
-        department = []
+        department = random.choice([])
     else:
         #fen edebiyat bölümleri
-        department = []
+        department = random.choice([])
     return faculty, department
 
 

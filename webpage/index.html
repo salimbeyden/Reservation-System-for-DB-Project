@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>University Sports Facilities</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header -->
+
+    <header>
+        <img src="img/itu250.svg" alt="Istanbul Technical University" id="itu_logo">
+        <nav>
+            <a href="#">Home</a>
+            <span class="separator"></span>
+            <a href="#">Statistics</a>
+            <span class="separator"></span>
+            <a href="#">Campuses</a>
+            <div id="loginSection">
+                <!-- Dynamic content based on login state -->
+                <a href="./account/login.html">Login<i class="fa-solid fa-user"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Slideshow -->
+
+    <div id="slideshow">
+        <div id="slideshow-wrapper">
+            <div id="slideshow-box">
+                <div id="slideshow-text"></div>
+                <div id="slideshow-links">
+                    <button id="more-info"><i class="fa-solid fa-circle-info"></i>&nbsp;&nbsp;More Information</button>
+                    <button id="reservation">Make Reservation</button>
+                </div>
+            </div>
+            <div id="slideshow-box"><img id="slideshow-image"></div>
+        </div>
+        <div id="slideshow-buttons">
+            <button id="prev"><i class="fa-solid fa-caret-left"></i></button>
+            <button id="reservation">Make Reservation</button>
+            <button id="next"><i class="fa-solid fa-caret-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Script Files -->
+    <script src="script/slider.js"></script>
+</body>
+</html>

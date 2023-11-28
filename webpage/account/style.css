@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,600&display=swap');
+
+body {
+    font-family: "Open Sans", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("./../img/login-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.form-container {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 300px;
+}
+
+.form-container input {
+    width: 100%;
+    max-width: 260px;
+    padding: 15px;
+    margin: 10px 0px;
+    border: 0px solid #ddd;
+    background-color: #f7f7f7;
+    transition: background-color 0.3s;
+}
+
+.form-container input:hover,
+.form-container input:focus {
+    background-color: #f0f0f0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+    outline: none;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    background-color: #051626;
+    color: white;
+    flex: 1;
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+    background-color: #0a2c4d;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}

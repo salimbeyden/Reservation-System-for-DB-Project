@@ -1,0 +1,9 @@
+{
+    "content": [
+        {"id": "ayazaga", "alt": "Ayazağa", "sports": ["basketball", "volleyball", "tennis"]},
+        {"id": "gumussuyu", "alt": "Gümüşsuyu", "sports": ["volleyball", "tennis"]},
+        {"id": "macka", "alt": "Maçka", "sports": ["basketball", "football", "volleyball"]},
+        {"id": "taskisla", "alt": "Taksim", "sports": ["basketball", "football", "tennis"]},
+        {"id": "tuzla", "alt": "Tuzla", "sports": ["basketball", "football"]}
+    ]
+}

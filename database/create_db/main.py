@@ -1,5 +1,3 @@
-from utils import create_db, create_stable_tables
+from utils import create_db
 
 create_db()
-
-create_stable_tables()

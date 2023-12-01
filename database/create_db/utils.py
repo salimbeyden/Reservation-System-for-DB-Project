@@ -5,7 +5,7 @@ import yaml
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
-    with open("../database/create_db/config.yaml", "r") as f:
+    with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config
 
@@ -26,6 +26,7 @@ def create_db():
 
     db_script = config["sqldb_path"] # path to sql commands that creates 'reservation' database
     table_script = config["sqltables_path"] # path to sql commands that creates tables for our database
+    stabletables_script = config["stabletables_path"]
 
     mycursor = mydb.cursor()
 
@@ -52,7 +53,6 @@ def create_db():
     for table_command in tables_commands: # block to create each tables
         if table_command.strip():
             mycursor.execute(table_command)
-    mydb.commit()
     print("Tables are created successfully!")
 
     # print tables to the screen
@@ -63,17 +63,14 @@ def create_db():
         print(f"- {table[0]}")
 
 
-def create_stable_tables():
-    config = read_config()
-
-    table_script = config["stabletables_path"]
-
     # .sql dosyasından sorguyu oku
-    with open(table_script, "r") as tables_file:
-        sql_insert = tables_file.read()
+    with open(stabletables_script, "r") as tables_file:
+        sql_insert = tables_file.read().split(";")
 
     # Sorguyu çalıştır
-    mycursor.execute(sql_insert)
+    for table_command in sql_insert: # block to create each tables
+        if table_command.strip():
+            mycursor.execute(table_command)
     mydb.commit()
 
     print("Values inserted into 'sport' table successfully!")

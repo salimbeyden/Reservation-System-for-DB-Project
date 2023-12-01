@@ -49,8 +49,8 @@ CREATE TABLE facility (
     facility_id INT PRIMARY KEY,
     `name` VARCHAR(30),
     campus_id INT,
-    tel_no CHAR(10),
-    email VARCHAR(50) CHECK (email IS NOT NULL AND email LIKE '%@%.%'),
+    tel_no VARCHAR(30),
+    email VARCHAR(50) CHECK (email IS NOT NULL),
     `address` VARCHAR(255),
     FOREIGN KEY (campus_id) REFERENCES campus (campus_id)
 );

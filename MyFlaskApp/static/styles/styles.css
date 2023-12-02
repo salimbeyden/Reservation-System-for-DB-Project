@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600&display=swap');
+
+html, body, header {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-weight: 300;
+    background-color: #f7f7f7;
+}
+
+/* Header */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #051626;
+    padding: 10px;
+}
+
+#itu_logo {
+    height: 50px;
+    margin: 2vh;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: center;
+    text-align: center;
+    font-weight: 500;
+}
+
+nav a {
+    margin: 0px 10px 0px 10px;
+    background-color: #051626;
+    border-style: none;
+    text-transform: uppercase;
+    color: #e5e2df;
+    text-decoration: none;
+    padding: 20px;
+    display: inline-block;
+    transition: color 0.3s;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    color: #051626;
+    background-color: #8c734b;
+}
+
+.separator {
+    height: 20px;
+    width: 1px;
+    background-color: #8c734b;
+    display: inline-block;
+}
+
+#loginSection {
+    margin-left: auto;
+}
+
+#loginSection a {
+    display: inline-flex;
+    align-items: center;
+}
+
+#loginSection a i {
+    margin-left: 15px;
+}
+
+/* Slideshow */
+
+#slideshow {
+    width: 100%;
+    overflow: hidden;
+}
+
+#slideshow-wrapper {
+    padding: 30px;
+    display: flex;
+    background-color: #f7f7f7;
+    position: relative;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 72vh;
+}
+
+#slideshow-box {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    flex-grow: 1;
+}
+
+#slideshow-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#slideshow-text {
+    color: black;
+    padding: 20px;
+    text-align: left;
+    margin: 10px;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+#slideshow-text h1 {
+    color: #051626;
+    font-size: 36px;
+    font-weight: 600;
+}
+
+#slideshow-text h2 {
+    color: #051626;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+#slideshow-text h3 {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+#slideshow-text m2 {
+    font-weight: 500;
+    color: #009944;
+}
+
+#slideshow-text f1 {
+    font-weight: 500;
+    color: #7c7358;
+}
+
+#slideshow-text tf1 {
+    font-weight: 500;
+    color: #68bcb0;
+}
+
+#slideshow-text li {
+    list-style-type: square;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+
+#slideshow-text li::marker {
+    color: #051626;
+}
+
+#slideshow-links {
+    margin-top: auto;
+    bottom: 0px;
+    max-height: 40px;
+    width: 100%;
+    padding: 40px;
+}
+
+#slideshow-links button {
+    font-size: 14px;
+    background-color: #f7f7f7;
+    border-style: solid;
+    border-color: #051626;
+    color: #051626;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+#slideshow-links button:hover {
+    background-color: #e5e5e5;
+}
+
+#slideshow-buttons {
+    width: 100%;
+    text-align: center;
+}
+
+#slideshow-buttons button {
+    font-size: 14px;
+    background-color: #051626;
+    border-style: none;
+    color: #e5e2df;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+#slideshow-buttons button:hover {
+    background-color: #0a2c4d;
+}

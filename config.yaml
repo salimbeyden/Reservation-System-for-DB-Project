@@ -1,0 +1,7 @@
+host: localhost
+user: root
+passwd:  # change this with your own password
+
+sqldb_path : database/commands/create_database.sql
+sqltables_path: database/commands/create_tables.sql
+stabletables_path: database/commands/stable_tables.sql

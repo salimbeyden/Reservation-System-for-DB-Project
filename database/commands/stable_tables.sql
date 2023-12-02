@@ -4,7 +4,7 @@ VALUES
 (2,'Voleybol', True, 2, 6), 
 (3,'Basketbol', True, 1, 5),
 (4,'Tenis', True, 1, 2),
-(5,'Yüzme', False, 1, 1),
+(5,'Yuzme', False, 1, 1),
 (6,'Gym', False, 1, 1),
 (7,'Ping-Pong', True, 2, 2);
 
@@ -12,51 +12,53 @@ VALUES
 
 INSERT INTO campus (campus_id, name, address, image_id)
 VALUES
-(1, 'Ayazağa', 'Maslak-İSTANBUL', 1),
-(2, 'Taşkişla', 'Taksim-İSTANBUL', 2),
-(3, 'Gümüşsuyu', 'Gümüşsuyu-İSTANBUL', 3),
-(4, 'Maçka', 'Maçka-İSTANBUL', 4),
-(5, 'Tuzla', 'Tuzla-İSTANBUL', 5),
-(6, 'İTÜ KKTC', 'Gazimağusa - KKTC', 6);
+(1, 'Ayazaga', 'Maslak-ISTANBUL', 1),
+(2, 'Taskisla', 'Taksim-ISTANBUL', 2),
+(3, 'Gumussuyu', 'Gumussuyu-ISTANBUL', 3),
+(4, 'Macka', 'Macka-ISTANBUL', 4),
+(5, 'Tuzla', 'Tuzla-ISTANBUL', 5),
+(6, 'ITU KKTC', 'Gazimagusa - KKTC', 6);
 
 
 
 INSERT INTO facility (facility_id, name, campus_id, tel_no, email, address)
 VALUES
-(1, 'Açik Spor Alanlari', 1, '-', '-', 'Maslak/İSTANBUL'),
-(2, 'Merkez Spor Salonu', 1, '-', '-', 'Maslak/İSTANBUL'),
-(3, 'Gümüşsuyu Spor Salonu', 3, '-', '-', 'Gümüşsuyu'),
-(4, 'Vadi Yurtlari Spor Salonu', 1, '-', '-', 'Maslak/İSTANBUL'),
-(5, 'Olimpik Yüzme Havuzu', 1, '+90 (212) 285 71 18', '-', 'Maslak/İSTANBUL'),
-(6, 'İTÜ Stadyumu', 1, '-', '-', 'Ayazağa'),
-(7, 'Gümüşsuyu Hali Saha', 3, '+90 (212) 285 39 51', '-', 'Gümüşsuyu'),
-(8, 'Ayazağa Hali Saha', 1, '-', '-', 'Maslak/İSTANBUL'),
-(9, 'Sağlikli Yaşam Merkezi', 1, '-', '-', 'Maslak/İSTANBUL'),
-(10, 'Tenis Kortlari', 1, '-', '-', 'Maslak/İSTANBUL');
+(1, 'Acik Spor Alanlari'        , 1, '+90 (212) 122 12 17', 'ayazagaacik@itu.edu.tr', 'Maslak/ISTANBUL'),
+(2, 'Merkez Spor Salonu'        , 2, '+90 (212) 154 56 22', 'taskislamerkez@itu.edu.tr', 'Taskisla'),
+(3, 'Gumussuyu Spor Salonu'     , 3, '+90 (212) 186 71 55', 'gumussuyuspor@itu.edu.tr', 'Gumussuyu'),
+(4, 'Vadi Yurtlari Spor Salonu' , 1, '+90 (212) 501 13 54', 'vadispor@itu.edu.tr', 'Maslak/ISTANBUL'),
+(5, 'Olimpik Yuzme Havuzu'      , 1, '+90 (212) 622 87 23', 'ayazagaolimpik@itu.edu.tr', 'Maslak/ISTANBUL'),
+(6, 'ITU Stadyumu'              , 1, '+90 (212) 743 65 57', 'ayazagastadium@itu.edu.tr', 'Ayazaga'),
+(7, 'Gumussuyu Hali Saha'       , 3, '+90 (212) 951 49 57', 'gumussuyuhalisaha@itu.edu.tr', 'Gumussuyu'),
+(8, 'Ayazaga Hali Saha'         , 1, '+90 (212) 224 57 35', 'ayazagahalisaha@itu.edu.tr', 'Maslak/ISTANBUL'),
+(9, 'Saglikli Yasam Merkezi'    , 4, '+90 (212) 366 19 64', 'mackasaglikliyasam@itu.edu.tr', 'Besiktas/ISTANBUL'),
+(10, 'Tenis Kortlari'           , 5, '+90 (212) 475 27 49', 'tuzlatenis@itu.edu.tr', 'Tuzla/ISTANBUL'),
+(11, 'Olimpik Yuzme Havuzu'     , 6, '+90 (212) 522 26 54', 'kktcolimpik@itu.edu.tr', 'KKTC');
 
 
 INSERT INTO facility_for_sport (fac_per_spor_id, facility_id, sport_id, capacity, current)
 VALUES
-(1, 1, 3, 20, 14),
-(2, 1, 2, 12, 4),
-(3, 1, 1, 22, 16),
-(4, 1, 4, 2, 1),
-(5, 2, 3, 20, 14),
-(6, 2, 2, 12, 4),
-(7, 2, 1, 22, 16),
-(8, 2, 7, 8, 4),
-(9, 3, 3, 20, 14),
-(10, 3, 2, 12, 4),
-(11, 3, 1, 22, 16),
-(12, 4, 3, 20, 14),
-(13, 4, 2, 12, 4),
-(14, 4, 1, 22, 16),
-(15, 5, 5, 20, 7),
-(16, 6, 1, 44, 22),
-(17, 7, 1, 22, 11),
-(18, 8, 1, 22, 11),
-(19, 9, 6, 50, 27),
-(20, 10, 4, 8, 6);
+(1, 1, 3, 20, 0),
+(2, 1, 2, 12, 0),
+(3, 1, 1, 22, 0),
+(4, 1, 4, 2, 0),
+(5, 2, 3, 20, 0),
+(6, 2, 2, 12, 0),
+(7, 2, 1, 22, 0),
+(8, 2, 7, 8, 0),
+(9, 3, 3, 20, 0),
+(10, 3, 2, 12, 0),
+(11, 3, 1, 22, 0),
+(12, 4, 3, 20, 0),
+(13, 4, 2, 12, 0),
+(14, 4, 1, 22, 0),
+(15, 5, 5, 20, 0),
+(16, 6, 1, 44, 0),
+(17, 7, 1, 22, 0),
+(18, 8, 1, 22, 0),
+(19, 9, 6, 50, 0),
+(20, 10, 4, 8, 0),
+(21, 11, 5, 20, 0);
 
 
 

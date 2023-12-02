@@ -28,13 +28,13 @@ CREATE TABLE sport (
 
 CREATE TABLE team (
     team_id INT PRIMARY KEY,
-    `name` VARCHAR(20),
-    captaid_id INT,
+    `name` VARCHAR(40),
+    captain_id INT,
     team_score INT,
     foundation_date DATE,
     password_hash VARCHAR(100),
     sport_id INT,
-    FOREIGN KEY (captaid_id) REFERENCES user (school_id),
+    FOREIGN KEY (captain_id) REFERENCES user (school_id),
     FOREIGN KEY (sport_id) REFERENCES sport (sport_id)
 );
 

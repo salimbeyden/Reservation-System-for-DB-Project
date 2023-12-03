@@ -1,13 +1,14 @@
 import numpy as np
 import random
 from faker import Faker
+from datetime import date as d, timedelta
 import yaml
 
 
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
-    with open("C:\\Users\\90543\\Desktop\\ITU\\ITU Fall 2024\\BLG317E-Database Systems\\Project\\DatabaseSystems_Project\\config.yaml", "r") as f:
+    with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config
 
@@ -16,7 +17,7 @@ def create_db(cursor, config):
     
     db_script = config["sqldb_path"] # path to sql commands that creates 'reservation' database
     table_script = config["sqltables_path"] # path to sql commands that creates tables for our database
-
+    db = config["database"]
 
     with open(db_script, "r") as db_file: # reads .sql scripts
         db_command = db_file.read().split(";")
@@ -33,9 +34,9 @@ def create_db(cursor, config):
     print("Tables created successfully!")
 
     # print tables to the screen
-    cursor.execute("USE RESERVATIONS")
+    cursor.execute(f"use {db}")
     print("Tables:")
-    cursor.execute("SHOW TABLES")
+    cursor.execute("show tables")
     for table in cursor:
         print(f"- {table[0]}")
 
@@ -102,8 +103,7 @@ def generate_team_table(cursor, team_count):
 
     team_id = 0
     for sport in sports:
-
-        query = "select school_id from user where team_id_{} is null;".format(sport[3])
+        query = "select school_id from user where team_id_{} is null;".format(sport[3].removesuffix("_team"))
         cursor.execute(query)
         result = cursor.fetchall()
 
@@ -121,18 +121,17 @@ def generate_team_table(cursor, team_count):
             foundation_date = fake.date_of_birth(minimum_age=0, maximum_age=5).isoformat()
             password = fake.password()
 
-            query = f"""insert into team (team_id, name, captain_id, foundation_date, password_hash, sport_id) 
-            values ({team_id}, '{team_name}', '{users[curr_user]}', '{foundation_date}', '{password}', '{sport[0]}')"""
+            query = f"""insert into team (name, captain_id, team_score, foundation_date, password_hash, sport_id) 
+            values ('{team_name}', {users[curr_user]}, 0, '{foundation_date}', '{password}', {sport[0]})"""
 
             cursor.execute(query)
             for j in range(curr_user, curr_user + player_in_team):
-                query = "UPDATE user SET team_id_{} = {} WHERE school_id = {};".format(sport[3], team_id, users[j])
+                query = "UPDATE user SET team_id_{} = {} WHERE school_id = {};".format(sport[3].removesuffix("_team"), team_id, users[j])
                 cursor.execute(query)
 
             curr_user += player_in_team
 
     print("Values inserted into 'team' table successfully!")
-
 
 def generate_ind_reservation(cursor, reservation_count):
 
@@ -291,3 +290,125 @@ def generate_team_reservation(cursor, reservation_count):
         idx += 1
 
     print("Values inserted into 'reservation_team' table successfully!")
+
+def random_score(sport_type):
+    """
+        returns logical score for given sport and point that winner will get
+    """
+    match sport_type:
+        case "football":
+            return abs(round(np.random.normal(1.5, 1))), abs(round(np.random.normal(1.5, 1))), 3
+        case "basketball":
+            return abs(round(np.random.normal(50, 7))), abs(round(np.random.normal(50, 7))), 2
+        case "volleyball":
+            score1 = np.random.randint(0,3)
+            return score1, 3 - score1, 3
+        case "tennis":
+            score1 = np.random.randint(0,3)
+            return score1, 3 - score1, 1
+        case "pingpong":
+            score1 = np.random.randint(0,3)
+            return score1, 3 - score1, 1
+        
+def random_date(foundation_date):
+    """
+        retrurns random date between today and given date
+    """
+    time_diff = d.today() - foundation_date
+    return foundation_date + timedelta(np.random.randint(0, time_diff.days))
+
+def generate_team_match_history(cursor, hist_count):
+
+    query = """select sport_id, sport_type from sport
+                where is_competitive = 1 and capacity_max > 1;"""
+    cursor.execute(query)
+
+    sport_ids = cursor.fetchall()
+
+    for sport in sport_ids:
+        query = f"""select team_id, foundation_date from team 
+                    where sport_id = {sport[0]};"""
+        cursor.execute(query)
+
+        team_ids = np.array(cursor.fetchall())
+        
+        num_of_teams = len(team_ids)
+        
+        query = f"""select facility_id from facility_for_sport
+                        where sport_id = {sport[0]};"""
+        cursor.execute(query)
+
+        facilities = [i[0] for i in cursor.fetchall()]
+
+        for i in range(hist_count):
+            team1 ,team2 = team_ids[np.random.choice(num_of_teams, 2, replace=False)]
+            score1, score2, point = random_score(sport[1].removesuffix("_team"))
+            facility_id = np.random.choice(facilities) # facility_for_sporta göre
+            
+            query = f"""select campus_id from facility
+                        where facility_id = {facility_id};"""
+            cursor.execute(query)
+            campus_id = cursor.fetchall()[0][0]
+
+            date = random_date(max(team1[1], team2[1]))
+
+            query = f"""insert into team_match_history (date, team_1, team_2, score_1, score_2, campus_id, facility_id, sport_id)
+                        values ('{date}', {team1[0]}, {team2[0]}, {score1}, {score2}, {campus_id}, {facility_id}, {sport[0]})"""
+            cursor.execute(query)
+
+            query = """update team set team_score = team_score + {}
+                     where team_id = {};"""
+            
+            if score1 > score2:
+                cursor.execute(query.format(point, team1[0]))
+            elif score2 > score1:
+                cursor.execute(query.format(point, team2[0]))
+            else:
+                cursor.execute(query.format(1, team1[0]))
+                cursor.execute(query.format(1, team2[0]))
+
+
+    print("Values inserted into 'team_match_history' table successfully!")
+
+
+
+def generate_individuals_match_history(cursor, hist_count):
+
+    query = """select sport_id, sport_type from sport
+                where is_competitive = 1 and capacity_max = 1;"""
+    cursor.execute(query)
+
+    sport_ids = cursor.fetchall()
+
+    for sport in sport_ids:
+        query = f"""select school_id from user;"""
+        cursor.execute(query)
+
+        user_ids = np.array(cursor.fetchall())
+        
+        num_of_users = len(user_ids)
+        
+        query = f"""select facility_id from facility_for_sport
+                        where sport_id = {sport[0]};"""
+        cursor.execute(query)
+
+        facilities = [i[0] for i in cursor.fetchall()]
+
+        for i in range(hist_count):
+            user1 ,user2 = user_ids[np.random.choice(num_of_users, 2, replace=False)]
+            score1, score2, point = random_score(sport[1].removesuffix("_ind"))
+            facility_id = np.random.choice(facilities) # facility_for_sporta göre
+            
+            query = f"""select campus_id from facility
+                        where facility_id = {facility_id};"""
+            cursor.execute(query)
+            campus_id = cursor.fetchall()[0][0]
+
+            date = d.today() - timedelta(np.random.randint(0,730)) # in 2 years
+
+            query = f"""insert into individuals_match_history (date, user_1, user_2, score_1, score_2, campus_id, facility_id, sport_id)
+                        values ('{date}', {user1[0]}, {user2[0]}, {score1}, {score2}, {campus_id}, {facility_id}, {sport[0]});"""
+            cursor.execute(query)
+
+    print("Values inserted into 'individuals_match_history' table successfully!")
+

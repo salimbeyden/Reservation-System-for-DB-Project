@@ -27,7 +27,7 @@ CREATE TABLE sport (
 );
 
 CREATE TABLE team (
-    team_id INT PRIMARY KEY,
+    team_id INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(40),
     captain_id INT,
     team_score INT,
@@ -65,8 +65,8 @@ CREATE TABLE facility_for_sport	(
     FOREIGN KEY (sport_id) REFERENCES sport (sport_id)
 );
 
-CREATE TABLE match_history_team (
-    match_id INT PRIMARY KEY,
+CREATE TABLE team_match_history (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
     `date` DATE,
     team_1 INT,
     team_2 INT,
@@ -82,8 +82,8 @@ CREATE TABLE match_history_team (
     FOREIGN KEY (sport_id) REFERENCES sport (sport_id)
 );
 
-CREATE TABLE match_history_individual (
-    match_id INT PRIMARY KEY,
+CREATE TABLE individuals_match_history (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
     `date` DATE,
     user_1 INT,
     user_2 INT,
@@ -100,7 +100,7 @@ CREATE TABLE match_history_individual (
 );
 
 CREATE TABLE reservation_team (
-    reservation_id INT PRIMARY KEY,
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     sport_id INT,
     campus_id INT,
     facility_id INT,
@@ -115,7 +115,7 @@ CREATE TABLE reservation_team (
 );
 
 CREATE TABLE reservation_individual (
-    reservation_id INT PRIMARY KEY,
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     sport_id INT,
     campus_id INT,
     facility_id INT,
@@ -128,7 +128,7 @@ CREATE TABLE reservation_individual (
 );
 
 CREATE TABLE reservation_individual_match (
-    reservation_id INT PRIMARY KEY,
+    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     sport_id INT,
     campus_id INT,
     facility_id INT,

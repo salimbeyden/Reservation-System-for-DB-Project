@@ -42,6 +42,6 @@ generate_team_table(cursor, c.TEAM_COUNT)
 
 generate_team_match_history(cursor, c.TEAM_MATCH_COUNT)
 
-generate_individuals_match_history(cursor, c.TEAM_MATCH_COUNT)
+generate_individuals_match_history(cursor, c.IND_MATCH_COUNT)
 
 mydb.commit()

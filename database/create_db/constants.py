@@ -1,3 +1,13 @@
+USER_COUNT = 500
+
+TEAM_COUNT = 15
+
+RESERVATION_COUNT = 30
+
+TEAM_MATCH_COUNT = 20
+
+IND_MATCH_COUNT = 50
+
 FACULTY = ["Faculty of Civil Engineering", "Faculty of Architecture", "Faculty of Mechanical Engineering", "Faculty of Electrical and Electronics Engineering", "Faculty of Maritime", "Faculty of Chemistry and Metallurgy",
 "Faculty of Business Administration", "Faculty of Aerospace Engineering", "Faculty of Textile Technologies and Design", "Faculty of Mining",
 "Faculty of Shipbuilding and Marine Sciences", "Faculty of Computer and Informatics", "Faculty of Arts and Sciences"]
@@ -17,11 +27,3 @@ MAJOR_DICT = {
     "Faculty of Textile Technologies and Design": ["Textile Engineering"],
     "Faculty of Computer and Informatics": ["Computer Engineering", "Artificial Intelligence and Data Engineering"]
 }
-
-USER_COUNT = 500
-
-TEAM_COUNT = 15
-
-RESERVATION_COUNT = 30
-
-TEAM_MATCH_COUNT = 20

@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from faker import Faker
-from datetime import date as d, timedelta
+from datetime import date as d, timedelta, datetime
 import yaml
 
 
@@ -41,7 +41,6 @@ def create_db(cursor, config):
         print(f"- {table[0]}")
 
     print()
-
 
 
 def stable_tables(cursor, stables_path):
@@ -133,6 +132,16 @@ def generate_team_table(cursor, team_count):
 
     print("Values inserted into 'team' table successfully!")
 
+def random_date_in_next_month():
+    """
+    Returns a random date within the next one month from today.
+    """
+    today = datetime.now()
+    one_month_later = today + timedelta(days=30)
+    random_days = np.random.randint(0, 30)
+
+    return today + timedelta(days=random_days)
+
 def generate_ind_reservation(cursor, reservation_count):
 
     #faker to create date
@@ -157,7 +166,7 @@ def generate_ind_reservation(cursor, reservation_count):
     facility_ids = [row[0] for row in result_facility]
 
     #get user_id's from user table
-    query_user = "select user_id from user"
+    query_user = "select school_id from user"
     cursor.execute(query_user)
     result_user = cursor.fetchall()
     user_ids = [row[0] for row in result_user]
@@ -173,12 +182,14 @@ def generate_ind_reservation(cursor, reservation_count):
     idx = 0
     for i in range(reservation_count):
         reservation_id += 1
-        
+    
         #generate random date
-        date = fake.date()
+        date = random_date_in_next_month()
 
         query = f"""insert into reservation_individual (reservation_id, sport_id, campus_id, facility_id, date, user)
-        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, {date}, {users[idx]})"""
+        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, '{date}', {users[idx]})"""
+
+        cursor.execute(query)
 
         #increase index one
         idx += 1
@@ -209,7 +220,7 @@ def generate_ind_match_reservation(cursor, reservation_count):
     facility_ids = [row[0] for row in result_facility]
 
     #get user_id's from user table
-    query_user = "select user_id from user"
+    query_user = "select school_id from user"
     cursor.execute(query_user)
     result_user = cursor.fetchall()
     user_ids = [row[0] for row in result_user]
@@ -225,18 +236,20 @@ def generate_ind_match_reservation(cursor, reservation_count):
         reservation_id += 1
         
         #generate random date
-        date = fake.date()
+        date = random_date_in_next_month()
         
         #get two different users
         users = np.random.choice(user_ids, 2, replace=False)
 
-        query = f"""insert into reservation_individual (reservation_id, sport_id, campus_id, facility_id, date, user_1, user_2)
-        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, {date}, {users[0]} , {users[1]})"""
+        query = f"""insert into reservation_individual_match (reservation_id, sport_id, campus_id, facility_id, date, user_1, user_2)
+        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, '{date}', {users[0]} , {users[1]})"""
+
+        cursor.execute(query)
 
         #increase index one
         idx += 1
     
-    print("Values inserted into 'reservation_ind_match' table successfully!")
+    print("Values inserted into 'reservation_individual_match' table successfully!")
 
 def generate_team_reservation(cursor, reservation_count):
 
@@ -278,13 +291,15 @@ def generate_team_reservation(cursor, reservation_count):
         reservation_id += 1
         
         #generate random date
-        date = fake.date()
+        date = random_date_in_next_month()
 
         #get two different teams
         teams = np.random.choice(team_ids, 2, replace=False)
 
-        query = f"""insert into reservation_individual (reservation_id, sport_id, campus_id, facility_id, date, team_1, team_2)
-        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, {date}, {teams[0]}, {teams[1]})"""
+        query = f"""insert into reservation_team (reservation_id, sport_id, campus_id, facility_id, date, team_1, team_2)
+        values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, '{date}', {teams[0]}, {teams[1]})"""
+
+        cursor.execute(query)
 
         #increase index one
         idx += 1

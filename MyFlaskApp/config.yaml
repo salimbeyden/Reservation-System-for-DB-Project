@@ -1,0 +1,4 @@
+host: localhost
+user: root
+passwd: voltran1234 # change this with your own password
+database : reservations

@@ -8,6 +8,7 @@ import yaml
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
+    print("here")
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config

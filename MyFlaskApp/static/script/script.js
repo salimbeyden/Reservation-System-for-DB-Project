@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var loginForm = document.getElementById('login-form');
     var registerForm = document.getElementById('register-form');
 
-    document.getElementById('show-register').addEventListener('click', function() {
+ /*   document.getElementById('show-register').addEventListener('click', function() {
         loginForm.style.display = 'none';
         registerForm.style.display = 'block';
-    });
+    });*/
 
     document.getElementById('show-login').addEventListener('click', function() {
         registerForm.style.display = 'none';

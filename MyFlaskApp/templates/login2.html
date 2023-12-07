@@ -6,27 +6,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+        <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="form-container" id="login-form">
+        <i class="fa-solid fa-user"></i><h2>Login</h2>
         <form action="/login" method="POST" class="form-signin" style="color:white">
             <div class="msg">{{ msg }}</div>
             {{ form.hidden_tag() }}
             <br>
-            {{ form.email_address.label() }}
-            {{ form.email_address(class="form-control", placeholder="User Name") }}
+            {{ form.email_address(class="form-control", placeholder="Email") }}
 
-            {{ form.password.label() }}
             {{ form.password(class="form-control", placeholder="Password") }}
 
             <br>
 
             <div class="button-container">
+                {{ form.submit() }}
                 <button type="button" id="homepage-login"><i class="fa-solid fa-house"></i></button>
                 <button type="button" id="show-register">Register</button>
-                <button type="submit" id="login">Login</button>
+                <!--<button type="submit" id="login">Login</button>-->
             </div>
 
-            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-
+            <!--{{ form.submit(class="btn btn-lg btn-block btn-primary") }}-->
         </form>
     </div>
 

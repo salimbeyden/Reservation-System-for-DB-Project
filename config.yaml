@@ -1,8 +1,0 @@
-host: localhost
-user: root
-passwd: voltran1234 # change this with your own password
-database : reservations
-
-sqldb_path : database/commands/create_database.sql
-sqltables_path: database/commands/create_tables.sql
-stabletables_path: database/commands/stable_tables.sql

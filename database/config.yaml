@@ -1,0 +1,8 @@
+host: localhost
+user: root
+passwd:  # change this with your own password
+database : reservations
+
+sqldb_path : commands/create_database.sql
+sqltables_path: commands/create_tables.sql
+stabletables_path: commands/stable_tables.sql

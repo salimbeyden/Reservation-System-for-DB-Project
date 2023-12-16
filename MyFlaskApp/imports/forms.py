@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, IntegerField, StringField, PasswordField, SubmitField
+from wtforms import DateField, IntegerField, StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 
 
@@ -20,3 +20,24 @@ class RegisterForm(FlaskForm):
     department = StringField(label='Department:', validators=[Length(min=2, max=50), DataRequired()])
     gender = StringField(label='Gender:', validators=[Length(1), DataRequired()])
     submit = SubmitField(label='Register')
+
+class MatchHistFrom(FlaskForm):
+    sports = SelectField(label='Sport', choices=[], validators=[DataRequired()])
+    submit_button = SubmitField(label = 'See Results')
+    
+    def __init__(self, sports, placeholder, *args, **kwargs):
+        super(FlaskForm, self).__init__(*args, **kwargs)
+
+        sports = list(sports)
+
+        if placeholder == "*":
+            sports.insert(0, ("*", "All Sports"))
+        else:
+            placeholder = [tup for tup in sports if str(tup[0]) == placeholder][0]
+            sports.remove(placeholder)
+            sports.insert(0, placeholder)
+            sports.insert(1, ("*", "All Sports"))
+
+        self.sports.choices = sports
+
+    

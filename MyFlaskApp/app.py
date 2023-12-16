@@ -1,9 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, session, flash
-from MyFlaskApp.forms import LoginForm, RegisterForm
-from MyFlaskApp import mysql
-from MyFlaskApp import app
-from MyFlaskApp.models import User  # Import User from models.py
+from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_login import login_user, current_user
+
+from MyFlaskApp import app
+from MyFlaskApp import mysql
+
+from imports.forms import *
+from imports.utils import *
+from imports.models import User  # Import User from models.py
 
 # to view a personalized page with peralized http extension
 @app.route('/about/<username>')
@@ -47,4 +50,58 @@ def login_page():
     elif register_form.validate_on_submit():
         print()
 
-    return render_template('login2.html',login_form=login_form, register_form=register_form)
+    return render_template('login.html',login_form=login_form, register_form=register_form)
+
+@app.route('/matchhist/', methods = ["GET","POST"])
+@app.route('/matchhist/<selected_sport><data>', methods = ["GET","POST"])
+def match_hist(selected_sport = "*"):
+    cursor = mysql.connection.cursor()
+
+    cursor.execute('SELECT sport_id, sport_type FROM sport where is_competitive = 1')
+    sports = cursor.fetchall()
+
+    if request.method == 'POST':
+        selected_sport = request.form['sports']
+
+    match_hist_form = MatchHistFrom(sports, selected_sport)
+
+
+    if selected_sport == "*":
+        query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
+                   from team_match_history as hist
+                   join team as t1 on t1.team_id = hist.team_1
+                   join team as t2 on t2.team_id = hist.team_2
+                   join campus on campus.campus_id = hist.campus_id
+                   join facility on facility.facility_id = hist.facility_id;"""
+        is_ind = 0
+        
+    else:
+        cursor.execute('SELECT is_ind FROM sport where sport_id = {}'.format(selected_sport))
+        is_ind = cursor.fetchall()[0][0]
+
+        if is_ind == 0:
+            query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date 
+                    from team_match_history as hist
+                    join team as t1 on t1.team_id = hist.team_1
+                    join team as t2 on t2.team_id = hist.team_2
+                    join campus on campus.campus_id = hist.campus_id
+                    join facility on facility.facility_id = hist.facility_id
+                    where hist.sport_id = {};""".format(selected_sport)
+            
+        else:
+            query = """select u1.name, u1.surname, u2.name, u2.surname, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
+                       from individuals_match_history as hist
+                       join user as u1 on u1.school_id = hist.user_1
+                       join user as u2 on u2.school_id = hist.user_2
+                       join campus on campus.campus_id = hist.campus_id
+                       join facility on facility.facility_id = hist.facility_id
+                       where sport_id = {};""".format(selected_sport)
+            
+
+    cursor.execute(query)
+    table_data = cursor.fetchall()
+
+    table_data, title = manipulate_hist_data(table_data, is_ind)
+    
+    cursor.close()
+    return render_template('match_hist.html', match_hist_form=match_hist_form, selected_sport=selected_sport, table_data=table_data, title=title)

@@ -27,7 +27,7 @@ create_db(cursor, config)
 
 stable_tables(cursor, stables_path)
 
-query = "use reservations"
+query = f"use {db}"
 cursor.execute(query)
 
 generate_user_table(cursor ,c.FACULTY, c.MAJOR_DICT, c.USER_COUNT)

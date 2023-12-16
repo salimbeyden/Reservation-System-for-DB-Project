@@ -95,15 +95,15 @@ def generate_user_table(cursor, faculties, majors, user_count):
 def generate_team_table(cursor, team_count):
     fake = Faker()
 
-    query = "select sport_id, capacity_min, capacity_max, sport_type from sport where capacity_max > 1;"
+    query = "select sport_id, capacity_min, capacity_max, sport_type, is_ind from sport where is_ind = 0;"
     cursor.execute(query)
     result = cursor.fetchall()
 
-    sports = [[row[0], row[1], row[2], row[3]] for row in result]
+    sports = [[row[0], row[1], row[2], row[3].lower().split(" ")[0], row[4]] for row in result]
 
     team_id = 0
     for sport in sports:
-        query = "select school_id from user where team_id_{} is null;".format(sport[3].removesuffix("_team"))
+        query = "select school_id from user where team_id_{} is null;".format(sport[3])
         cursor.execute(query)
         result = cursor.fetchall()
 
@@ -126,7 +126,7 @@ def generate_team_table(cursor, team_count):
 
             cursor.execute(query)
             for j in range(curr_user, curr_user + player_in_team):
-                query = "UPDATE user SET team_id_{} = {} WHERE school_id = {};".format(sport[3].removesuffix("_team"), team_id, users[j])
+                query = "UPDATE user SET team_id_{} = {} WHERE school_id = {};".format(sport[3], team_id, users[j])
                 cursor.execute(query)
 
             curr_user += player_in_team
@@ -346,18 +346,18 @@ def random_score(sport_type):
     """
         returns logical score for given sport and point that winner will get
     """
-    match sport_type:
-        case "football":
+    match sport_type.split(" ")[0]:
+        case "Football":
             return abs(round(np.random.normal(1.5, 1))), abs(round(np.random.normal(1.5, 1))), 3
-        case "basketball":
+        case "Basketball":
             return abs(round(np.random.normal(50, 7))), abs(round(np.random.normal(50, 7))), 2
-        case "volleyball":
+        case "Volleyball":
             score1 = np.random.randint(0,3)
             return score1, 3 - score1, 3
-        case "tennis":
+        case "Tennis":
             score1 = np.random.randint(0,3)
             return score1, 3 - score1, 1
-        case "pingpong":
+        case "PingPong":
             score1 = np.random.randint(0,3)
             return score1, 3 - score1, 1
         
@@ -370,8 +370,8 @@ def random_date(foundation_date):
 
 def generate_team_match_history(cursor, hist_count):
 
-    query = """select sport_id, sport_type from sport
-                where is_competitive = 1 and capacity_max > 1;"""
+    query = """select sport_id, sport_type, is_ind from sport
+                where is_competitive = 1 and is_ind = 0;"""
     cursor.execute(query)
 
     sport_ids = cursor.fetchall()
@@ -393,7 +393,7 @@ def generate_team_match_history(cursor, hist_count):
 
         for i in range(hist_count):
             team1 ,team2 = team_ids[np.random.choice(num_of_teams, 2, replace=False)]
-            score1, score2, point = random_score(sport[1].removesuffix("_team"))
+            score1, score2, point = random_score(sport[1])
             facility_id = np.random.choice(facilities) # facility_for_sporta göre
             
             query = f"""select campus_id from facility
@@ -425,8 +425,8 @@ def generate_team_match_history(cursor, hist_count):
 
 def generate_individuals_match_history(cursor, hist_count):
 
-    query = """select sport_id, sport_type from sport
-                where is_competitive = 1 and capacity_max = 1;"""
+    query = """select sport_id, sport_type, is_ind from sport
+                where is_competitive = 1 and is_ind = 1;"""
     cursor.execute(query)
 
     sport_ids = cursor.fetchall()
@@ -447,7 +447,7 @@ def generate_individuals_match_history(cursor, hist_count):
 
         for i in range(hist_count):
             user1 ,user2 = user_ids[np.random.choice(num_of_users, 2, replace=False)]
-            score1, score2, point = random_score(sport[1].removesuffix("_ind"))
+            score1, score2, point = random_score(sport[1])
             facility_id = np.random.choice(facilities) # facility_for_sporta göre
             
             query = f"""select campus_id from facility

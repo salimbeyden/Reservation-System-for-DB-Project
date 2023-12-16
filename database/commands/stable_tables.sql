@@ -1,14 +1,14 @@
-INSERT INTO sport (sport_id, sport_type, is_competitive, capacity_min, capacity_max)
+INSERT INTO sport (sport_id, sport_type, is_competitive, capacity_min, capacity_max, is_ind)
 VALUES 
-(1,'football', True, 5, 11), 
-(2,'volleyball', True, 2, 6), 
-(3,'basketball', True, 3, 5),
-(4,'tennis_ind', True, 1, 1),
-(5,'tennis_team', True, 2, 2),
-(6,'swimming', False, 1, 1),
-(7,'Gym', False, 1, 1),
-(8,'pingpong_ind', True, 1, 1),
-(9,'pingpong_team', True, 2, 2);
+(1,'Football', True, 5, 11, 0), 
+(2,'Volleyball', True, 2, 6, 0), 
+(3,'Basketball', True, 3, 5, 0),
+(4,'Tennis Individuals', True, 1, 1, 1),
+(5,'Tennis Teams', True, 2, 2, 0),
+(6,'Swimming', False, 1, 1, 1),
+(7,'Gym', False, 1, 1, 1),
+(8,'PingPong Individuals', True, 1, 1, 1),
+(9,'PingPong Teams', True, 2, 2, 0);
 
 
 

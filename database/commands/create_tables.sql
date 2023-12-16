@@ -20,10 +20,11 @@ CREATE TABLE user (
 
 CREATE TABLE sport (
     sport_id INT PRIMARY KEY,
-    sport_type VARCHAR(15),
+    sport_type VARCHAR(20),
     is_competitive BOOLEAN,
     capacity_min TINYINT UNSIGNED,
-    capacity_max TINYINT UNSIGNED
+    capacity_max TINYINT UNSIGNED,
+    is_ind BOOLEAN
 );
 
 CREATE TABLE team (

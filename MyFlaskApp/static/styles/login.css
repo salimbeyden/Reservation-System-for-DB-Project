@@ -60,3 +60,9 @@ body {
     justify-content: space-between;
     margin-top: 10px;
 }
+
+.flash-messages {
+    color: red;
+    list-style-type: square;
+    text-align: left;
+} 

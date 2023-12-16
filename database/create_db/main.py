@@ -34,14 +34,14 @@ generate_user_table(cursor ,c.FACULTY, c.MAJOR_DICT, c.USER_COUNT)
 
 generate_team_table(cursor, c.TEAM_COUNT)
 
+generate_team_match_history(cursor, c.TEAM_MATCH_COUNT)
+
+generate_individuals_match_history(cursor, c.IND_MATCH_COUNT)
+
 generate_ind_reservation(cursor, c.RESERVATION_COUNT)
 
 generate_ind_match_reservation(cursor, c.RESERVATION_COUNT)
 
 generate_team_reservation(cursor, c.RESERVATION_COUNT)
-
-generate_team_match_history(cursor, c.TEAM_MATCH_COUNT)
-
-generate_individuals_match_history(cursor, c.IND_MATCH_COUNT)
 
 mydb.commit()

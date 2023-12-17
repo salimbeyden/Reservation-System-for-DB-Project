@@ -53,7 +53,7 @@ def login_page():
     return render_template('login.html',login_form=login_form, register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
-@app.route('/matchhist/<selected_sport><data>', methods = ["GET","POST"])
+@app.route('/matchhist/<selected_sport>', methods = ["GET","POST"])
 def match_hist(selected_sport = "*"):
     cursor = mysql.connection.cursor()
 
@@ -105,3 +105,44 @@ def match_hist(selected_sport = "*"):
     
     cursor.close()
     return render_template('match_hist.html', match_hist_form=match_hist_form, selected_sport=selected_sport, table_data=table_data, title=title)
+
+@app.route('/rank/', methods = ["GET","POST"])
+@app.route('/rank/<selected_sport><order_by>', methods = ["GET","POST"])
+def rank_page(selected_sport = "*", order_by = "score"):
+    print(selected_sport, order_by)
+    cursor = mysql.connection.cursor()
+
+    cursor.execute('SELECT sport_id, sport_type FROM sport where is_ind = 0')
+    sports = cursor.fetchall()
+
+    if request.method == 'POST':
+        print(request.form.keys())
+        selected_sport = request.form['sports']
+        order_by = request.form['order']
+    rank_form = RankFrom(sports, selected_sport, order_by)
+
+
+    if selected_sport == "*":
+        query = """select team.name, u.name, u.surname, s.sport_type, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
+                   join user as u on u.school_id = team.captain_id
+                   join team_match_history as hist1 on hist1.team_1 = team.team_id or hist1.team_2 = team.team_id
+                   join sport as s on s.sport_id = team.sport_id
+                   group by s.sport_type, team.name, u.name, u.surname, team.team_score, team.foundation_date
+                   order by {} desc;
+                """.format(order_by)
+        
+    else:
+        query = """select team.name, u.name, u.surname, s.sport_type, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
+                   join user as u on u.school_id = team.captain_id
+                   join team_match_history as hist1 on hist1.team_1 = team.team_id or hist1.team_2 = team.team_id
+                   join sport as s on s.sport_id = team.sport_id
+                   where s.sport_id = {}
+                   group by s.sport_type, team.name, u.name, u.surname, team.team_score, team.foundation_date
+                   order by {} desc;
+                """.format(selected_sport, order_by)
+    cursor.execute(query)
+    table_data = cursor.fetchall()
+    table_data, title = manipulate_rank_data(table_data)
+
+    cursor.close()
+    return render_template('ranking.html', selected_sport=selected_sport, rank_form=rank_form, table_data=table_data, title=title)

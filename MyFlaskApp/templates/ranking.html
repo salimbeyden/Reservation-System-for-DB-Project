@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rankings</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/ranking.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header -->
+
+    <header>
+        <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
+        <nav>
+            <a href="{{ url_for('home_page')}}">Home</a>
+            <span class="separator"></span>
+            <a href="{{ url_for('rank_page')}}">Statistics</a>
+            <span class="separator"></span>
+            <a href="#">Campuses</a>
+            <div id="loginSection">
+                <!-- Dynamic content based on login state -->
+                <!-- to link login.html page -->
+                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+            </div>
+        </nav>
+    </header>
+    <div class="ranking-title">
+
+    
+    <form class = form method="post" action="{{ url_for('rank_page', selected_sport = selected_sport) }}">
+        <div>
+            Select Sport: <br>
+            {{ rank_form.sports(class="sport-dropdown") }}
+        </div>
+        <div>
+            Order by: <br>
+            {{ rank_form.order(class="order-dropdown") }}
+        </div>
+        {{ rank_form.hidden_tag() }}
+        {{ rank_form.submit_button(class="submit-button") }}
+
+    </form>
+
+
+    {% if selected_sport %}
+    <table class = ranking-table>
+        <thead>
+            {% for column in title %}
+                <th> {{ column }}</th>
+            {% endfor %}
+                      
+        </thead>
+        <tbody>
+            {% for row in table_data %}
+                <tr>
+                    {% for cell in row %}
+                        <td class = text>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+</div>
+
+
+</html>

@@ -1,4 +1,4 @@
-    /* styles.css */
+/* styles.css */
 
 form {
     padding-top: 25px;
@@ -6,11 +6,25 @@ form {
     margin: 0 auto;
     padding: 20px;
     border-radius: 5px;
+    align-items: left;
 }
 
-    /* Style the sports dropdown */
-.sports-dropdown {
+
+
+.dropdown {
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+.sport-dropdown {
     width: 50%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.order-dropdown {
+    width: 25%;
     padding: 10px;
     margin-bottom: 15px;
     box-sizing: border-box;
@@ -30,18 +44,20 @@ form {
     transition: background-color 0.3s;
     font-weight: 600;
 }
-.hist-table{
+
+    
+.ranking-table{
     padding-top: 10px;
     padding-bottom: 15%;
 }
 
-div.hist-title {
+div.ranking-title {
     display: block;
     padding:50px;
     width: 50%;
 }
 
-.hist-title h3 {
+.ranking-title h3 {
     color: #fafafa;
     font-size: 30px;
     font-weight: 400;
@@ -52,7 +68,7 @@ div.hist-title {
 
     /*** Table Styles **/
 
-.hist-title {
+.ranking-title {
     border-radius:3px;
     height: 320px;
     margin: auto;

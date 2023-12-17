@@ -31,13 +31,47 @@ class MatchHistFrom(FlaskForm):
         sports = list(sports)
 
         if placeholder == "*":
-            sports.insert(0, ("*", "All Sports"))
+            sports.insert(0, ("*", "All Team Sports"))
         else:
             placeholder = [tup for tup in sports if str(tup[0]) == placeholder][0]
             sports.remove(placeholder)
             sports.insert(0, placeholder)
-            sports.insert(1, ("*", "All Sports"))
+            sports.insert(1, ("*", "All Team Sports"))
 
         self.sports.choices = sports
 
+
+
+class RankFrom(FlaskForm):
+    sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
+    order = SelectField(label='order', choices=[])
+    orders = [("score", "Total Score"),("count", "Total Maches"),("avrg", "Average score")]
+    submit_button = SubmitField(label = 'See Results')
+    
+    def __init__(self, sports, default_sport, default_ord, *args, **kwargs):
+        super(FlaskForm, self).__init__(*args, **kwargs)
+
+        sports = list(sports)
+
+        if default_sport == "*":
+            sports.insert(0, ("*", "All Team Sports"))
+        else:
+            default_sport = [tup for tup in sports if str(tup[0]) == default_sport][0]
+            sports.remove(default_sport)
+            sports.insert(0, default_sport)
+            sports.insert(1, ("*", "All Team Sports"))
+
+
+
+
+        o = self.orders.copy()
+        if default_ord != "score":
+            print(default_ord)
+            default_ord = [tup for tup in self.orders if tup[0] == default_ord][0]
+            o.remove(default_ord)
+            o.insert(0, default_ord)
+            self.order.choices=o
+
+        self.sports.choices = sports
+        self.order.choices = o
     

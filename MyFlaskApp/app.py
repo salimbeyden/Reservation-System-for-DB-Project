@@ -146,3 +146,9 @@ def rank_page(selected_sport = "*", order_by = "score"):
 
     cursor.close()
     return render_template('ranking.html', selected_sport=selected_sport, rank_form=rank_form, table_data=table_data, title=title)
+
+#RESERVATION PAGE(processing...)
+@app.route('/reservation/', methods = ["GET","POST"])
+@app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
+def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
+    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)

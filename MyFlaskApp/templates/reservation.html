@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Rankings</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/reservation.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header -->
+
+    <header>
+        <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
+        <nav>
+            <a href="{{ url_for('home_page')}}">Home</a>
+            <span class="separator"></span>
+            <a href="{{ url_for('rank_page')}}">Statistics</a>
+            <span class="separator"></span>
+            <a href="#">Campuses</a>
+            <div id="loginSection">
+                <!-- Dynamic content based on login state -->
+                <!-- to link login.html page -->
+                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+            </div>
+        </nav>
+    </header>
+
+
+
+    
+</body>
+</html>

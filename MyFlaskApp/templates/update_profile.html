@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/update_profile.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Profile Update</title>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
+        <nav>
+            <a href="{{ url_for('home_page')}}">Home</a>
+            <span class="separator"></span>
+            <a href="{{ url_for('rank_page')}}">Statistics</a>
+            <span class="separator"></span>
+            <a href="#">Campuses</a>
+            <div id="loginSection">
+                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="top">
+            <div class="user-img">
+                <img src="{{ url_for('static', filename='images/user_icon/userimg.jpg')}}" alt="user">
+                <div type="button">Upload Photo</div>
+            </div>
+            <form action="{{ url_for('update_profile') }}" method="POST" class="update-form">
+                <div class="user-info">
+                 
+                    <label for="department">Department:</label>
+                    <input type="text" id="department" name="department" placeholder="Your Department">
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Your Email">
+                </div>
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+        <div class="bottom">
+            <div class="teams"><h2>Teams</h2></div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+/* Add this to your existing CSS or create a new CSS file */
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  
+  .user-img {
+    position: relative;
+  }
+  
+  .user-info {
+    margin-left: 20px;
+  }
+  
+  .update-form {
+    width: 60%;
+    margin-top: 20px;
+  }
+  
+  .update-form label,
+  .update-form input {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .update-form input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Positioning the button to the bottom right */
+  button[type="submit"] {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  

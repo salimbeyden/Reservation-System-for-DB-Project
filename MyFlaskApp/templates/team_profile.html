@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Team Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/team_profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Team Profile</title>
 </head>
 <body>
-
-    <!-- Header -->
-
     <header>
         <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
         <nav>
@@ -26,5 +25,28 @@
         </nav>
     </header>
 
-    {{selected_team}}
-    <div class="hist-title">
+    <div class="container">
+        <div class="top">
+            <div class="team-info">
+                <h1>VOLTRAN</h1>
+                <p>BOSS</p>
+                <p>55p - 102 games</p>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="team-players"><h2>Team Players</h2></div>
+            <div class="prev-games">
+                <h2>Previous Games</h2>
+                <!-- Here can be a list of future reservations -->
+            </div>
+            <div class="others">
+                <div class="date-created"></div>
+                <div class="join-team">
+                    <button>Join Team</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

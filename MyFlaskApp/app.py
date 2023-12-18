@@ -148,7 +148,53 @@ def rank_page(selected_sport = "*", order_by = "score"):
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
 def team_profile(selected_team):
-    return render_template('team_profile.html', selected_team=selected_team)
+    cursor = mysql.connection.cursor()
+
+    query = """select team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, count(*) from team
+               join team_match_history as hist on team.team_id = hist.team_1 or team.team_id = hist.team_2
+               join user on user.school_id = team.captain_id
+               join sport on sport.sport_id = team.sport_id
+               where team_id = {}
+               group by team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score;
+            """.format(selected_team)
+    cursor.execute(query)
+
+    team_info = cursor.fetchall()
+
+    team_info = manipulate_team_info(team_info)
+
+
+
+
+
+    query = """select name, surname, school_id from user
+               where team_id_football = {team} or 
+               team_id_volleyball = {team} or 
+               team_id_basketball = {team} or 
+               team_id_tennis = {team} or 
+               team_id_pingpong = {team};
+            """.format(team=selected_team)
+    
+    cursor.execute(query)
+    players = [[row[0].capitalize() + " " + row[1].capitalize(), row[2]] for row in cursor.fetchall()]
+    
+
+
+    query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
+               join team as team1 on team1.team_id = hist.team_1
+               join team as team2 on team2.team_id = hist.team_2
+               where team_1 = 4 or team_2 = 4;
+            """.format(selected_team)
+
+            
+    cursor.execute(query)
+    match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
+    
+
+    
+    
+
+    return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
 
 
 @app.route('/profile/<selected_user>', methods = ["GET", "POST"])

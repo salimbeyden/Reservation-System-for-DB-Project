@@ -28,16 +28,23 @@
     <div class="container">
         <div class="top">
             <div class="team-info">
-                <h1>VOLTRAN</h1>
-                <p>BOSS</p>
+                <h1>{{ team['name'] }}</h1>
+                <p>{{ team["captain"] }}</p>
                 <p>55p - 102 games</p>
             </div>
         </div>
         <div class="bottom">
-            <div class="team-players"><h2>Team Players</h2></div>
+            <div class="team-players">
+                <h2>Team Players</h2>
+                {% for player in players %}
+                    {{ player[0] }} <br>
+                {% endfor %}
+            </div>
             <div class="prev-games">
                 <h2>Previous Games</h2>
-                <!-- Here can be a list of future reservations -->
+                {% for match in match_hist %}
+                    {{ match[0]}} {{ match[1]}} {{ match[2]}} {{ match[3]  }} <br>
+                {% endfor %}
             </div>
             <div class="others">
                 <div class="date-created"></div>

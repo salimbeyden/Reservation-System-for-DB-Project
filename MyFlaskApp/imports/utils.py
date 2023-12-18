@@ -36,3 +36,19 @@ def manipulate_rank_data(data):
              for row in data] 
     
     return data, title
+
+def manipulate_team_info(data):
+    data = data[0]
+
+    team = dict()
+
+    team["name"] = data[0].title()
+    team["captain"] = data[1].capitalize() + " " + data[2].capitalize()
+    team["sport_type"] = data[3]
+    team["sport_id"] = data[4]
+    team["fuoundation_date"] = data[5]
+    team["team_score"] = data[6]
+    team["#_matches"] = data[7]
+    team["avrg"] = round(int(data[6]) / int(data[7]), 2)
+
+    return team

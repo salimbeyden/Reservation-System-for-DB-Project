@@ -53,16 +53,16 @@
         </thead>
         <tbody>
             {% for row in table_data %}
-            <tr>
-                {% for cell in row %}
-                    {% if loop.first %}
-                        <td><a href="{{ url_for('team_profile', selected_team = cell)}}">{{ cell }}</a></td>
-                    {% else %}
-                        <td class="text">{{ cell }}</td>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-                {% endfor %}
+                <tr>
+                    <td><a href="{{ url_for('team_profile', selected_team = row[1]) }}">{{ row[0] }}</a></td>
+                    <td><a href="{{ url_for('profile_page', selected_user = row[3]) }}">{{ row[2] }}</a></td>
+                    <td><a href="#">{{ row[4] }}</a></td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{ row[7] }}</td>
+                    <td>{{ row[8] }}</td>
+                    <td>{{ row[9] }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
         {% endif %}

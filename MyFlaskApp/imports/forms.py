@@ -66,7 +66,6 @@ class RankFrom(FlaskForm):
 
         o = self.orders.copy()
         if default_ord != "score":
-            print(default_ord)
             default_ord = [tup for tup in self.orders if tup[0] == default_ord][0]
             o.remove(default_ord)
             o.insert(0, default_ord)

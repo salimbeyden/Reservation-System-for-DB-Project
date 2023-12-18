@@ -19,9 +19,13 @@
             <span class="separator"></span>
             <a href="#">Campuses</a>
             <div id="loginSection">
-                <!-- Dynamic content based on login state -->
-                <!-- to link login.html page -->
-                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+                {% if current_user %}
+                    <!-- Display profile link if user is logged in -->
+                    <a href="{{ url_for('profile_page') }}">Profile: {{ current_user.name }}<i class="fa-solid fa-user"></i></a>
+                {% else %}
+                    <!-- Display login link if user is not logged in -->
+                    <a href="{{ url_for('login_page') }}">Login<i class="fa-solid fa-user"></i></a>
+                {% endif %}
             </div>
         </nav>
     </header>

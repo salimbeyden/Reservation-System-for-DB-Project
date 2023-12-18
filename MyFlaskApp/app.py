@@ -152,3 +152,7 @@ def rank_page(selected_sport = "*", order_by = "score"):
 @app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
 def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
     return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)
+
+# @app.route('/profile_page')
+# def profile_page():
+#     return render_template('profile.html')

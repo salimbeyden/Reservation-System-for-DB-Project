@@ -146,3 +146,11 @@ def rank_page(selected_sport = "*", order_by = "score"):
 
     cursor.close()
     return render_template('ranking.html', selected_sport=selected_sport, rank_form=rank_form, table_data=table_data, title=title)
+
+
+@app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
+def team_profile(selected_team = "*"):
+
+
+
+    return render_template('team_profile.html', selected_team=selected_team)

@@ -53,11 +53,15 @@
         </thead>
         <tbody>
             {% for row in table_data %}
-                <tr>
-                    {% for cell in row %}
-                        <td class = text>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
+            <tr>
+                {% for cell in row %}
+                    {% if loop.first %}
+                        <td><a href="{{ url_for('team_profile', selected_team = cell)}}">{{ cell }}</a></td>
+                    {% else %}
+                        <td class="text">{{ cell }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
                 {% endfor %}
             </tbody>
         </table>

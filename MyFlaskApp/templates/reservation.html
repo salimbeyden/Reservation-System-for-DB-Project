@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>Rankings</title>
+    <title>Reservation</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/reservation.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,14 +31,14 @@
         <form class = form method="post" action="{{ url_for('reservation_page', selected_sport = selected_sport) }}">
             <div>
                 Select Sport: <br>
-                {{ rank_form.sports(class="sport-dropdown") }}
+                {{ reservation_form.sports(class="sport-dropdown") }}
             </div>
             <div>
                 Order by: <br>
-                {{ rank_form.order(class="order-dropdown") }}
+                {{ reservation_form.order(class="order-dropdown") }}
             </div>
-            {{ rank_form.hidden_tag() }}
-            {{ rank_form.submit_button(class="submit-button") }}
+            {{ reservation_form.hidden_tag() }}
+            {{ reservation_form.submit_button(class="submit-button") }}
     
         </form>
 

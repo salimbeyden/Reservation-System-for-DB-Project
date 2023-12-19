@@ -179,12 +179,14 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         selected_campus = request.form['campus']
         selected_area = request.form['area']
         order_by = request.form['order']
+
+    reservation_form = ReservationForm()
     
 
     #cursor.execute(query)
     table_data = cursor.fetchall()
 
-    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)
+    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form)
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
 def team_profile(selected_team):

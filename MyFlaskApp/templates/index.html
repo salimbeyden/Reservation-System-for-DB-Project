@@ -19,12 +19,18 @@
             <span class="separator"></span>
             <a href="#">Campuses</a>
             <div id="loginSection">
-                {% if current_user %}
+                {% if current_user.is_authenticated %}
                     <!-- Display profile link if user is logged in -->
-                    <a href="{{ url_for('profile_page') }}">Profile: {{ current_user.name }}<i class="fa-solid fa-user"></i></a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">{{ current_user.name }}<i class="fa-solid fa-user"></i></a>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('profile_page') }}">Profile</a>
+                            <a href="{{ url_for('log_out') }}">Logout</a>
+                        </div>
+                    </div>
                 {% else %}
-                    <!-- Display login link if user is not logged in -->
-                    <a href="{{ url_for('login_page') }}">Login<i class="fa-solid fa-user"></i></a>
+                <!-- Display login link if user is not logged in -->
+                <a href="{{ url_for('login_page') }}">Login<i class="fa-solid fa-user"></i></a>
                 {% endif %}
             </div>
         </nav>

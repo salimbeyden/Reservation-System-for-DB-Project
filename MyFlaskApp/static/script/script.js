@@ -1,22 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var loginForm = document.getElementById('login-form');
-    var registerForm = document.getElementById('register-form');
 
-    document.getElementById('show-register').addEventListener('click', function() {
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-    });
+    if (document.getElementById('show-register')) {
+        document.getElementById('show-register').addEventListener('click', function() {
+            window.location.href = registerUrl;
+        });
+    }
 
-    document.getElementById('show-login').addEventListener('click', function() {
-        registerForm.style.display = 'none';
-        loginForm.style.display = 'block';
-    });
+    if (document.getElementById('homepage-login')) {
+        document.getElementById('homepage-login').addEventListener('click', function() {
+            window.location.href = homepageUrl;
+        });
+    }
 
-    document.getElementById('homepage-login').addEventListener('click', function() {
-        window.location.href = "./../";
-    });
+    if (document.getElementById('show-login')) {
+        document.getElementById('show-login').addEventListener('click', function() {
+            window.location.href = loginUrl;
+        });
+    }
 
-    document.getElementById('homepage-register').addEventListener('click', function() {
-        window.location.href = "./../";
-    });
+    if (document.getElementById('homepage-register')) {
+        document.getElementById('homepage-register').addEventListener('click', function() {
+            window.location.href = homepageUrl;
+        });
+    }
+
 });

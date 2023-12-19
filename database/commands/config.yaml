@@ -1,0 +1,12 @@
+host: localhost
+user: eoyku
+passwd:  voltran1234
+database : reservations
+
+# sqldb_path : commands/create_database.sql
+# sqltables_path: commands/create_tables.sql
+# stabletables_path: commands/stable_tables.sql
+
+sqldb_path : D:\YZV-DERSLER\BLG317E-DataBase Systems\Project\github\database\commands\create_database.sql
+sqltables_path: D:\YZV-DERSLER\BLG317E-DataBase Systems\Project\github\database\commands\create_tables.sql
+stabletables_path: D:\YZV-DERSLER\BLG317E-DataBase Systems\Project\github\database\commands\stable_tables.sql

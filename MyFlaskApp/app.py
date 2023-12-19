@@ -1,5 +1,5 @@
- from flask import Flask, render_template, redirect, url_for, session, flash, request
-from flask_login import login_user, current_user
+from flask import Flask, render_template, redirect, url_for, session, flash, request
+from flask_login import login_user, current_user, logout_user
 
 from MyFlaskApp import app
 from MyFlaskApp import mysql
@@ -27,7 +27,6 @@ def dash_page():
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     login_form = LoginForm()
-    register_form = RegisterForm()
     print("Hello, console!")
     ### FOR LOGIN ###
     if login_form.validate_on_submit():
@@ -42,15 +41,48 @@ def login_page():
             user_obj = User(user_id=user[0], name=user[1], surname=user[2], email=user[3], tel_no=user[4], faculty_name=user[5], department=user[6], 
                  birth_date=user[7], password=user[8], gender=user[9], f_team_id=user[10], v_team_id=user[11], b_team_id=user[12], t_team_id=user[13], p_team_id=user[14])  # Create a user object
             login_user(user_obj)  # Log in the user
-            return redirect(url_for('dash_page'))
+            return redirect(url_for('home_page'))
         else:
             flash("Login failed. Please check your email and password")
-    
-    ### FOR REGISTRATION ###
-    elif register_form.validate_on_submit():
-        print()
 
-    return render_template('login.html',login_form=login_form, register_form=register_form)
+    return render_template('login.html',login_form=login_form)
+
+# for register page at /register
+@app.route('/register', methods=['GET', 'POST'])
+def register_page():
+    register_form = RegisterForm()
+    print("Hello, console!")
+    ### FOR REGISTRATION ###
+    if register_form.validate_on_submit():
+        print("girdim")
+        try:
+            id = register_form.student_number.data
+            name = register_form.name.data
+            surname = register_form.surname.data
+            email = register_form.email_address.data
+            tel_no = register_form.phone_number.data
+            faculty_name = register_form.faculty.data
+            department = register_form.department.data 
+            birth_date = register_form.birth_date.data
+            password = register_form.password.data
+            gender = register_form.gender.data
+            
+            cursor = mysql.connection.cursor()
+            print("buraya geldim")
+            query= """INSERT INTO user (school_id, name, surname, email, tel_no, faculty_name, department, birth_date, password_hash, gender) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            values = (id, name, surname, email, tel_no, faculty_name, department, birth_date, password, gender)
+            cursor.execute(query, values)
+            print("sanırım insert edeedim")
+            mysql.connection.commit()
+            print("Record inserted successfully into Reservations table")
+            cursor.close()
+            flash("Registration successful, please login.")
+            return redirect(url_for('login.html'))
+
+        except Exception as e:
+            print("An error occurred: " + str(e))
+
+    return render_template(login_page, register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
 @app.route('/matchhist/<selected_sport>', methods = ["GET","POST"])
@@ -151,10 +183,6 @@ def rank_page(selected_sport = "*", order_by = "score"):
 def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
     return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)
 
-# @app.route('/profile_page')
-# def profile_page():
-#     return render_template('profile.html')
-
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
 def team_profile(selected_team):
     cursor = mysql.connection.cursor()
@@ -213,3 +241,10 @@ def profile_page(selected_user):
 @app.route("/update_profile")
 def update_profile():
     return render_template("update_profile.html")
+
+# when log out
+@app.route('/logout')
+def log_out():
+    logout_user()
+    session.clear()  # Clear the session
+    return redirect(url_for('home_page'))

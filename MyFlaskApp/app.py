@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash, request
+ from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_login import login_user, current_user
 
 from MyFlaskApp import app
@@ -109,37 +109,35 @@ def match_hist(selected_sport = "*"):
 @app.route('/rank/', methods = ["GET","POST"])
 @app.route('/rank/<selected_sport><order_by>', methods = ["GET","POST"])
 def rank_page(selected_sport = "*", order_by = "score"):
-    print(selected_sport, order_by)
     cursor = mysql.connection.cursor()
 
     cursor.execute('SELECT sport_id, sport_type FROM sport where is_ind = 0')
     sports = cursor.fetchall()
 
     if request.method == 'POST':
-        print(request.form.keys())
         selected_sport = request.form['sports']
         order_by = request.form['order']
     rank_form = RankFrom(sports, selected_sport, order_by)
 
-
     if selected_sport == "*":
-        query = """select team.name, u.name, u.surname, s.sport_type, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
+        query = """select  team.name, team.team_id, u.name, u.surname, u.school_id, s.sport_type, team.sport_id, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
                    join user as u on u.school_id = team.captain_id
                    join team_match_history as hist1 on hist1.team_1 = team.team_id or hist1.team_2 = team.team_id
                    join sport as s on s.sport_id = team.sport_id
-                   group by s.sport_type, team.name, u.name, u.surname, team.team_score, team.foundation_date
+                   group by team.name, team.team_id, u.name, u.surname, u.school_id, s.sport_type, team.sport_id, team.team_score, team.foundation_date
                    order by {} desc;
                 """.format(order_by)
         
     else:
-        query = """select team.name, u.name, u.surname, s.sport_type, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
+        query = """select  team.name, team.team_id, u.name, u.surname, u.school_id, s.sport_type, team.sport_id, team.team_score as score, count(*) as count, team.team_score/count(*) as avrg, team.foundation_date from team
                    join user as u on u.school_id = team.captain_id
                    join team_match_history as hist1 on hist1.team_1 = team.team_id or hist1.team_2 = team.team_id
                    join sport as s on s.sport_id = team.sport_id
                    where s.sport_id = {}
-                   group by s.sport_type, team.name, u.name, u.surname, team.team_score, team.foundation_date
+                   group by team.name, team.team_id, u.name, u.surname, u.school_id, s.sport_type, team.sport_id, team.team_score, team.foundation_date
                    order by {} desc;
                 """.format(selected_sport, order_by)
+
     cursor.execute(query)
     table_data = cursor.fetchall()
     table_data, title = manipulate_rank_data(table_data)
@@ -156,3 +154,62 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
 # @app.route('/profile_page')
 # def profile_page():
 #     return render_template('profile.html')
+
+@app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
+def team_profile(selected_team):
+    cursor = mysql.connection.cursor()
+
+    query = """select team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, count(*) from team
+               join team_match_history as hist on team.team_id = hist.team_1 or team.team_id = hist.team_2
+               join user on user.school_id = team.captain_id
+               join sport on sport.sport_id = team.sport_id
+               where team_id = {}
+               group by team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score;
+            """.format(selected_team)
+    cursor.execute(query)
+
+    team_info = cursor.fetchall()
+
+    team_info = manipulate_team_info(team_info)
+
+
+
+
+
+    query = """select name, surname, school_id from user
+               where team_id_football = {team} or 
+               team_id_volleyball = {team} or 
+               team_id_basketball = {team} or 
+               team_id_tennis = {team} or 
+               team_id_pingpong = {team};
+            """.format(team=selected_team)
+    
+    cursor.execute(query)
+    players = [[row[0].capitalize() + " " + row[1].capitalize(), row[2]] for row in cursor.fetchall()]
+    
+
+
+    query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
+               join team as team1 on team1.team_id = hist.team_1
+               join team as team2 on team2.team_id = hist.team_2
+               where team_1 = 4 or team_2 = 4;
+            """.format(selected_team)
+
+            
+    cursor.execute(query)
+    match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
+    
+
+    
+    
+
+    return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
+
+
+@app.route('/profile/<selected_user>', methods = ["GET", "POST"])
+def profile_page(selected_user):
+    return render_template('profile.html', selected_user=selected_user)
+
+@app.route("/update_profile")
+def update_profile():
+    return render_template("update_profile.html")

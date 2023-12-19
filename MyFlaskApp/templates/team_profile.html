@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/team_profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Team Profile</title>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
+        <nav>
+            <a href="{{ url_for('home_page')}}">Home</a>
+            <span class="separator"></span>
+            <a href="{{ url_for('rank_page')}}">Statistics</a>
+            <span class="separator"></span>
+            <a href="#">Campuses</a>
+            <div id="loginSection">
+                <!-- Dynamic content based on login state -->
+                <!-- to link login.html page -->
+                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="top">
+            <div class="team-info">
+                <h1>{{ team['name'] }}</h1>
+                <p>{{ team["captain"] }}</p>
+                <p>55p - 102 games</p>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="team-players">
+                <h2>Team Players</h2>
+                {% for player in players %}
+                    {{ player[0] }} <br>
+                {% endfor %}
+            </div>
+            <div class="prev-games">
+                <h2>Previous Games</h2>
+                {% for match in match_hist %}
+                    {{ match[0]}} {{ match[1]}} {{ match[2]}} {{ match[3]  }} <br>
+                {% endfor %}
+            </div>
+            <div class="others">
+                <div class="date-created"></div>
+                <div class="join-team">
+                    <button>Join Team</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

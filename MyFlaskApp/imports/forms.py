@@ -21,27 +21,6 @@ class RegisterForm(FlaskForm):
     gender = StringField(label='Gender:', validators=[Length(1), DataRequired()])
     submit = SubmitField(label='Register',render_kw={"id": "register_submit"})
 
-class MatchHistFrom(FlaskForm):
-    sports = SelectField(label='Sport', choices=[], validators=[DataRequired()])
-    submit_button = SubmitField(label = 'See Results')
-    
-    def __init__(self, sports, placeholder, *args, **kwargs):
-        super(FlaskForm, self).__init__(*args, **kwargs)
-
-        sports = list(sports)
-
-        if placeholder == "*":
-            sports.insert(0, ("*", "All Team Sports"))
-        else:
-            placeholder = [tup for tup in sports if str(tup[0]) == placeholder][0]
-            sports.remove(placeholder)
-            sports.insert(0, placeholder)
-            sports.insert(1, ("*", "All Team Sports"))
-
-        self.sports.choices = sports
-
-
-
 class RankFrom(FlaskForm):
     sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
     order = SelectField(label='order', choices=[])
@@ -50,7 +29,6 @@ class RankFrom(FlaskForm):
     
     def __init__(self, sports, default_sport, default_ord, *args, **kwargs):
         super(FlaskForm, self).__init__(*args, **kwargs)
-
         sports = list(sports)
 
         if default_sport == "*":
@@ -60,6 +38,8 @@ class RankFrom(FlaskForm):
             sports.remove(default_sport)
             sports.insert(0, default_sport)
             sports.insert(1, ("*", "All Team Sports"))
+
+    
 
 
 
@@ -73,7 +53,26 @@ class RankFrom(FlaskForm):
 
         self.sports.choices = sports
         self.order.choices = o
+        
+class MatchHistFrom(FlaskForm):
+    sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
+    submit_button = SubmitField(label = 'See Results')
+    
+    def __init__(self, sports, placeholder, *args, **kwargs):
+        super(FlaskForm, self).__init__(*args, **kwargs)
 
+        sports = list(sports)
+
+        if placeholder == "*":
+            sports.insert(0, ("*", "All Individual Sports"))
+        else:
+            placeholder = [tup for tup in sports if str(tup[0]) == str(placeholder)][0]
+            sports.remove(placeholder)
+            sports.insert(0, placeholder)
+            sports.insert(1, ("*", "All Individual Sports"))
+
+        self.sports.choices = sports
+        
 class ReservationForm(FlaskForm):
     sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
     campus = SelectField(label='campus', choices=[], validators=[DataRequired()])

@@ -86,70 +86,57 @@ def register_page():
     return render_template(login_page, register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
-@app.route('/matchhist/<selected_sport>', methods = ["GET","POST"])
-def match_hist(selected_sport = "*"):
+@app.route('/matchhist/<selected_user>', methods = ["GET","POST"])
+def match_hist(selected_user, selected_sport = "*", selected_team_sport = "*"):
     cursor = mysql.connection.cursor()
-
-    cursor.execute('SELECT sport_id, sport_type FROM sport where is_competitive = 1')
-    sports = cursor.fetchall()
 
     if request.method == 'POST':
         selected_sport = request.form['sports']
+    cursor.execute('SELECT sport_id, sport_type FROM sport where is_competitive = 1 and is_ind = 1;')
+    sports = cursor.fetchall()
+    
 
     match_hist_form = MatchHistFrom(sports, selected_sport)
 
-
     if selected_sport == "*":
-        query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
-                   from team_match_history as hist
-                   join team as t1 on t1.team_id = hist.team_1
-                   join team as t2 on t2.team_id = hist.team_2
+        query = """select u1.name, u1.surname, u1.school_id, score_1, score_2, u2.name, u2.surname, u2.school_id, campus.name, campus.campus_id, f.name, f.facility_id, sport.sport_type, sport.sport_id, date 
+                   from individuals_match_history as hist
+                   join user as u1 on hist.user_1 = u1.school_id
+                   join user as u2 on hist.user_2 = u2.school_id
                    join campus on campus.campus_id = hist.campus_id
-                   join facility on facility.facility_id = hist.facility_id;"""
-        is_ind = 0
-        
+                   join facility as f on f.facility_id = hist.facility_id
+                   join sport on sport.sport_id = hist.sport_id
+                   where u1.school_id = {user} or u2.school_id = {user};""".format(user = selected_user)
     else:
-        cursor.execute('SELECT is_ind FROM sport where sport_id = {}'.format(selected_sport))
-        is_ind = cursor.fetchall()[0][0]
-
-        if is_ind == 0:
-            query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date 
-                    from team_match_history as hist
-                    join team as t1 on t1.team_id = hist.team_1
-                    join team as t2 on t2.team_id = hist.team_2
-                    join campus on campus.campus_id = hist.campus_id
-                    join facility on facility.facility_id = hist.facility_id
-                    where hist.sport_id = {};""".format(selected_sport)
-            
-        else:
-            query = """select u1.name, u1.surname, u2.name, u2.surname, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
-                       from individuals_match_history as hist
-                       join user as u1 on u1.school_id = hist.user_1
-                       join user as u2 on u2.school_id = hist.user_2
-                       join campus on campus.campus_id = hist.campus_id
-                       join facility on facility.facility_id = hist.facility_id
-                       where sport_id = {};""".format(selected_sport)
-            
-
+        query = """select u1.name, u1.surname, u1.school_id, score_1, score_2, u2.name, u2.surname, u2.school_id, campus.name, campus.campus_id, f.name, f.facility_id, sport.sport_type, sport.sport_id, date 
+                   from individuals_match_history as hist
+                   join user as u1 on hist.user_1 = u1.school_id
+                   join user as u2 on hist.user_2 = u2.school_id
+                   join campus on campus.campus_id = hist.campus_id
+                   join facility as f on f.facility_id = hist.facility_id
+                   join sport on sport.sport_id = hist.sport_id
+                   where (u1.school_id = {user} or u2.school_id = {user}) and sport.sport_id = {sport};""".format(user=selected_user, sport=selected_sport)
+        
     cursor.execute(query)
-    table_data = cursor.fetchall()
+    data = cursor.fetchall()
+    data, title = manipulate_hist_data(data, "ind")
 
-    table_data, title = manipulate_hist_data(table_data, is_ind)
-    
     cursor.close()
-    return render_template('match_hist.html', match_hist_form=match_hist_form, selected_sport=selected_sport, table_data=table_data, title=title)
+    return render_template('match_hist.html', user = selected_user, form=match_hist_form, data=data, title=title)
 
 @app.route('/rank/', methods = ["GET","POST"])
 @app.route('/rank/<selected_sport><order_by>', methods = ["GET","POST"])
 def rank_page(selected_sport = "*", order_by = "score"):
+    if request.method == 'POST':
+        selected_sport = request.form['sports']
+        order_by = request.form['order']
+
+
     cursor = mysql.connection.cursor()
 
     cursor.execute('SELECT sport_id, sport_type FROM sport where is_ind = 0')
     sports = cursor.fetchall()
 
-    if request.method == 'POST':
-        selected_sport = request.form['sports']
-        order_by = request.form['order']
     rank_form = RankFrom(sports, selected_sport, order_by)
 
     if selected_sport == "*":

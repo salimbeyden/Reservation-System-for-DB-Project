@@ -6,7 +6,7 @@ RESERVATION_COUNT = 30
 
 TEAM_MATCH_COUNT = 20
 
-IND_MATCH_COUNT = 50
+IND_MATCH_COUNT = 1000
 
 FACULTY = ["Faculty of Civil Engineering", "Faculty of Architecture", "Faculty of Mechanical Engineering", "Faculty of Electrical and Electronics Engineering", "Faculty of Maritime", "Faculty of Chemistry and Metallurgy",
 "Faculty of Business Administration", "Faculty of Aerospace Engineering", "Faculty of Textile Technologies and Design", "Faculty of Mining",

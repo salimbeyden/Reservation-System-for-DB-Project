@@ -1,23 +1,29 @@
-def manipulate_hist_data(data, is_ind):
-    if is_ind:
-        title = ["First player", "Score", "Second player", "Campus", "Facility", "Date" ]
-        data = [[row[0].capitalize() + " " + row[1].capitalize(), 
-                 f"{row[4]} - {row[5]}",
-                 row[2].capitalize() + " " + row[3].capitalize(),
-                 row[6],
-                 row[7],
-                 row[8]]  for row in data]
-
-    else:
-        title = ["First team", "Score", "Second team", "Campus", "Facility", "Date" ]
-        data = [[row[0].title(),
-                 f"{row[2]} - {row[3]}",
-                 row[1].title(),
-                 row[4],
-                 row[5],
-                 row[6]] for row in data]
+def manipulate_hist_data(data, type):
+    if type == "ind":
         
-    return data, title
+        title = ["First Player", "Score", "Second Player", "Campus", "Facility", "Sport", "Date"]
+
+        hists = list()
+        for row in data:
+            hist = dict()
+
+            hist["u1_name"] = f"{row[0]} {row[1]}".title()
+            hist["u1_id"] = row[2]
+            hist["score"] = f"{row[3]} - {row[4]}"
+            hist["u2_name"] = f"{row[5]} {row[6]}".title()
+            hist["u2_id"] = row[7]
+            hist["campus_name"] = row[8]
+            hist["campus_id"] = row[9]
+            hist["facility_name"] = row[10].split(" ")[0]
+            hist["facility_id"] = row[11]
+            hist["sport_type"] = row[12]
+            hist["sport_id"] = row[13]
+            hist["date"] = row[14]
+
+            hists.append(hist)
+        
+
+    return hists ,title
 
 
 def manipulate_rank_data(data):

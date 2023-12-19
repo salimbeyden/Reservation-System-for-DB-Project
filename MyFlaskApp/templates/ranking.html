@@ -28,7 +28,7 @@
     <div class="ranking-title">
 
     
-    <form class = form method="post" action="{{ url_for('rank_page', selected_sport = selected_sport) }}">
+    <form class = form method="post" action="{{ url_for('rank_page') }}">
         <div>
             Select Sport: <br>
             {{ rank_form.sports(class="sport-dropdown") }}
@@ -43,13 +43,13 @@
     </form>
 
 
-    {% if selected_sport %}
     <table class = ranking-table>
         <thead>
+            
             {% for column in title %}
                 <th> {{ column }}</th>
             {% endfor %}
-                      
+
         </thead>
         <tbody>
             {% for row in table_data %}
@@ -65,7 +65,6 @@
             {% endfor %}
             </tbody>
         </table>
-        {% endif %}
 </div>
 
 

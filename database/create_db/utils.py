@@ -4,7 +4,6 @@ from faker import Faker
 from datetime import date as d, timedelta, datetime
 import yaml
 
-
 def read_config():
     # config file keeps the parameters like host, user, password and sql command paths
     # you can change them if needed
@@ -12,7 +11,6 @@ def read_config():
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     return config
-
 
 def create_db(cursor, config):
     
@@ -43,7 +41,6 @@ def create_db(cursor, config):
 
     print()
 
-
 def stable_tables(cursor, stables_path):
 
     # .sql dosyasından sorguyu oku
@@ -59,8 +56,6 @@ def stable_tables(cursor, stables_path):
     print("Values inserted into 'facility' table successfully!")
     print("Values inserted into 'facility_for_sport' table successfully!")
     print("Values inserted into 'sport' table successfully!")
-
-
 
 def generate_user_table(cursor, faculties, majors, user_count):
     school_ids = np.random.randint(100000000, 999999999, size = user_count)
@@ -90,7 +85,6 @@ def generate_user_table(cursor, faculties, majors, user_count):
         cursor.execute(insert_query)
 
     print("Values inserted into 'user' table successfully!")
-
 
 def generate_team_table(cursor, team_count):
     fake = Faker()
@@ -430,7 +424,6 @@ def generate_individuals_match_history(cursor, hist_count):
     cursor.execute(query)
 
     sport_ids = cursor.fetchall()
-
     for sport in sport_ids:
         query = f"""select school_id from user;"""
         cursor.execute(query)
@@ -446,6 +439,7 @@ def generate_individuals_match_history(cursor, hist_count):
         facilities = [i[0] for i in cursor.fetchall()]
 
         for i in range(hist_count):
+            print(sport)
             user1 ,user2 = user_ids[np.random.choice(num_of_users, 2, replace=False)]
             score1, score2, point = random_score(sport[1])
             facility_id = np.random.choice(facilities) # facility_for_sporta göre

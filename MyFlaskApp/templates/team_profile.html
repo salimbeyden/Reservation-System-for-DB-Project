@@ -28,6 +28,8 @@
     <div class="container">
         <div class="top">
             <div class="team-info">
+                usable team keys: <br>
+                team["name"],   team["captain"],   team["sport_type"],    team["sport_id"],   team["fuoundation_date"],  team["team_score"],   team["#_matches"], team["avrg"]
                 <h1>{{ team['name'] }}</h1>
                 <p>{{ team["captain"] }}</p>
                 <p>55p - 102 games</p>
@@ -47,10 +49,11 @@
                 {% endfor %}
             </div>
             <div class="others">
-                <div class="date-created"></div>
-                <div class="join-team">
-                    <button>Join Team</button>
-                </div>
+                {% if no_teams == False %}
+                    <div class="join-team">
+                        <button>Join Team</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

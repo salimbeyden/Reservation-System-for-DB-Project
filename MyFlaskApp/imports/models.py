@@ -14,12 +14,18 @@ class User(UserMixin):
         self.birth_date = birth_date
         self.password = password
         self.gender = gender
+
         self.f_team_id = f_team_id
         self.v_team_id = v_team_id
         self.b_team_id = b_team_id
         self.t_team_id = t_team_id
         self.p_team_id = p_team_id
-    
+
+        self.all_teams = {"Football": self.f_team_id,
+                          "Tennis Teams": self.t_team_id,
+                          "Basketball": self.b_team_id,
+                          "Volleyball": self.v_team_id,
+                          "PingPong Teams": self.p_team_id}
     def get_id(self):
         return str(self.school_id) 
 

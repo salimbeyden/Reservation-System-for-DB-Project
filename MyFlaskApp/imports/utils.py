@@ -29,19 +29,25 @@ def manipulate_hist_data(data, type):
 def manipulate_rank_data(data):
     title = ["Team name", "Captain", "Sport", "Total Score", "Total matches", "Average Score", "Foundation Date"]
 
-    data = [[row[0].title(), # Team name
-             row[1], # Team id
-             row[2].capitalize() + " " + row[3].capitalize(), # Captain Name
-             row[4], # Captain id
-             row[5].split(" ")[0], # Sport
-             row[6], # Sport id
-             row[7], # Total Score
-             row[8], # Total Matches
-             round(row[9], 1), # Average Score
-             row[10]] # Foundation Date
-             for row in data] 
-    
-    return data, title
+    teams = list()
+
+    for row in data:
+        team = dict()
+
+        team["name"] = row[0].title()
+        team["team_id"] = row[1]
+        team["captain"] = f"{row[2]} {row[3]}".title()
+        team["captain_id"] = row[4]
+        team["sport"] = row[5].split(" ")[0]
+        team["sport_id"] = row[6]
+        team["#_matches"] = row[7]
+        team["total_score"] = row[8]
+        team["avrg_score"] = round(row[9], 1)
+        team["foundation_date"] = row[10]
+
+        teams.append(team)
+
+    return teams, title
 
 def manipulate_team_info(data):
     data = data[0]
@@ -58,3 +64,35 @@ def manipulate_team_info(data):
     team["avrg"] = round(int(data[6]) / int(data[7]), 2)
 
     return team
+
+
+def manipulate_profile_teams(data):
+
+    teams = list()
+
+    for row in data:
+        team = dict()
+
+        team["name"] = row[0].title()
+        team["team_id"] = row[1]
+        team["team_score"] = row[2]
+        team["sport_id"] = row[3]
+
+        teams.append(team)
+
+    return teams
+
+def manipulate_profile_user(data):
+    data = data[0]
+    user = dict()
+
+    user["name"] = f"{data[0]} {data[1]}".title()
+    user["school_id"] = str(data[2])
+    user["mail"] = data[3]
+    user["tel_no"] = data[4]
+    user["faculty"] = data[5]
+    user["department"] = data[6]
+    user["birth_date"] = data[7]
+    user["gender"] = data[8]
+
+    return user

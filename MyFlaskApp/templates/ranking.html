@@ -54,13 +54,13 @@
         <tbody>
             {% for row in table_data %}
                 <tr>
-                    <td><a href="{{ url_for('team_profile', selected_team = row[1]) }}">{{ row[0] }}</a></td>
-                    <td><a href="{{ url_for('profile_page', selected_user = row[3]) }}">{{ row[2] }}</a></td>
-                    <td><a href="#">{{ row[4] }}</a></td>
-                    <td>{{ row[6] }}</td>
-                    <td>{{ row[7] }}</td>
-                    <td>{{ row[8] }}</td>
-                    <td>{{ row[9] }}</td>
+                    <td><a href="{{ url_for('team_profile', selected_team = row['team_id']) }}">{{ row["name"] }}</a></td>
+                    <td><a href="{{ url_for('profile_page', selected_user = row['captain_id']) }}">{{ row["captain"] }}</a></td>
+                    <td><a href="#">{{ row["sport"] }}</a></td> <!-- will direct  url_for('sport_page', selected_user = row['sport_id']) -->
+                    <td>{{ row["total_score"] }}</td>
+                    <td>{{ row["#_matches"] }}</td>
+                    <td>{{ row["avrg_score"] }}</td>
+                    <td>{{ row["foundation_date"] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

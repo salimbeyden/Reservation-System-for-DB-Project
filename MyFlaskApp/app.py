@@ -83,7 +83,7 @@ def register_page():
         except Exception as e:
             print("An error occurred: " + str(e))
 
-    return render_template(login_page, register_form=register_form)
+    return render_template('register.html', register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
 @app.route('/matchhist/<selected_user>', methods = ["GET","POST"])
@@ -239,9 +239,46 @@ def team_profile(selected_team):
     return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
 
 
-@app.route('/profile/<selected_user>', methods = ["GET", "POST"])
+@app.route('/profile/<selected_user>', methods = ["GET"])
 def profile_page(selected_user):
-    return render_template('profile.html', selected_user=selected_user)
+    cursor = mysql.connection.cursor()
+
+    query = """select u.name, u.surname, u.email, u.tel_no, u.faculty_name, u.department, u.birth_date, u.gender from user u
+              where u.school_id = {user};""".format(user = selected_user)
+    
+    cursor.execute(query)
+
+    user = cursor.fetchall()
+
+    user = manipulate_profile_user(user)
+    
+    query = """SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_football
+               WHERE school_id = {user} AND team_id_football IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_volleyball
+               WHERE school_id = {user} AND team_id_volleyball IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_basketball
+               WHERE school_id = {user} AND team_id_basketball IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_tennis
+               WHERE school_id = {user} AND team_id_tennis IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_pingpong
+               WHERE school_id = {user} AND team_id_pingpong IS NOT NULL;""".format(user = selected_user)
+
+    cursor.execute(query)
+
+    team_table = cursor.fetchall()
+
+    team_table = manipulate_profile_teams(team_table)
+
+    return render_template('profile.html', team_table=team_table, user=user)
 
 @app.route("/update_profile")
 def update_profile():

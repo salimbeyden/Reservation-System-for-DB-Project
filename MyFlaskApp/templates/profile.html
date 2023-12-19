@@ -18,27 +18,49 @@
             <span class="separator"></span>
             <a href="#">Campuses</a>
             <div id="loginSection">
-                <!-- Dynamic content based on login state -->
-                <!-- to link login.html page -->
-                <a href="{{ url_for('login_page')}}">Login<i class="fa-solid fa-user"></i></a>
+                {% if current_user.is_authenticated %}
+                    <!-- Display profile link if user is logged in -->
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">{{ current_user.name }}<i class="fa-solid fa-user"></i></a>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('profile_page', selected_user = current_user.school_id) }}">Profile</a>
+                            <a href="{{ url_for('log_out') }}">Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                <!-- Display login link if user is not logged in -->
+                <a href="{{ url_for('login_page') }}">Login<i class="fa-solid fa-user"></i></a>
+                {% endif %}
             </div>
         </nav>
     </header>
-    {{ selected_user }} elam
+
     <div class="container">
         <div class="top">
             <div class="user-img">
-                <img src="{{ url_for('static', filename='images/user_icon/userimg.jpg')}}" alt="user">
+                {% if user["gender"] == "m" %}
+                    <img src="{{ url_for('static', filename='images/user_icon/userimg_male.jpg')}}" alt="user">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/user_icon/userimg_female.jpg')}}" alt="user">
+                {% endif %}
+
             </div>
             <div class="user-info">
-                <h1>Eren Olug</h1>
-                <p>AI and Data</p>
-                <p>Mail GSM</p>
+                <h1>{{ user["name"] }}</h1>
+                <p>{{ user["mail"] }}</p>
+                <p>{{ user["tel_no"] }}a</p>
+                <p> {{ user["faculty"] }} </p>
+                <p> {{ user["department"] }} </p>
+                <p> {{ user["birth_date"] }} </p>
+                <p> {{ user["gender"] }} </p>
             </div>
-            <div class="scores">User Scores</div>
         </div>
         <div class="bottom">
-            <div class="teams"><h2>Teams</h2></div>
+            <div class="teams"><h2>Teams</h2>
+                {% for row in team_table %}
+                    <a href="{{ url_for('team_profile', selected_team = row['team_id']) }}"> {{ row["name"] }} </a> {{ row["team_score"] }} {{ row["sport_id"] }} <br>
+                {% endfor%}
+            </div>
             <div class="reservations">
                 <h2>Future Reservations</h2>
                 <!-- Here can be a list of future reservations -->

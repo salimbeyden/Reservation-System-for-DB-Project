@@ -73,4 +73,11 @@ class RankFrom(FlaskForm):
 
         self.sports.choices = sports
         self.order.choices = o
+
+class ReservationForm(FlaskForm):
+    sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
+    campus = SelectField(label='campus', choices=[], validators=[DataRequired()])
+    area = SelectField(label='area', choices=[], validators=[DataRequired()])
+    order = SelectField(label='order', choices=[])
+    submit_button = SubmitField(label = 'See Results')
     

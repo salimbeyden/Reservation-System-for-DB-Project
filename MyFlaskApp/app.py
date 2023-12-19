@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user
 
 from MyFlaskApp import app
 from MyFlaskApp import mysql
@@ -181,6 +182,21 @@ def rank_page(selected_sport = "*", order_by = "score"):
 @app.route('/reservation/', methods = ["GET","POST"])
 @app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
 def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
+    cursor = mysql.connection.cursor()
+    
+    cursor.execute('SELECT sport_id, sport_type FROM sport')
+    sports = cursor.fetchall()
+
+    if request.method == 'POST':
+        selected_sport = request.form['sports']
+        selected_campus = request.form['campus']
+        selected_area = request.form['area']
+        order_by = request.form['order']
+    
+
+    #cursor.execute(query)
+    table_data = cursor.fetchall()
+
     return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])

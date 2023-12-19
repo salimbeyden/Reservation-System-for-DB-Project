@@ -49,10 +49,11 @@
                 {% endfor %}
             </div>
             <div class="others">
-                <div class="date-created"></div>
-                <div class="join-team">
-                    <button>Join Team</button>
-                </div>
+                {% if no_teams == False %}
+                    <div class="join-team">
+                        <button>Join Team</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

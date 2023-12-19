@@ -1,6 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_login import login_user, current_user, logout_user
-from flask_login import login_user, current_user
 
 from MyFlaskApp import app
 from MyFlaskApp import mysql
@@ -27,6 +26,7 @@ def dash_page():
 # for login page at /login
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+
     login_form = LoginForm()
     print("Hello, console!")
     ### FOR LOGIN ###
@@ -205,10 +205,6 @@ def team_profile(selected_team):
 
     team_info = manipulate_team_info(team_info)
 
-
-
-
-
     query = """select name, surname, school_id from user
                where team_id_football = {team} or 
                team_id_volleyball = {team} or 
@@ -220,30 +216,28 @@ def team_profile(selected_team):
     cursor.execute(query)
     players = [[row[0].capitalize() + " " + row[1].capitalize(), row[2]] for row in cursor.fetchall()]
     
-
-
     query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
                join team as team1 on team1.team_id = hist.team_1
                join team as team2 on team2.team_id = hist.team_2
                where team_1 = 4 or team_2 = 4;
             """.format(selected_team)
 
-            
     cursor.execute(query)
     match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
-    
 
     
-    
+    no_teams = False
+    if current_user.all_teams[team_info["sport_type"]]:
+        no_teams = True
 
-    return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
+    return render_template('team_profile.html', team=team_info ,players=players, match_hist=match_hist, no_teams=no_teams)
 
 
 @app.route('/profile/<selected_user>', methods = ["GET"])
 def profile_page(selected_user):
     cursor = mysql.connection.cursor()
 
-    query = """select u.name, u.surname, u.email, u.tel_no, u.faculty_name, u.department, u.birth_date, u.gender from user u
+    query = """select u.name, u.surname, u.school_id, u.email, u.tel_no, u.faculty_name, u.department, u.birth_date, u.gender from user u
               where u.school_id = {user};""".format(user = selected_user)
     
     cursor.execute(query)

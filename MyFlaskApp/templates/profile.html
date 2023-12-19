@@ -72,9 +72,11 @@
                     </a>
                     <!-- Here can be a list of previous reservations -->
                 </div>
-                <div class="take-reservation">
-                    <button>Take Reservation</button>
-                </div>
+                {% if user["school_id"] == current_user.school_id %}
+                    <div class="take-reservation">
+                        <button>Take Reservation</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -45,7 +45,9 @@ def manipulate_rank_data(data):
         team["avrg_score"] = round(row[9], 1)
         team["foundation_date"] = row[10]
 
-    return data, title
+        teams.append(team)
+
+    return teams, title
 
 def manipulate_team_info(data):
     data = data[0]
@@ -85,11 +87,12 @@ def manipulate_profile_user(data):
     user = dict()
 
     user["name"] = f"{data[0]} {data[1]}".title()
-    user["mail"] = data[2]
-    user["tel_no"] = data[3]
-    user["faculty"] = data[4]
-    user["department"] = data[5]
-    user["birth_date"] = data[6]
-    user["gender"] = data[7]
+    user["school_id"] = str(data[2])
+    user["mail"] = data[3]
+    user["tel_no"] = data[4]
+    user["faculty"] = data[5]
+    user["department"] = data[6]
+    user["birth_date"] = data[7]
+    user["gender"] = data[8]
 
     return user

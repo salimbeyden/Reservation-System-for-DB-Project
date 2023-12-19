@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/team_profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>User Profile</title>
+    <title>Team Profile</title>
 </head>
 <body>
     <header>
@@ -27,29 +27,29 @@
 
     <div class="container">
         <div class="top">
-            <div class="user-img">
-                <img src="{{ url_for('static', filename='images/user_icon/userimg.jpg')}}" alt="user">
+            <div class="team-info">
+                <h1>{{ team['name'] }}</h1>
+                <p>{{ team["captain"] }}</p>
+                <p>55p - 102 games</p>
             </div>
-            <div class="user-info">
-                <h1>Eren Olug</h1>
-                <p>AI and Data</p>
-                <p>Mail GSM</p>
-            </div>
-            <div class="scores">User Scores</div>
         </div>
         <div class="bottom">
-            <div class="teams"><h2>Teams</h2></div>
-            <div class="reservations">
-                <h2>Future Reservations</h2>
-                <!-- Here can be a list of future reservations -->
+            <div class="team-players">
+                <h2>Team Players</h2>
+                {% for player in players %}
+                    {{ player[0] }} <br>
+                {% endfor %}
+            </div>
+            <div class="prev-games">
+                <h2>Previous Games</h2>
+                {% for match in match_hist %}
+                    {{ match[0]}} {{ match[1]}} {{ match[2]}} {{ match[3]  }} <br>
+                {% endfor %}
             </div>
             <div class="others">
-                <div class="prev-reservations">
-                    <button>Previous Reservations</button>
-                    <!-- Here can be a list of previous reservations -->
-                </div>
-                <div class="take-reservation">
-                    <button>Take Reservation</button>
+                <div class="date-created"></div>
+                <div class="join-team">
+                    <button>Join Team</button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash, request
+from flask import Flask, render_template, redirect, url_for, session, flash, request, jsonify
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_user, current_user
 
@@ -169,10 +169,6 @@ def rank_page(selected_sport = "*", order_by = "score"):
 @app.route('/reservation/', methods = ["GET","POST"])
 @app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
 def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
-    cursor = mysql.connection.cursor()
-    
-    cursor.execute('SELECT sport_id, sport_type FROM sport')
-    sports = cursor.fetchall()
 
     if request.method == 'POST':
         selected_sport = request.form['sports']
@@ -180,9 +176,35 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         selected_area = request.form['area']
         order_by = request.form['order']
 
-    reservation_form = ReservationForm()
-    
+    cursor = mysql.connection.cursor()
 
+    cursor.execute('SELECT sport_id, sport_type FROM sport')
+    sports = cursor.fetchall()
+
+    if selected_sport == "*":
+        cursor.execute('SELECT campus_id, name FROM campus')
+        campuses = cursor.fetchall()
+    else:
+        query = """SELECT DISTINCT c.campus_id, c.name FROM campus c 
+        JOIN facility f ON c.campus_id = f.campus_id
+        JOIN facility_for_sport fs ON f.facility_id = fs.facility_id
+        WHERE fs.sport_id = {}""".format(selected_sport)
+        cursor.execute(query, (selected_sport,))
+        campuses = cursor.fetchall()
+    
+    if selected_campus == "*":
+        cursor.execute('SELECT facility_id, name FROM facility')
+        area = cursor.fetchall()
+    else:
+        query = 'SELECT facility_id, name FROM facility WHERE campus_id = {}'.format(selected_campus)
+        cursor.execute(query, (selected_campus,))
+        area = cursor.fetchall()
+
+    query = """SELECT * FROM facility as f join facility_for_sport as fps on f.facility_id = fps.facility_id;"""
+
+    reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area, order_by)
+    
+    
     #cursor.execute(query)
     table_data = cursor.fetchall()
 

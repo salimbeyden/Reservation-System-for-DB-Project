@@ -39,11 +39,6 @@ class RankFrom(FlaskForm):
             sports.insert(0, default_sport)
             sports.insert(1, ("*", "All Team Sports"))
 
-    
-
-
-
-
         o = self.orders.copy()
         if default_ord != "score":
             default_ord = [tup for tup in self.orders if tup[0] == default_ord][0]
@@ -74,9 +69,57 @@ class MatchHistFrom(FlaskForm):
         self.sports.choices = sports
         
 class ReservationForm(FlaskForm):
+    sport_types = SelectField(label='type', choices=[], validators=[DataRequired()])
     sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
-    campus = SelectField(label='campus', choices=[], validators=[DataRequired()])
+    campuses = SelectField(label='campus', choices=[], validators=[DataRequired()])
     area = SelectField(label='area', choices=[], validators=[DataRequired()])
+    set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
     order = SelectField(label='order', choices=[])
     submit_button = SubmitField(label = 'See Results')  
+
+    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
+        sport_types = SelectField(label='type', choices=[], validators=[DataRequired()])
+    sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
+    campuses = SelectField(label='campus', choices=[], validators=[DataRequired()])
+    area = SelectField(label='area', choices=[], validators=[DataRequired()])
+    set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
+    order = SelectField(label='order', choices=[])
+    submit_button = SubmitField(label='See Results')
+
+    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
+        super(ReservationForm, self).__init__(*args, **kwargs)
+        self.sports.choices = [(str(s[0]), s[1]) for s in sports]
+        self.campuses.choices = [(str(c[0]), c[1]) for c in campuses]
+        self.area.choices = [(str(a[0]), a[1]) for a in area]
+
+        # Dropdown sport
+        if default_sport == "*":
+            self.sports.choices.insert(0, ("*", "All Sports"))
+        else:
+            default_sport = next((tup for tup in sports if str(tup[0]) == default_sport), None)
+            if default_sport:
+                self.sports.choices.remove(default_sport)
+                self.sports.choices.insert(0, (str(default_sport[0]), default_sport[1]))
+                self.sports.choices.insert(1, ("*", "All Sports"))
+
+        # Dropdown campus
+        if default_campus == "*":
+            self.campuses.choices.insert(0, ("*", "All Campuses"))
+        else:
+            default_campus = next((tup for tup in campuses if str(tup[0]) == default_campus), None)
+            if default_campus:
+                self.campuses.choices.remove(default_campus)
+                self.campuses.choices.insert(0, (str(default_campus[0]), default_campus[1]))
+                self.campuses.choices.insert(1, ("*", "All Campuses"))
+
+        # Dropdown area
+        if default_area == "*":
+            self.area.choices.insert(0, ("*", "All Saloons"))
+        else:
+            default_area = next((tup for tup in area if str(tup[0]) == default_area), None)
+            if default_area:
+                self.area.choices.remove(default_area)
+                self.area.choices.insert(0, (str(default_area[0]), default_area[1]))
+                self.area.choices.insert(1, ("*", "All Saloons"))
+    
     

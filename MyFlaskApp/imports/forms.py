@@ -69,22 +69,12 @@ class MatchHistFrom(FlaskForm):
         self.sports.choices = sports
         
 class ReservationForm(FlaskForm):
-    sport_types = SelectField(label='type', choices=[], validators=[DataRequired()])
     sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
     campuses = SelectField(label='campus', choices=[], validators=[DataRequired()])
     area = SelectField(label='area', choices=[], validators=[DataRequired()])
     set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
     order = SelectField(label='order', choices=[])
     submit_button = SubmitField(label = 'See Results')  
-
-    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
-        sport_types = SelectField(label='type', choices=[], validators=[DataRequired()])
-    sports = SelectField(label='sport', choices=[], validators=[DataRequired()])
-    campuses = SelectField(label='campus', choices=[], validators=[DataRequired()])
-    area = SelectField(label='area', choices=[], validators=[DataRequired()])
-    set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
-    order = SelectField(label='order', choices=[])
-    submit_button = SubmitField(label='See Results')
 
     def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
         super(ReservationForm, self).__init__(*args, **kwargs)

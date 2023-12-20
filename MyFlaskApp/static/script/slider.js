@@ -41,9 +41,9 @@ function updateSlideshow() {
     var reservationLink = document.getElementById('reservation-link');
 
     // Set the href attribute with the current item's details
-    reservationLink.href = "reservation/" + item.alt;
+    reservationLink.href = "reservation/" + item.id;
     // Assuming you have a route or a URL pattern to follow, for example:
-    var campusInfoUrl = "/campus/" + item.alt; 
+    var campusInfoUrl = "/campus/" + item.id; 
     
     // Clear existing content
     slideshowText.innerHTML = '';

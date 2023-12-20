@@ -310,15 +310,15 @@ def log_out():
 
 @app.route('/campus/<selected_campus>')
 def campus_page(selected_campus):
-    print(selected_campus)
     # Query for campus_id
-    campus_query = "SELECT name FROM campus WHERE campus_id = %s"
+    campus_query = "SELECT name, image_id FROM campus WHERE campus_id = %s"
     cursor = mysql.connection.cursor()
     cursor.execute(campus_query, (selected_campus,))
-    campus_name = cursor.fetchone()
+    campus = cursor.fetchone()
     campus_id = selected_campus
+    campus_name = campus[0]
+    campus_image = campus[1]
 
-    
     # Query for facilities in this campus
     facilities_query = "SELECT * FROM facility WHERE campus_id = %s"
     cursor.execute(facilities_query, (campus_id,))
@@ -336,9 +336,8 @@ def campus_page(selected_campus):
         cursor.execute(sports_query, (facility_id,))
         sports = cursor.fetchall()
         facilities_sports[facility["facility_id"]] = [facility, [sport for sport in sports]]
-
     # Render template with facilities and associated sports
-    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=campus_name)
+    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=campus_name, campus_image=campus_image)
 
 # sports
 @app.route('/sports/<selected_sport>')

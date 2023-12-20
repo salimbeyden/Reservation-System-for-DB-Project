@@ -34,7 +34,6 @@ def home_page():
 def login_page():
 
     login_form = LoginForm()
-    print("Hello, console!")
     ### FOR LOGIN ###
     if login_form.validate_on_submit():
         email = login_form.email_address.data
@@ -77,7 +76,7 @@ def register_page():
             values = (id, name, surname, email, tel_no, faculty_name, department, birth_date, password, gender)
             cursor.execute(query, values)
             mysql.connection.commit()
-            # cursor.close()
+            cursor.close()
             # flash("Registration successful, please login.")
             return redirect(url_for('login_page'))
 
@@ -345,7 +344,6 @@ def sports_page(selected_sport):
     # Query for campus_id
     sport_query = "SELECT sport_type FROM sport WHERE sport_id = %s"
     cursor = mysql.connection.cursor()
-    print(selected_sport)
     cursor.execute(sport_query, (selected_sport,))
     sport_name = cursor.fetchone()[0]
     sport_id = selected_sport

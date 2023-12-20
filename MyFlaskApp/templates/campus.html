@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>selected_campus</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/update_profile.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/campus.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>Profile Update</title>
 </head>
 <body>
+
+    <!-- Header -->
+
     <header>
         <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
         <nav>
@@ -47,26 +47,22 @@
         </nav>
     </header>
 
-    <div class="container">
-        <div class="top">
-            <div class="user-img">
-                <img src="{{ url_for('static', filename='images/user_icon/userimg.jpg')}}" alt="user">
-                <div type="button">Upload Photo</div>
-            </div>
-            <form action="{{ url_for('update_profile') }}" method="POST" class="update-form">
-                <div class="user-info">
-                 
-                    <label for="department">Department:</label>
-                    <input type="text" id="department" name="department" placeholder="Your Department">
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="Your Email">
-                </div>
-                <button type="submit">Update Profile</button>
-            </form>
+    <h1 class="campus-title">{{ campus_name }} Kampüs Detayları</h1>
+
+    <div class="campus-details">
+        {% for facility_name, facility_info in facilities_sports.items() %}
+        <div class="facility">
+            <h2>{{ facility_info[0].name }}</h2>
+            <p>{{ facility_info[0].address }}</p>
+            <p>{{ facility_info[0].tel_no }}</p>
+            <p>{{ facility_info[0].email }}</p>
+            {% for sport in facility_info[1] %}
+            <a href="{{ url_for('reservation_page', selected_sport=sport[0], selected_campus=campus_id) }}">{{ sport[1] }}</a>
+            {% endfor %}
         </div>
-        <div class="bottom">
-            <div class="teams"><h2>Teams</h2></div>
+        {% endfor %}
+        <div class="reservation-link">
+            <a href="{{ url_for('reservation_page') }}">Rezervasyon Al</a>
         </div>
     </div>
 

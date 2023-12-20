@@ -13,11 +13,22 @@
     <header>
         <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
         <nav>
-            <a href="#">Home</a>
+            <a href="{{ url_for('home_page')}}">Home</a>
             <span class="separator"></span>
             <a href="{{ url_for('rank_page')}}">Statistics</a>
             <span class="separator"></span>
-            <a href="#">Campuses</a>
+            <div id="campusSection">
+                    <!-- Display all campuses -->
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">Campuses</a>
+                        <div class="dropdown-content">
+                            {% for item in dropdown_items %}
+                                <a href="{{ url_for('campus_page', selected_campus = item.name) }}">{{ item.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+            </div>
+            <span class="separator"></span>
             <div id="loginSection">
                 {% if current_user.is_authenticated %}
                     <!-- Display profile link if user is logged in -->
@@ -43,17 +54,21 @@
             <div id="slideshow-box">
                 <div id="slideshow-text"></div>
                 <div id="slideshow-links">
-                    <button id="more-info"><i class="fa-solid fa-circle-info"></i>&nbsp;&nbsp;More Information</button>
-                    <button id="reservation">Make Reservation</button>
+                    <a id="reservation-link" href="#"> <!-- Placeholder href -->
+                        <button id="reservation">Make Reservation</button>
+                    </a>
                 </div>
             </div>
             <div id="slideshow-box"><img id="slideshow-image"></div>
         </div>
         <div id="slideshow-buttons">
             <button id="prev"><i class="fa-solid fa-caret-left"></i></button>
-            <button id="reservation">Make Reservation</button>
+            <a id="reservation-link" href="{{ url_for('reservation_page') }}">
+                <button id="reservation">Make Reservation</button>
+            </a>
             <button id="next"><i class="fa-solid fa-caret-right"></i></button>
         </div>
+        
     </div>
 
     <!-- Script Files -->

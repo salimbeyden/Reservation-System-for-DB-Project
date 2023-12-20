@@ -1,3 +1,5 @@
+from MyFlaskApp import mysql
+
 def manipulate_hist_data(data, type):
     if type == "ind":
         
@@ -96,3 +98,35 @@ def manipulate_profile_user(data):
     user["gender"] = data[8]
 
     return user
+
+def manipulate_facility_info(data):
+    facility = dict()
+
+    facility["facility_id"] = data[0]
+    facility["name"] = data[1]
+    facility["tel_no"] = data[3]
+    facility["email"] = data[4]
+    facility["address"] = data[5]
+
+    return facility
+
+def manipulate_spor_info(data):
+    team = dict()
+
+    return team
+
+
+    
+def manipulate_campus_dropdown():
+    cursor = mysql.connection.cursor()
+    
+    # to get campus names
+    cursor.execute("SELECT * FROM campus")  # Adjust the query as needed
+    campuses = cursor.fetchall()
+    cursor.close()
+    
+    campus_dropdown = [{"id": campus[0], "name": campus[1]} for campus in campuses]
+    print(campus_dropdown)
+    return campus_dropdown
+
+    

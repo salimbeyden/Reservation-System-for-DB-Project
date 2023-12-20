@@ -1,0 +1,70 @@
+form {
+    padding-top: 25px;
+    width : 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    align-items: left;
+}
+
+.dropdown {
+    display: inline-block;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.sport-dropdown {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.campus-dropdown {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.area-dropdown {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.set-time{
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.order-dropdown {
+    display: inline-block;
+    width: 25%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    font-size: 14px;
+    background-color: #f7f7f7;
+    border-style: solid;
+    border-color: #051626;
+    color: #051626;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}

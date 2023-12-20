@@ -35,7 +35,7 @@
                     <div class="dropdown">
                         <a href="#" class="dropbtn">{{ current_user.name }}<i class="fa-solid fa-user"></i></a>
                         <div class="dropdown-content">
-                            <a href="{{ url_for('profile_page', selected_user = current_user) }}">Profile</a>url_for
+                            <a href="{{ url_for('profile_page', selected_user = current_user.school_id) }}">Profile</a>
                             <a href="{{ url_for('log_out') }}">Logout</a>
                         </div>
                     </div>

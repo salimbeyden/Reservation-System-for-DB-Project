@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash, request
+from flask import Flask, render_template, redirect, url_for, session, flash, request, jsonify
 from flask_login import login_user, current_user, logout_user
 
 from MyFlaskApp import app
@@ -26,6 +26,7 @@ def home_page():
 # for login page at /login
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+
     login_form = LoginForm()
     print("Hello, console!")
     ### FOR LOGIN ###
@@ -80,70 +81,57 @@ def register_page():
     return render_template('register.html', register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
-@app.route('/matchhist/<selected_sport>', methods = ["GET","POST"])
-def match_hist(selected_sport = "*"):
+@app.route('/matchhist/<selected_user>', methods = ["GET","POST"])
+def match_hist(selected_user, selected_sport = "*", selected_team_sport = "*"):
     cursor = mysql.connection.cursor()
-
-    cursor.execute('SELECT sport_id, sport_type FROM sport where is_competitive = 1')
-    sports = cursor.fetchall()
 
     if request.method == 'POST':
         selected_sport = request.form['sports']
+    cursor.execute('SELECT sport_id, sport_type FROM sport where is_competitive = 1 and is_ind = 1;')
+    sports = cursor.fetchall()
+    
 
     match_hist_form = MatchHistFrom(sports, selected_sport)
 
-
     if selected_sport == "*":
-        query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
-                   from team_match_history as hist
-                   join team as t1 on t1.team_id = hist.team_1
-                   join team as t2 on t2.team_id = hist.team_2
+        query = """select u1.name, u1.surname, u1.school_id, score_1, score_2, u2.name, u2.surname, u2.school_id, campus.name, campus.campus_id, f.name, f.facility_id, sport.sport_type, sport.sport_id, date 
+                   from individuals_match_history as hist
+                   join user as u1 on hist.user_1 = u1.school_id
+                   join user as u2 on hist.user_2 = u2.school_id
                    join campus on campus.campus_id = hist.campus_id
-                   join facility on facility.facility_id = hist.facility_id;"""
-        is_ind = 0
-        
+                   join facility as f on f.facility_id = hist.facility_id
+                   join sport on sport.sport_id = hist.sport_id
+                   where u1.school_id = {user} or u2.school_id = {user};""".format(user = selected_user)
     else:
-        cursor.execute('SELECT is_ind FROM sport where sport_id = {}'.format(selected_sport))
-        is_ind = cursor.fetchall()[0][0]
-
-        if is_ind == 0:
-            query = """select t1.name, t2.name, hist.score_1, hist.score_2, campus.name, facility.name, hist.date 
-                    from team_match_history as hist
-                    join team as t1 on t1.team_id = hist.team_1
-                    join team as t2 on t2.team_id = hist.team_2
-                    join campus on campus.campus_id = hist.campus_id
-                    join facility on facility.facility_id = hist.facility_id
-                    where hist.sport_id = {};""".format(selected_sport)
-            
-        else:
-            query = """select u1.name, u1.surname, u2.name, u2.surname, hist.score_1, hist.score_2, campus.name, facility.name, hist.date
-                       from individuals_match_history as hist
-                       join user as u1 on u1.school_id = hist.user_1
-                       join user as u2 on u2.school_id = hist.user_2
-                       join campus on campus.campus_id = hist.campus_id
-                       join facility on facility.facility_id = hist.facility_id
-                       where sport_id = {};""".format(selected_sport)
-            
-
+        query = """select u1.name, u1.surname, u1.school_id, score_1, score_2, u2.name, u2.surname, u2.school_id, campus.name, campus.campus_id, f.name, f.facility_id, sport.sport_type, sport.sport_id, date 
+                   from individuals_match_history as hist
+                   join user as u1 on hist.user_1 = u1.school_id
+                   join user as u2 on hist.user_2 = u2.school_id
+                   join campus on campus.campus_id = hist.campus_id
+                   join facility as f on f.facility_id = hist.facility_id
+                   join sport on sport.sport_id = hist.sport_id
+                   where (u1.school_id = {user} or u2.school_id = {user}) and sport.sport_id = {sport};""".format(user=selected_user, sport=selected_sport)
+        
     cursor.execute(query)
-    table_data = cursor.fetchall()
+    data = cursor.fetchall()
+    data, title = manipulate_hist_data(data, "ind")
 
-    table_data, title = manipulate_hist_data(table_data, is_ind)
-    
     cursor.close()
-    return render_template('match_hist.html', match_hist_form=match_hist_form, selected_sport=selected_sport, table_data=table_data, title=title)
+    return render_template('match_hist.html', user = selected_user, form=match_hist_form, data=data, title=title)
 
 @app.route('/rank/', methods = ["GET","POST"])
 @app.route('/rank/<selected_sport><order_by>', methods = ["GET","POST"])
 def rank_page(selected_sport = "*", order_by = "score"):
+    if request.method == 'POST':
+        selected_sport = request.form['sports']
+        order_by = request.form['order']
+
+
     cursor = mysql.connection.cursor()
 
     cursor.execute('SELECT sport_id, sport_type FROM sport where is_ind = 0')
     sports = cursor.fetchall()
 
-    if request.method == 'POST':
-        selected_sport = request.form['sports']
-        order_by = request.form['order']
     rank_form = RankFrom(sports, selected_sport, order_by)
 
     if selected_sport == "*":
@@ -176,7 +164,46 @@ def rank_page(selected_sport = "*", order_by = "score"):
 @app.route('/reservation/', methods = ["GET","POST"])
 @app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
 def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
-    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by)
+
+    if request.method == 'POST':
+        selected_sport = request.form['sports']
+        selected_campus = request.form['campus']
+        selected_area = request.form['area']
+        order_by = request.form['order']
+
+    cursor = mysql.connection.cursor()
+
+    cursor.execute('SELECT sport_id, sport_type FROM sport')
+    sports = cursor.fetchall()
+
+    if selected_sport == "*":
+        cursor.execute('SELECT campus_id, name FROM campus')
+        campuses = cursor.fetchall()
+    else:
+        query = """SELECT DISTINCT c.campus_id, c.name FROM campus c 
+        JOIN facility f ON c.campus_id = f.campus_id
+        JOIN facility_for_sport fs ON f.facility_id = fs.facility_id
+        WHERE fs.sport_id = {}""".format(selected_sport)
+        cursor.execute(query, (selected_sport,))
+        campuses = cursor.fetchall()
+    
+    if selected_campus == "*":
+        cursor.execute('SELECT facility_id, name FROM facility')
+        area = cursor.fetchall()
+    else:
+        query = 'SELECT facility_id, name FROM facility WHERE campus_id = {}'.format(selected_campus)
+        cursor.execute(query, (selected_campus,))
+        area = cursor.fetchall()
+
+    query = """SELECT * FROM facility as f join facility_for_sport as fps on f.facility_id = fps.facility_id;"""
+
+    reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area, order_by)
+    
+    
+    #cursor.execute(query)
+    table_data = cursor.fetchall()
+
+    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form)
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
 def team_profile(selected_team):
@@ -195,10 +222,6 @@ def team_profile(selected_team):
 
     team_info = manipulate_team_info(team_info)
 
-
-
-
-
     query = """select name, surname, school_id from user
                where team_id_football = {team} or 
                team_id_volleyball = {team} or 
@@ -210,27 +233,63 @@ def team_profile(selected_team):
     cursor.execute(query)
     players = [[row[0].capitalize() + " " + row[1].capitalize(), row[2]] for row in cursor.fetchall()]
     
-
-
     query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
                join team as team1 on team1.team_id = hist.team_1
                join team as team2 on team2.team_id = hist.team_2
                where team_1 = 4 or team_2 = 4;
             """.format(selected_team)
 
-            
     cursor.execute(query)
     match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
-    
 
     
-    
+    no_teams = False
+    if current_user.all_teams[team_info["sport_type"]]:
+        no_teams = True
 
-    return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
+    return render_template('team_profile.html', team=team_info ,players=players, match_hist=match_hist, no_teams=no_teams)
 
-@app.route('/profile/<selected_user>', methods = ["GET", "POST"])
+
+@app.route('/profile/<selected_user>', methods = ["GET"])
 def profile_page(selected_user):
-    return render_template('profile.html', selected_user=selected_user)
+    cursor = mysql.connection.cursor()
+
+    query = """select u.name, u.surname, u.school_id, u.email, u.tel_no, u.faculty_name, u.department, u.birth_date, u.gender from user u
+              where u.school_id = {user};""".format(user = selected_user)
+    
+    cursor.execute(query)
+
+    user = cursor.fetchall()
+
+    user = manipulate_profile_user(user)
+    
+    query = """SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_football
+               WHERE school_id = {user} AND team_id_football IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_volleyball
+               WHERE school_id = {user} AND team_id_volleyball IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_basketball
+               WHERE school_id = {user} AND team_id_basketball IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_tennis
+               WHERE school_id = {user} AND team_id_tennis IS NOT NULL
+               UNION
+               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               join team on team.team_id = user.team_id_pingpong
+               WHERE school_id = {user} AND team_id_pingpong IS NOT NULL;""".format(user = selected_user)
+
+    cursor.execute(query)
+
+    team_table = cursor.fetchall()
+
+    team_table = manipulate_profile_teams(team_table)
+
+    return render_template('profile.html', team_table=team_table, user=user)
 
 @app.route("/update_profile")
 def update_profile():

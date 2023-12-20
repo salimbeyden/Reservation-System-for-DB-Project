@@ -49,15 +49,14 @@
 
     <div class="hist-title">
 
-    <form method="post" action="{{ url_for('match_hist', selected_sport = selected_sport) }}">
-        {{ match_hist_form.sports(class="sports-dropdown") }}
-        {{ match_hist_form.hidden_tag() }}
-        {{ match_hist_form.submit_button(class="submit-button") }}
-
+    <form method="post" action="{{ url_for('match_hist', selected_user = user) }}">
+        {{ form.sports(class="sports-dropdown") }}
+        {{ form.hidden_tag() }}
+        {{ form.submit_button(class="submit-button") }}
+        
     </form>
-
-
-        {% if selected_sport %}
+    
+    individual matches
         <table class = hist-table>
             <thead>
                 {% for column in title %}
@@ -66,16 +65,19 @@
                           
             </thead>
             <tbody>
-                {% for row in table_data %}
-                    <tr>
-                        {% for cell in row %}
-                            <td class = text>{{ cell }}</td>
-                        {% endfor %}
-                    </tr>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row["u1_name"] }}</td>
+                    <td>{{ row["score"] }}</td>
+                    <td>{{ row["u2_name"] }}</td>
+                    <td>{{ row["campus_name"] }}</td>
+                    <td>{{ row["facility_name"] }}</td>
+                    <td>{{ row["sport_type"] }}</td>
+                    <td>{{ row["date"] }}</td>
+                </tr>
                     {% endfor %}
                 </tbody>
-            </table>
-            {% endif %}
+            </table>    
     </div>
 
 </html>

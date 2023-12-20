@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash, request, jsonify
+from flask import Flask, render_template, redirect, url_for, session, flash, request, jsonify, session
 from flask_login import login_user, current_user, logout_user
 
 from MyFlaskApp import app
@@ -7,6 +7,7 @@ from MyFlaskApp import mysql
 from imports.forms import *
 from imports.utils import *
 from imports.models import User  # Import User from models.py
+import random
 
 # to be able to reachable from every file
 @app.context_processor
@@ -174,7 +175,9 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         selected_sport = request.form['sports']
         selected_campus = request.form['campus']
         selected_area = request.form['area']
-        order_by = request.form['order']
+
+        # Store the selected date in the session
+        session['selected_date'] = request.form['set_time']
 
     cursor = mysql.connection.cursor()
 
@@ -186,11 +189,12 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         campuses = cursor.fetchall()
     else:
         query = """SELECT DISTINCT c.campus_id, c.name FROM campus c 
-        JOIN facility f ON c.campus_id = f.campus_id
-        JOIN facility_for_sport fs ON f.facility_id = fs.facility_id
-        WHERE fs.sport_id = {}""".format(selected_sport)
+                    JOIN facility f ON c.campus_id = f.campus_id
+                    JOIN facility_for_sport fs ON f.facility_id = fs.facility_id
+                    WHERE fs.sport_id = {}""".format(selected_sport)
         cursor.execute(query, (selected_sport,))
         campuses = cursor.fetchall()
+
     
     if selected_campus == "*":
         cursor.execute('SELECT facility_id, name FROM facility')
@@ -200,15 +204,109 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         cursor.execute(query, (selected_campus,))
         area = cursor.fetchall()
 
-    query = """SELECT * FROM facility as f join facility_for_sport as fps on f.facility_id = fps.facility_id;"""
+    query = """SELECT DISTINCT c.name, f.name, s.sport_type, f.email, fps.current, fps.capacity FROM facility as f
+                join facility_for_sport as fps on f.facility_id = fps.facility_id
+                join campus as c on c.campus_id = f.campus_id
+                join sport as s on s.sport_id = fps.sport_id
+                where fps.current < fps.capacity;"""
+    
+    cursor.execute(query)
+    data = cursor.fetchall()
+    data, title = manipulate_reservation_data(data)
 
     reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area, order_by)
-    
-    
-    #cursor.execute(query)
-    table_data = cursor.fetchall()
 
-    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form)
+    cursor.close()
+    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form,
+                           data=data, title=title)
+
+
+@app.route('/reservation_result', methods=['POST'])
+def reservation_result():
+    campus = request.form.get('campus')
+    saloon = request.form.get('saloon')
+    sport = request.form.get('sport')
+    mail = request.form.get('mail')
+    current = request.form.get('current')
+    capacity = request.form.get('capacity')
+    
+    #take reservation in that date
+    selected_date = session.get('selected_date', None)
+    
+    data = [campus, saloon, sport, mail, current, capacity, selected_date]
+
+    cursor = mysql.connection.cursor()
+
+    query = """SELECT is_competitive,is_ind FROM sport WHERE sport_type = '{}'""".format(sport)
+    cursor.execute(query)
+    res_table = cursor.fetchall()
+    
+    #get sport id
+    query = """SELECT sport_id FROM sport WHERE sport_type = '{}'""".format(sport)
+    cursor.execute(query)
+    sport_id = cursor.fetchall()[0][0]
+    
+
+    #get campus id
+    query = """SELECT campus_id FROM campus WHERE name = '{}'""".format(campus)
+    cursor.execute(query)
+    campus_id = cursor.fetchall()[0][0]
+
+    #get saloon id
+    query = """SELECT facility_id FROM facility WHERE name = '{}'""".format(saloon)
+    cursor.execute(query)
+    facility_id = cursor.fetchall()[0][0]
+
+    #individual sports
+    if(res_table[0] == "1" and res_table[1] == "0"):
+        #append reservation_team
+
+        #decide the sport type of user
+        if(sport_id == "1"):
+            team_1 = current_user.f_team_id
+        elif(sport_id == "2"):
+            team_1 = current_user.v_team_id
+        elif(sport_id == "3"):
+            team_1 = current_user.b_team_id
+        elif(sport_id == "5"):
+            team_1 = current_user.t_team_id
+        elif(sport_id == "9"):
+            team_1 = current_user.p_team_id
+
+        print(team_1)
+
+        query = """SELECT team_id FROM team"""
+        cursor.execute(query)
+        team_ids = cursor.fetchall()
+        team_2 = random.choice(team_ids)[0]
+
+        query = """INSERT INTO reservation_team (sport_id, campus_id, facility_id, date, team_1, team_2)
+                    VALUES (%s, %s, %s, %s, %s, %s)"""
+        values = (sport_id, campus_id, facility_id, selected_date, team_1, team_2)
+        cursor.execute(query, values)
+        mysql.connection.commit()
+    elif(res_table[0] == "0" and res_table[1] == "1"):
+        #append individual reservation
+        query = """INSERT INTO reservation_individual (sport_id, campus_id, facility_id, date, user)
+                    VALUES (%s, %s, %s, %s, %s)"""
+        values = (sport_id, campus_id, facility_id, selected_date, current_user.school_id)
+        cursor.execute(query, values)
+        mysql.connection.commit()
+    else:
+        #append reservation individual_match
+        query = """SELECT school_id FROM user"""
+        cursor.execute(query)
+        user_ids = cursor.fetchall()
+        user_2 = random.choice(user_ids)[0]
+
+        query = """INSERT INTO reservation_individual_match (sport_id, campus_id, facility_id, date, user_1, user_2)
+                    VALUES (%s, %s, %s, %s, %s, %s)"""
+        values = (sport_id, campus_id, facility_id, selected_date, current_user.school_id, user_2)
+        cursor.execute(query, values)
+        mysql.connection.commit()
+        
+    return render_template("success_res.html", data=data)
+
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
 def team_profile(selected_team):

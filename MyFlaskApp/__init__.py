@@ -10,7 +10,7 @@ with open('config.yaml', 'r') as config_file:
     db = yaml.load(config_file, Loader=yaml.FullLoader)
 
 app.config['MYSQL_HOST'] = db['host']
-app.config['MYSQL_USER'] = db["user"]
+app.config['MYSQL_USER'] = db['user']
 app.config['MYSQL_PASSWORD'] = db['passwd']
 app.config['MYSQL_DB'] = db['database']
 app.config['SECRET_KEY'] = 'voltran1234'

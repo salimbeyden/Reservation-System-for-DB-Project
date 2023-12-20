@@ -8,9 +8,15 @@ from imports.forms import *
 from imports.utils import *
 from imports.models import User  # Import User from models.py
 
+# to be able to reachable from every file
 @app.context_processor
 def inject_campus_dropdown():
-    return dict(dropdown_items=manipulate_campus_dropdown())
+    return dict(dropdown_campus_items=manipulate_campus_dropdown())
+
+# to be able to reachable from every file
+@app.context_processor
+def inject_sport_dropdown():
+    return dict(dropdown_sport_items=manipulate_sports_dropdown())
 
 # to view a personalized page with peralized http extension
 @app.route('/about/<username>')
@@ -71,9 +77,9 @@ def register_page():
             values = (id, name, surname, email, tel_no, faculty_name, department, birth_date, password, gender)
             cursor.execute(query, values)
             mysql.connection.commit()
-            cursor.close()
-            flash("Registration successful, please login.")
-            return redirect(url_for('login.html'))
+            # cursor.close()
+            # flash("Registration successful, please login.")
+            return redirect(url_for('login_page'))
 
         except Exception as e:
             print("An error occurred: " + str(e))
@@ -209,12 +215,12 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
 def team_profile(selected_team):
     cursor = mysql.connection.cursor()
 
-    query = """select team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, count(*) from team
+    query = """select team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, count(*) from team
                join team_match_history as hist on team.team_id = hist.team_1 or team.team_id = hist.team_2
                join user on user.school_id = team.captain_id
                join sport on sport.sport_id = team.sport_id
                where team_id = {}
-               group by team.name, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score;
+               group by team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score;
             """.format(selected_team)
     cursor.execute(query)
 
@@ -302,20 +308,21 @@ def log_out():
     session.clear()  # Clear the session
     return redirect(url_for('home_page'))
 
-# when log out
 @app.route('/campus/<selected_campus>')
 def campus_page(selected_campus):
+    print(selected_campus)
     # Query for campus_id
-    campus_query = "SELECT campus_id FROM campus WHERE name = %s"
+    campus_query = "SELECT name FROM campus WHERE campus_id = %s"
     cursor = mysql.connection.cursor()
     cursor.execute(campus_query, (selected_campus,))
-    campus_id = cursor.fetchone()[0]
+    campus_name = cursor.fetchone()
+    campus_id = selected_campus
+
     
     # Query for facilities in this campus
     facilities_query = "SELECT * FROM facility WHERE campus_id = %s"
     cursor.execute(facilities_query, (campus_id,))
     facilities = cursor.fetchall()
-    #facilities = manipulate_facility_info(facilities_data)
     # For each facility, find associated sports
     facilities_sports = {}
     for facility in facilities:
@@ -329,6 +336,46 @@ def campus_page(selected_campus):
         cursor.execute(sports_query, (facility_id,))
         sports = cursor.fetchall()
         facilities_sports[facility["facility_id"]] = [facility, [sport for sport in sports]]
-        print(facilities_sports)
+
     # Render template with facilities and associated sports
-    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=selected_campus)
+    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=campus_name)
+
+# sports
+@app.route('/sports/<selected_sport>')
+def sports_page(selected_sport):
+    # Query for campus_id
+    sport_query = "SELECT sport_type FROM sport WHERE sport_id = %s"
+    cursor = mysql.connection.cursor()
+    print(selected_sport)
+    cursor.execute(sport_query, (selected_sport,))
+    sport_name = cursor.fetchone()[0]
+    sport_id = selected_sport
+    
+    # Query for facilities which has the sport field
+    facilities_query = """
+    SELECT facility.* 
+    FROM facility 
+    JOIN facility_for_sport 
+    ON facility.facility_id = facility_for_sport.facility_id 
+    WHERE facility_for_sport.sport_id = %s
+    """
+    cursor.execute(facilities_query, (sport_id,))
+    facilities = cursor.fetchall()
+    # For each facility, find associated sports
+    campus_facilities_dict = {}
+    for facility in facilities:
+        facility_info = manipulate_facility_info(facility)
+        
+        # Query for campus name
+        campus_query = "SELECT * FROM campus WHERE campus_id = %s"
+        cursor.execute(campus_query, (facility_info["campus_id"],))
+        campus = cursor.fetchone()
+        campus_info = manipulate_campus_info(campus)
+        
+        # Add to dictionary
+        
+        if campus_info["name"] not in campus_facilities_dict:
+            campus_facilities_dict[campus_info["name"]] = [campus_info,[]]
+        campus_facilities_dict[campus_info["name"]][1].append(facility_info)
+    # Render template with facilities and associated sports
+    return render_template('sports.html', campus_facilities_dict=campus_facilities_dict, sport_id=sport_id, sport_name=sport_name)

@@ -22,11 +22,23 @@
                     <div class="dropdown">
                         <a href="#" class="dropbtn">Campuses</a>
                         <div class="dropdown-content">
-                            {% for item in dropdown_items %}
-                                <a href="{{ url_for('campus_page', selected_campus = item.name) }}">{{ item.name }}</a>
+                            {% for item in dropdown_campus_items %}
+                                <a href="{{ url_for('campus_page', selected_campus = item.id) }}">{{ item.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
+            </div>
+            <span class="separator"></span>
+            <div id="sportsSection">
+                <!-- Display all campuses -->
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Sports</a>
+                    <div class="dropdown-content">
+                        {% for item in dropdown_sport_items %}
+                            <a href="{{ url_for('sports_page', selected_sport = item.id) }}">{{ item.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             <span class="separator"></span>
             <div id="loginSection">
@@ -63,9 +75,7 @@
         </div>
         <div id="slideshow-buttons">
             <button id="prev"><i class="fa-solid fa-caret-left"></i></button>
-            <a id="reservation-link" href="{{ url_for('reservation_page') }}">
-                <button id="reservation">Make Reservation</button>
-            </a>
+                <button id="reservation"><a id="reservation-link" href="{{ url_for('reservation_page') }}">Make Reservation</a></button>
             <button id="next"><i class="fa-solid fa-caret-right"></i></button>
         </div>
         

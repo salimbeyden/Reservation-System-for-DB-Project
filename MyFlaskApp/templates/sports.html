@@ -1,14 +1,16 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>selected_campus</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/campus.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>User Profile</title>
 </head>
 <body>
+
+    <!-- Header -->
+
     <header>
         <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
         <nav>
@@ -58,50 +60,20 @@
         </nav>
     </header>
 
+    <h1 class="campus-title">{{ sport_name }} Detayları</h1>
 
-    <div class="container">
-        <div class="top">
-            <div class="user-img">
-                {% if user["gender"] == "m" %}
-                    <img src="{{ url_for('static', filename='images/user_icon/userimg_male.jpg')}}" alt="user">
-                {% else %}
-                    <img src="{{ url_for('static', filename='images/user_icon/userimg_female.jpg')}}" alt="user">
-                {% endif %}
-
-            </div>
-            <div class="user-info">
-                <h1>{{ user["name"] }}</h1>
-                <p>{{ user["mail"] }}</p>
-                <p>{{ user["tel_no"] }}a</p>
-                <p> {{ user["faculty"] }} </p>
-                <p> {{ user["department"] }} </p>
-                <p> {{ user["birth_date"] }} </p>
-                <p> {{ user["gender"] }} </p>
-            </div>
+    <div class="campus-details">
+        {% for campus_name, campus in campus_facilities_dict.items() %}
+        <div class="facility">
+            <h2>{{ campus[0].name }}</h2>
+            <p>{{ campus[0].address }}</p>
+            {% for facility_info in campus[1] %}
+            <a href="{{ url_for('reservation_page', selected_sport=sport_id, selected_campus=campus[0].campus_id, selected_area=facility_info.facility_id) }}">{{ facility_info.name }}</a>
+            {% endfor %}
         </div>
-        <div class="bottom">
-            <div class="teams"><h2>Teams</h2>
-                {% for row in team_table %}
-                    <a href="{{ url_for('team_profile', selected_team = row['team_id']) }}"> {{ row["name"] }} </a> {{ row["team_score"] }} {{ row["sport_id"] }} <br>
-                {% endfor%}
-            </div>
-            <div class="reservations">
-                <h2>Future Reservations</h2>
-                <!-- Here can be a list of future reservations -->
-            </div>
-            <div class="others">
-                <div class="prev-reservations">
-                    <a href="{{ url_for('match_hist', selected_user = selected_user) }}">
-                        <button>Previous Matches</button>
-                    </a>
-                    <!-- Here can be a list of previous reservations -->
-                </div>
-                {% if user["school_id"] == current_user.school_id %}
-                    <div class="take-reservation">
-                        <button>Take Reservation</button>
-                    </div>
-                {% endif %}
-            </div>
+        {% endfor %}
+        <div class="reservation-link">
+            <a href="{{ url_for('reservation_page') }}">Rezervasyon Al</a>
         </div>
     </div>
 

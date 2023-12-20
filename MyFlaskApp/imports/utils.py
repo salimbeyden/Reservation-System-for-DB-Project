@@ -104,16 +104,21 @@ def manipulate_facility_info(data):
 
     facility["facility_id"] = data[0]
     facility["name"] = data[1]
+    facility["campus_id"] = data[2]
     facility["tel_no"] = data[3]
     facility["email"] = data[4]
     facility["address"] = data[5]
 
     return facility
 
-def manipulate_spor_info(data):
-    team = dict()
+def manipulate_campus_info(data):
+    campus = dict()
 
-    return team
+    campus["campus_id"] = data[0]
+    campus["name"] = data[1]
+    campus["address"] = data[2]
+
+    return campus
 
 
     
@@ -129,4 +134,14 @@ def manipulate_campus_dropdown():
     print(campus_dropdown)
     return campus_dropdown
 
+def manipulate_sports_dropdown():
+    cursor = mysql.connection.cursor()
     
+    # to get sports names
+    cursor.execute("SELECT * FROM sport")  # Adjust the query as needed
+    sports = cursor.fetchall()
+    cursor.close()
+    
+    sports_dropdown = [{"id": sport[0], "name": sport[1]} for sport in sports]
+    print(sports_dropdown)
+    return sports_dropdown

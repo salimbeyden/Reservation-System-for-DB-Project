@@ -1,4 +1,4 @@
 host: localhost
 user: root
-passwd:  test # change this with your own password
+passwd:  voltran1234 # change this with your own password
 database : reservations

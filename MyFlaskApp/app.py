@@ -8,6 +8,10 @@ from imports.forms import *
 from imports.utils import *
 from imports.models import User  # Import User from models.py
 
+@app.context_processor
+def inject_campus_dropdown():
+    return dict(dropdown_items=manipulate_campus_dropdown())
+
 # to view a personalized page with peralized http extension
 @app.route('/about/<username>')
 def about_person_page(username):
@@ -18,10 +22,6 @@ def about_person_page(username):
 @app.route('/home') # hume page at /home, also
 def home_page():
     return render_template('index.html')
-
-@app.route('/dash')
-def dash_page():
-    return render_template('dashboard.html')
 
 # for login page at /login
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,10 +51,8 @@ def login_page():
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
     register_form = RegisterForm()
-    print("Hello, console!")
     ### FOR REGISTRATION ###
     if register_form.validate_on_submit():
-        print("girdim")
         try:
             id = register_form.student_number.data
             name = register_form.name.data
@@ -68,13 +66,10 @@ def register_page():
             gender = register_form.gender.data
             
             cursor = mysql.connection.cursor()
-            print("buraya geldim")
             query= """INSERT INTO user (school_id, name, surname, email, tel_no, faculty_name, department, birth_date, password_hash, gender) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             values = (id, name, surname, email, tel_no, faculty_name, department, birth_date, password, gender)
             cursor.execute(query, values)
-            print("sanırım insert edeedim")
             mysql.connection.commit()
-            print("Record inserted successfully into Reservations table")
             cursor.close()
             flash("Registration successful, please login.")
             return redirect(url_for('login.html'))
@@ -82,7 +77,7 @@ def register_page():
         except Exception as e:
             print("An error occurred: " + str(e))
 
-    return render_template(login_page, register_form=register_form)
+    return render_template('register.html', register_form=register_form)
 
 @app.route('/matchhist/', methods = ["GET","POST"])
 @app.route('/matchhist/<selected_sport>', methods = ["GET","POST"])
@@ -233,7 +228,6 @@ def team_profile(selected_team):
 
     return render_template('team_profile.html',team=team_info ,players=players, match_hist=match_hist)
 
-
 @app.route('/profile/<selected_user>', methods = ["GET", "POST"])
 def profile_page(selected_user):
     return render_template('profile.html', selected_user=selected_user)
@@ -248,3 +242,34 @@ def log_out():
     logout_user()
     session.clear()  # Clear the session
     return redirect(url_for('home_page'))
+
+# when log out
+@app.route('/campus/<selected_campus>')
+def campus_page(selected_campus):
+    # Query for campus_id
+    campus_query = "SELECT campus_id FROM campus WHERE name = %s"
+    cursor = mysql.connection.cursor()
+    cursor.execute(campus_query, (selected_campus,))
+    campus_id = cursor.fetchone()[0]
+    
+    # Query for facilities in this campus
+    facilities_query = "SELECT * FROM facility WHERE campus_id = %s"
+    cursor.execute(facilities_query, (campus_id,))
+    facilities = cursor.fetchall()
+    #facilities = manipulate_facility_info(facilities_data)
+    # For each facility, find associated sports
+    facilities_sports = {}
+    for facility in facilities:
+        facility = manipulate_facility_info(facility)
+        facility_id = facility["facility_id"]
+        sports_query = """
+        SELECT sport.sport_id, sport.sport_type FROM sport
+        JOIN facility_for_sport ON sport.sport_id = facility_for_sport.sport_id
+        WHERE facility_for_sport.facility_id = %s
+        """
+        cursor.execute(sports_query, (facility_id,))
+        sports = cursor.fetchall()
+        facilities_sports[facility["facility_id"]] = [facility, [sport for sport in sports]]
+        print(facilities_sports)
+    # Render template with facilities and associated sports
+    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=selected_campus)

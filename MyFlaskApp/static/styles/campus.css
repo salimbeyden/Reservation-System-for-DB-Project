@@ -1,0 +1,76 @@
+.campus-details {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.facility {
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 80%;
+    padding: 20px;
+    text-align: center;
+}
+
+.facility h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.facility p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.sports-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.sports-list a {
+    padding: 5px 15px;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    flex: 0 1 calc(33% - 30px);
+    text-align: center;
+    margin: 5px 0; /* Additional spacing for wrapped sports */
+}
+
+.sports-list a:hover {
+    background-color: #d0d0d0;
+}
+
+@media (max-width: 600px) {
+    .sports-list a {
+        flex: 0 1 100%;
+    }
+}
+
+.reservation-link {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.reservation-link a {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.reservation-link a:hover {
+    background-color: #218838;
+}

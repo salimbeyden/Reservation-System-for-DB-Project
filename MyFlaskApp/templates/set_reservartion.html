@@ -1,1 +1,38 @@
 <!DOCTYPE html>
+
+<header>
+    <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
+    <nav>
+        <a href="{{ url_for('home_page')}}">Home</a>
+        <span class="separator"></span>
+        <a href="{{ url_for('rank_page')}}">Statistics</a>
+        <span class="separator"></span>
+        <div id="campusSection">
+                <!-- Display all campuses -->
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Campuses</a>
+                    <div class="dropdown-content">
+                        {% for item in dropdown_items %}
+                            <a href="{{ url_for('campus_page', selected_campus = item.name) }}">{{ item.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+        </div>
+        <span class="separator"></span>
+        <div id="loginSection">
+            {% if current_user.is_authenticated %}
+                <!-- Display profile link if user is logged in -->
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">{{ current_user.name }}<i class="fa-solid fa-user"></i></a>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('profile_page', selected_user = current_user) }}">Profile</a>url_for
+                        <a href="{{ url_for('log_out') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+            <!-- Display login link if user is not logged in -->
+            <a href="{{ url_for('login_page') }}">Login<i class="fa-solid fa-user"></i></a>
+            {% endif %}
+        </div>
+    </nav>
+</header>

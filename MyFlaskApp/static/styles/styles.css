@@ -176,3 +176,15 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.campus-link {
+    color: #051626;
+    font-size: 36px;
+    font-weight: 600;
+    text-decoration: none; /* Removes underline from links */
+}
+
+.campus-link:hover {
+    text-decoration: underline; /* Adds underline on hover for visual feedback */
+}
+

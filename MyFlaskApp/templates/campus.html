@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>University Sports Facilities</title>
+    <title>selected_campus</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/campus.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -47,31 +47,24 @@
         </nav>
     </header>
 
-    <!-- Slideshow -->
+    <h1 class="campus-title">{{ campus_name }} Kampüs Detayları</h1>
 
-    <div id="slideshow" data-base-image-url="{{ url_for('static', filename='images/campus/') }}">
-        <div id="slideshow-wrapper">
-            <div id="slideshow-box">
-                <div id="slideshow-text"></div>
-                <div id="slideshow-links">
-                    <a id="reservation-link" href="#"> <!-- Placeholder href -->
-                        <button id="reservation">Make Reservation</button>
-                    </a>
-                </div>
-            </div>
-            <div id="slideshow-box"><img id="slideshow-image"></div>
+    <div class="campus-details">
+        {% for facility_name, facility_info in facilities_sports.items() %}
+        <div class="facility">
+            <h2>{{ facility_info[0].name }}</h2>
+            <p>{{ facility_info[0].address }}</p>
+            <p>{{ facility_info[0].tel_no }}</p>
+            <p>{{ facility_info[0].email }}</p>
+            {% for sport in facility_info[1] %}
+            <a href="{{ url_for('reservation_page', selected_sport=sport[0], selected_campus=campus_id) }}">{{ sport[1] }}</a>
+            {% endfor %}
         </div>
-        <div id="slideshow-buttons">
-            <button id="prev"><i class="fa-solid fa-caret-left"></i></button>
-            <a id="reservation-link" href="{{ url_for('reservation_page') }}">
-                <button id="reservation">Make Reservation</button>
-            </a>
-            <button id="next"><i class="fa-solid fa-caret-right"></i></button>
+        {% endfor %}
+        <div class="reservation-link">
+            <a href="{{ url_for('reservation_page') }}">Rezervasyon Al</a>
         </div>
-        
     </div>
 
-    <!-- Script Files -->
-    <script type="text/javascript" src="{{ url_for('static', filename='script/slider.js') }}"></script>
 </body>
 </html>

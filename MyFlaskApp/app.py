@@ -34,7 +34,6 @@ def home_page():
 def login_page():
 
     login_form = LoginForm()
-    print("Hello, console!")
     ### FOR LOGIN ###
     if login_form.validate_on_submit():
         email = login_form.email_address.data
@@ -77,7 +76,7 @@ def register_page():
             values = (id, name, surname, email, tel_no, faculty_name, department, birth_date, password, gender)
             cursor.execute(query, values)
             mysql.connection.commit()
-            # cursor.close()
+            cursor.close()
             # flash("Registration successful, please login.")
             return redirect(url_for('login_page'))
 
@@ -310,17 +309,16 @@ def log_out():
 
 @app.route('/campus/<selected_campus>')
 def campus_page(selected_campus):
-    print(selected_campus)
     # Query for campus_id
     campus_query = "SELECT name, image_id FROM campus WHERE campus_id = %s"
     cursor = mysql.connection.cursor()
     print(selected_campus)
     cursor.execute(campus_query, (selected_campus,))
-    campus = cursor.fetchone()[0]
-    campus_name = campus[1]
+    campus = cursor.fetchone()
     campus_id = selected_campus
+    campus_name = campus[0]
+    campus_image = campus[1]
 
-    
     # Query for facilities in this campus
     facilities_query = "SELECT * FROM facility WHERE campus_id = %s"
     cursor.execute(facilities_query, (campus_id,))
@@ -338,9 +336,8 @@ def campus_page(selected_campus):
         cursor.execute(sports_query, (facility_id,))
         sports = cursor.fetchall()
         facilities_sports[facility["facility_id"]] = [facility, [sport for sport in sports]]
-
     # Render template with facilities and associated sports
-    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=campus_name)
+    return render_template('campus.html', facilities_sports=facilities_sports, campus_id=campus_id, campus_name=campus_name, campus_image=campus_image)
 
 # sports
 @app.route('/sports/<selected_sport>')
@@ -348,7 +345,6 @@ def sports_page(selected_sport):
     # Query for campus_id
     sport_query = "SELECT sport_type FROM sport WHERE sport_id = %s"
     cursor = mysql.connection.cursor()
-    print(selected_sport)
     cursor.execute(sport_query, (selected_sport,))
     sport_name = cursor.fetchone()[0]
     sport_id = selected_sport

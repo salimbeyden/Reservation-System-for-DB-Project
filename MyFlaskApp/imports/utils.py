@@ -132,7 +132,6 @@ def manipulate_campus_dropdown():
     cursor.close()
     
     campus_dropdown = [{"id": campus[0], "name": campus[1]} for campus in campuses]
-    print(campus_dropdown)
     return campus_dropdown
 
 def manipulate_sports_dropdown():
@@ -144,5 +143,4 @@ def manipulate_sports_dropdown():
     cursor.close()
     
     sports_dropdown = [{"id": sport[0], "name": sport[1]} for sport in sports]
-    print(sports_dropdown)
     return sports_dropdown

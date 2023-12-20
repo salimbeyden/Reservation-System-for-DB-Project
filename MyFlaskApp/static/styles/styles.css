@@ -122,6 +122,7 @@
     background-color: #051626;
     border-style: none;
     color: #e5e2df;
+    text-decoration: none;
     text-transform: uppercase;
     text-align: center;
     padding: 10px;
@@ -129,6 +130,11 @@
     display: inline-block;
     transition: background-color 0.3s;
     font-weight: 600;
+}
+
+a .reservation-link {
+    color: #e5e2df;
+    text-decoration: none;
 }
 
 #slideshow-buttons button:hover {

@@ -312,10 +312,12 @@ def log_out():
 def campus_page(selected_campus):
     print(selected_campus)
     # Query for campus_id
-    campus_query = "SELECT name FROM campus WHERE campus_id = %s"
+    campus_query = "SELECT name, image_id FROM campus WHERE campus_id = %s"
     cursor = mysql.connection.cursor()
+    print(selected_campus)
     cursor.execute(campus_query, (selected_campus,))
-    campus_name = cursor.fetchone()
+    campus = cursor.fetchone()[0]
+    campus_name = campus[1]
     campus_id = selected_campus
 
     

@@ -1,4 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
 /* styles.css */
+
+html, body, header {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-weight: 500;
+}
 
 form {
     padding-top: 25px;
@@ -7,6 +16,14 @@ form {
     padding: 20px;
     border-radius: 5px;
     align-items: left;
+    display: flex;
+
+}
+
+form div {
+    flex: 1;
+    font-size: 14px;
+    font-family: 'Open Sans';
 }
 
 .dropdown {
@@ -15,24 +32,13 @@ form {
     box-sizing: border-box;
 }
 .sport-dropdown {
-    width: 50%;
+    width: 240px;
     padding: 10px;
     margin-bottom: 15px;
     box-sizing: border-box;
-}
-
-.order-dropdown {
-    width: 25%;
-    padding: 10px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-}
-
-.submit-button {
     font-size: 14px;
     background-color: #f7f7f7;
     border-style: solid;
-    border-color: #051626;
     color: #051626;
     text-transform: uppercase;
     text-align: center;
@@ -41,11 +47,58 @@ form {
     display: inline-block;
     transition: background-color 0.3s;
     font-weight: 600;
+    border-width: 2px;
+    border-color: #051626;
+}
+
+.order-dropdown {
+    width: 240px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #f7f7f7;
+    border-style: solid;
+    color: #051626;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    border-width: 2px;
+    border-color: #051626;
+}
+
+.submit-button {
+    font-size: 14px;
+    background-color: #8c734b;
+    border-style: solid;
+    border-color: #8c734b;
+    color: #f7f7f7;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    margin-top: 30px;
+    margin-left: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
 }
 
 .ranking-table{
     padding-top: 10px;
     padding-bottom: 15%;
+}
+
+.ranking-table thead {
+    border-radius: 20%;
+}
+
+.ranking-table thead tr{
+    font-weight: 300;
+    text-transform: capitalize;
 }
 
 div.ranking-title {
@@ -57,7 +110,6 @@ div.ranking-title {
 .ranking-title h3 {
     color: #fafafa;
     font-size: 30px;
-    font-weight: 400;
     font-style:normal;
     text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -72,12 +124,13 @@ div.ranking-title {
     padding:8px;
 }
 
+
+
 th {
     color:#D5DDE5;;
     background:#051626;
     border-right: 1px solid #343a45;
     font-size:23px;
-    font-weight: 100;
     padding:24px;
     text-align:center;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -103,9 +156,7 @@ tr {
 }
 
 tr:hover td {
-    background:#4E5066;
-    color:#FFFFFF;
-    border-top: 1px solid #22262e;
+    background:#DAE3EB;
 }
 
 tr:first-child {
@@ -121,7 +172,7 @@ tr:nth-child(odd) td {
 }
 
 tr:nth-child(odd):hover td {
-    background:#4E5066;
+    background:#DAE3EB;
 }
 
 tr:last-child td:first-child {
@@ -140,10 +191,15 @@ td {
     padding:10px;
     text-align:left;
     vertical-align:middle;
-    font-weight:300;
+    font-weight:400;
     font-size:18px;
     text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
     border-right: 1px solid #C1C3D1;
+}
+
+td a {
+    text-decoration: none;
+    color: #051626;
 }
 
 td:last-child {

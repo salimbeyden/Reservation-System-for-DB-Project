@@ -57,13 +57,14 @@ def manipulate_team_info(data):
     team = dict()
 
     team["name"] = data[0].title()
-    team["captain"] = data[1].capitalize() + " " + data[2].capitalize()
-    team["sport_type"] = data[3]
-    team["sport_id"] = data[4]
-    team["fuoundation_date"] = data[5]
-    team["team_score"] = data[6]
-    team["#_matches"] = data[7]
-    team["avrg"] = round(int(data[6]) / int(data[7]), 2)
+    team["team_id"] = data[1]
+    team["captain"] = data[2].capitalize() + " " + data[3].capitalize()
+    team["sport_type"] = data[4]
+    team["sport_id"] = data[5]
+    team["fuoundation_date"] = data[6]
+    team["team_score"] = data[7]
+    team["#_matches"] = data[8]
+    team["avrg"] = round(int(data[7]) / int(data[8]), 2)
 
     return team
 

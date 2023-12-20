@@ -71,8 +71,10 @@
             Order by: <br>
             {{ rank_form.order(class="order-dropdown") }}
         </div>
-        {{ rank_form.hidden_tag() }}
-        {{ rank_form.submit_button(class="submit-button") }}
+        <div>
+            {{ rank_form.hidden_tag() }}
+            {{ rank_form.submit_button(class="submit-button") }}
+        </div>
 
     </form>
 

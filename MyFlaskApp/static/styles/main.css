@@ -1,9 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+
 html, body, header {
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', Arial, sans-serif;
     font-weight: 300;
     background-color: #f7f7f7;
+}
+
+html, body, header {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-weight: 500;
 }
 
 /* Header */
@@ -92,6 +101,7 @@ button {
 /* Dropdown button */
 .dropbtn {
     cursor: pointer;
+    margin-top: 15px;
 }
 
 /* Dropdown content (hidden by default) */

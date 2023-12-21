@@ -65,15 +65,15 @@
     <form class = form method="post" action="{{ url_for('rank_page') }}">
         <div>
             Select Sport: <br>
-            {{ rank_form.sports(class="sport-dropdown") }}
+            {{ rank_form.sports(class="dropdown") }}
         </div>
         <div>
             Order by: <br>
-            {{ rank_form.order(class="order-dropdown") }}
+            {{ rank_form.order(class="dropdown") }}
         </div>
         <div>
             {{ rank_form.hidden_tag() }}
-            {{ rank_form.submit_button(class="submit-button") }}
+            {{ rank_form.submit_button(class="fill") }}
         </div>
 
     </form>

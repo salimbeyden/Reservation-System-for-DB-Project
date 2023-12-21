@@ -128,16 +128,22 @@ h2 {
     color: #051626;
 }
 
-/* Style for dropdown */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+/* Dropdown */
 
-/* Dropdown button */
-.dropbtn {
-    cursor: pointer;
-    margin-top: 15px;
+.dropdown {
+    width: 100%;
+    box-sizing: border-box;
+    border-style: solid;
+    color: #051626;
+    text-transform: uppercase;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    border-width: 2px;
+    border-color: #051626;
+    position: relative;
+    padding: 0px;
 }
 
 /* Dropdown content (hidden by default) */
@@ -168,5 +174,5 @@ h2 {
 
 /* Change dropdown button style on hover */
 .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+    background-color: #8c734b;
 }

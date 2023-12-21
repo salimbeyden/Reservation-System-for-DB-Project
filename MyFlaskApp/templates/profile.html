@@ -60,6 +60,7 @@
 
 
     <div class="container">
+
         <div class="top">
             <div class="user-img">
                 {% if user["gender"] == "m" %}
@@ -72,7 +73,7 @@
             <div class="user-info">
                 <h1>{{ user["name"] }}</h1>
                 <p>{{ user["mail"] }}</p>
-                <p>{{ user["tel_no"] }}a</p>
+                <p>{{ user["tel_no"] }}</p>
                 <p> {{ user["faculty"] }} </p>
                 <p> {{ user["department"] }} </p>
                 <p> {{ user["birth_date"] }} </p>
@@ -82,16 +83,20 @@
         <div class="bottom">
             <div class="teams"><h2>Teams</h2>
                 {% for row in team_table %}
-                    <a href="{{ url_for('team_profile', selected_team = row['team_id']) }}"> {{ row["name"] }} </a> {{ row["team_score"] }} {{ row["sport_id"] }} <br>
+                    <a href="{{ url_for('team_profile', selected_team = row['team_id']) }}"> {{ row["name"] }} </a> - 
+                    <a href="{{ url_for('sports_page', selected_sport = row['sport_id']) }}">{{ row["sport_type"] }} </a>  - 
+                    {{ row["team_score"] }}<br>
                 {% endfor%}
             </div>
-            <div class="reservations">
-                <h2>Future Reservations</h2>
-                <!-- Here can be a list of future reservations -->
-            </div>
+            {% if user["school_id"] == current_user.school_id %}
+                <div class="reservations">
+                    <h2>Future Reservations</h2>
+                    <!-- Here can be a list of future reservations -->
+                </div>
+            {% endif %}
             <div class="others">
                 <div class="prev-reservations">
-                    <a href="{{ url_for('match_hist', selected_user = selected_user) }}">
+                    <a href="{{ url_for('match_hist', selected_user = user['school_id']) }}">
                         <button>Previous Matches</button>
                     </a>
                     <!-- Here can be a list of previous reservations -->
@@ -102,7 +107,13 @@
                     </div>
                 {% endif %}
             </div>
+
         </div>
+        {% if user["school_id"] == current_user.school_id %}
+            <a href="{{ url_for('update_profile', selected_user = user['school_id']) }}">
+                <button>Edit Profile</button>
+            </a>
+        {% endif %}
     </div>
 
 </body>

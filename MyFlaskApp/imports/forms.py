@@ -111,5 +111,13 @@ class ReservationForm(FlaskForm):
                 self.area.choices.remove(default_area)
                 self.area.choices.insert(0, (str(default_area[0]), default_area[1]))
                 self.area.choices.insert(1, ("*", "All Saloons"))
+
+                
+
+class UpdateProfile(FlaskForm):
+    email_address = StringField(label='Email Address:', validators=[Email()])    
+    tel_no = StringField(label='Tel_no:', validators=[])
+    password = PasswordField(label='Password:', validators=[])
+    submit = SubmitField(label='Update')
     
     

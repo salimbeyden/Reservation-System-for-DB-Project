@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, session, flash, req
 from flask_login import login_user, current_user, logout_user
 
 from MyFlaskApp import app
-from MyFlaskApp import mysql
+from MyFlaskApp import mysql, csrf
 
 from imports.forms import *
 from imports.utils import *
@@ -211,16 +211,18 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
     return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form)
 
 @app.route('/team_profile/<selected_team>', methods = ["GET","POST"])
+@csrf.exempt
 def team_profile(selected_team):
     cursor = mysql.connection.cursor()
 
-    query = """select team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, count(*) from team
+    query = """select team.name, team.team_id, user.name, user.surname, user.school_id, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, sport.capacity_max, count(*) from team
                join team_match_history as hist on team.team_id = hist.team_1 or team.team_id = hist.team_2
                join user on user.school_id = team.captain_id
                join sport on sport.sport_id = team.sport_id
                where team_id = {}
-               group by team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score;
+               group by team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, sport.capacity_max;
             """.format(selected_team)
+    
     cursor.execute(query)
 
     team_info = cursor.fetchall()
@@ -231,18 +233,19 @@ def team_profile(selected_team):
                where team_id_football = {team} or 
                team_id_volleyball = {team} or 
                team_id_basketball = {team} or 
-               team_id_tennis = {team} or 
+               team_id_tennis = {team} or
                team_id_pingpong = {team};
             """.format(team=selected_team)
     
     cursor.execute(query)
-    players = [[row[0].capitalize() + " " + row[1].capitalize(), row[2]] for row in cursor.fetchall()]
+
+    players = [{"name": f"{row[0]} {row[1]}".title(), "school_id": row[2]} for row in cursor.fetchall()]
     
     query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
                join team as team1 on team1.team_id = hist.team_1
                join team as team2 on team2.team_id = hist.team_2
-               where team_1 = 4 or team_2 = 4;
-            """.format(selected_team)
+               where team_1 = {team} or team_2 = {team};
+            """.format(team = selected_team)
 
     cursor.execute(query)
     match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
@@ -251,6 +254,91 @@ def team_profile(selected_team):
     no_teams = False
     if current_user.all_teams[team_info["sport_type"]]:
         no_teams = True
+
+    query = """select  sport.capacity_max from team
+                       join sport on sport.sport_id = team.sport_id
+                       where team.team_id = {};""".format(team_info["team_id"])
+            
+    cursor.execute(query)
+    max_player = cursor.fetchone()[0]
+    
+    if request.method == 'POST':
+        print("Takimdan cikma-girme fonkisyonu calistirildi")
+        if request.form.get('action') == 'leave_team':
+
+            for player in players:
+                if str(player["school_id"]) == current_user.school_id:
+                    print("oyuncu silindi")
+                    players.remove(player)
+
+            base_query = "UPDATE user"
+            
+            match team_info["sport_id"]:
+                case 1:
+                    base_query += " SET team_id_football = NULL"
+                case 2:
+                    base_query += " SET team_id_volleyball = NULL"
+                case 3:
+                    base_query += " SET team_id_basketball = NULL"
+                case 5:
+                    base_query += " SET team_id_tennis = NULL"
+                case 5:
+                    base_query += " SET team_id_pingpong = NULL"
+
+            base_query += " WHERE school_id = {};".format(current_user.school_id)
+                
+            cursor.execute(base_query)
+            mysql.connection.commit()
+
+
+            if len(players) == 0:
+                query = "DELETE FROM team WHERE team_id = {});".format(team_info["team_id"])
+                cursor.execute(query)
+                mysql.connection.commit()
+
+                return redirect(url_for("profile_page", selected_user = current_user.school_id))
+
+            if str(team_info["captain_id"]) == current_user.school_id:
+                print("kaptan çıktı")
+                new_captain = players[0]["school_id"]
+                print(new_captain, team_info["team_id"])
+                query = "UPDATE team SET captain_id = {} WHERE team_id = {}".format(new_captain, team_info["team_id"])
+
+                cursor.execute(query)
+                mysql.connection.commit()
+
+            return redirect(url_for("team_profile", selected_team = team_info["team_id"]))
+        
+        if request.form.get('action') == 'join_team':
+
+            query = """UPDATE user
+                    SET team_id_football = NULL
+                    WHERE school_id = {};
+                    """.format(current_user.school_id)
+                
+            cursor.execute(query)
+            mysql.connection.commit()
+
+            base_query = "UPDATE user"
+            
+            match team_info["sport_id"]:
+                case 1:
+                    base_query += " SET team_id_football = {}".format(team_info["team_id"])
+                case 2:
+                    base_query += " SET team_id_volleyball = {}".format(team_info["team_id"])
+                case 3:
+                    base_query += " SET team_id_basketball = {}".format(team_info["team_id"])
+                case 5:
+                    base_query += " SET team_id_tennis = {}".format(team_info["team_id"])
+                case 5:
+                    base_query += " SET team_id_pingpong = {}".format(team_info["team_id"])
+
+            base_query += " WHERE school_id = {};".format(current_user.school_id)
+
+            cursor.execute(base_query)
+            mysql.connection.commit()
+
+            return redirect(url_for("team_profile", selected_team = team_info["team_id"]))
 
     return render_template('team_profile.html', team=team_info ,players=players, match_hist=match_hist, no_teams=no_teams)
 
@@ -268,37 +356,73 @@ def profile_page(selected_user):
 
     user = manipulate_profile_user(user)
     
-    query = """SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+    query = """SELECT team.name, team.team_id, team.team_score, sport.sport_type, team.sport_id, team.captain_id  FROM user 
                join team on team.team_id = user.team_id_football
+               join sport on sport.sport_id = team.sport_id
                WHERE school_id = {user} AND team_id_football IS NOT NULL
                UNION
-               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               SELECT team.name, team.team_id, team.team_score, sport.sport_type, team.sport_id, team.captain_id  FROM user 
                join team on team.team_id = user.team_id_volleyball
+               join sport on sport.sport_id = team.sport_id
                WHERE school_id = {user} AND team_id_volleyball IS NOT NULL
                UNION
-               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               SELECT team.name, team.team_id, team.team_score, sport.sport_type, team.sport_id, team.captain_id FROM user 
                join team on team.team_id = user.team_id_basketball
+               join sport on sport.sport_id = team.sport_id
                WHERE school_id = {user} AND team_id_basketball IS NOT NULL
                UNION
-               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               SELECT team.name, team.team_id, team.team_score, sport.sport_type, team.sport_id, team.captain_id  FROM user 
                join team on team.team_id = user.team_id_tennis
+               join sport on sport.sport_id = team.sport_id
                WHERE school_id = {user} AND team_id_tennis IS NOT NULL
                UNION
-               SELECT team.name, team.team_id, team.team_score, team.sport_id FROM user 
+               SELECT team.name, team.team_id, team.team_score, sport.sport_type, team.sport_id, team.captain_id  FROM user 
                join team on team.team_id = user.team_id_pingpong
+               join sport on sport.sport_id = team.sport_id
                WHERE school_id = {user} AND team_id_pingpong IS NOT NULL;""".format(user = selected_user)
 
     cursor.execute(query)
 
     team_table = cursor.fetchall()
 
-    team_table = manipulate_profile_teams(team_table)
+    team_table = manipulate_profile_teams(team_table, user["school_id"])
 
     return render_template('profile.html', team_table=team_table, user=user)
 
-@app.route("/update_profile")
+@app.route("/update_profile", methods = ["GET", "POST"])
 def update_profile():
-    return render_template("update_profile.html")
+
+    update_form = UpdateProfile()
+
+    update_form.email_address.render_kw = {"placeholder": current_user.email, "value": current_user.email}
+    update_form.tel_no.render_kw = {"placeholder": current_user.tel_no, "value": current_user.tel_no}
+    update_form.password.render_kw = {"placeholder": "********", "value": current_user.password}
+
+    if request.method == "POST":
+        cursor = mysql.connection.cursor()
+
+        new_mail = request.form["email_address"] if request.form["email_address"] != "" else current_user.email
+        new_tel_no = request.form["tel_no"] if request.form["tel_no"] != "" else current_user.tel_no
+        new_passw = request.form["password"] if request.form["password"] != "" else current_user.password
+
+
+        query = """UPDATE `reservations`.`user` 
+                   SET `email` = '{mail}', 
+                       `tel_no` = '{tel}', 
+                       `password_hash` = '{passw}' 
+                   WHERE (`school_id` = '{user}');""".format(mail=new_mail, tel=new_tel_no, passw=new_passw, user=current_user.school_id)
+        try:
+            cursor.execute(query)
+            mysql.connection.commit()
+            print("Oldu :)")
+        except:
+            print("Olmadi!!")
+        
+        cursor.close()
+        return redirect(url_for('profile_page', selected_user=current_user.school_id))
+
+
+    return render_template("update_profile.html", form=update_form)
 
 # when log out
 @app.route('/logout')
@@ -312,7 +436,6 @@ def campus_page(selected_campus):
     # Query for campus_id
     campus_query = "SELECT name, image_id FROM campus WHERE campus_id = %s"
     cursor = mysql.connection.cursor()
-    print(selected_campus)
     cursor.execute(campus_query, (selected_campus,))
     campus = cursor.fetchone()
     campus_id = selected_campus

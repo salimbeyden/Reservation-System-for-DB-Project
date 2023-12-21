@@ -58,7 +58,6 @@
         </nav>
     </header>
 
-
     <div class="container">
         <div class="top">
             <div class="team-info">
@@ -73,24 +72,32 @@
             <div class="team-players">
                 <h2>Team Players</h2>
                 {% for player in players %}
-                    {{ player[0] }} <br>
+                    <a href="{{ url_for('profile_page', selected_user = player['school_id']) }}">{{ player["name"] }}</a> <br>
                 {% endfor %}
             </div>
             <div class="prev-games">
                 <h2>Previous Games</h2>
                 {% for match in match_hist %}
-                    {{ match[0]}} {{ match[1]}} {{ match[2]}} {{ match[3]  }} <br>
+                    {{ match[0] }} {{ match[1] }} {{ match[2] }} {{ match[3] }} <br>
                 {% endfor %}
             </div>
             <div class="others">
                 {% if no_teams == False %}
-                    <div class="join-team">
-                        <button>Join Team</button>
-                    </div>
+                    {% if team["capacity_max"] > players|length %}
+                        <form action="{{ url_for('team_profile', selected_team = team['team_id']) }}", method = "POST">
+                            <input type="hidden" name="action" value="join_team">
+                            <div class="join-team">
+                                <button>Join Team</button>
+                            </div>
+                        </form>
+                    {% endif %}
                 {% elif team["team_id"] == current_user.all_teams[team["sport_type"]] %}
-                    <div class="join-team">
-                        <button>Piece out</button>
-                    </div>
+                    <form action="{{ url_for('team_profile', selected_team = team['team_id']) }}", method = "POST">
+                        <input type="hidden" name="action" value="leave_team">
+                        <div class="leave-team">
+                            <button>Peace out</button>
+                        </div>
+                    </form>
                 {% endif %}
             </div>
         </div>

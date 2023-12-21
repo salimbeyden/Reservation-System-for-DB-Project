@@ -59,17 +59,18 @@ def manipulate_team_info(data):
     team["name"] = data[0].title()
     team["team_id"] = data[1]
     team["captain"] = data[2].capitalize() + " " + data[3].capitalize()
-    team["sport_type"] = data[4]
-    team["sport_id"] = data[5]
-    team["fuoundation_date"] = data[6]
-    team["team_score"] = data[7]
-    team["#_matches"] = data[8]
-    team["avrg"] = round(int(data[7]) / int(data[8]), 2)
+    team["captain_id"] = data[4]
+    team["sport_type"] = data[5]
+    team["sport_id"] = data[6]
+    team["fuoundation_date"] = data[7]
+    team["team_score"] = data[8]
+    team["capacity_max"] = data[9]
+    team["#_matches"] = data[10]
+    team["avrg"] = round(int(data[8]) / int(data[10]), 2)
 
     return team
 
-
-def manipulate_profile_teams(data):
+def manipulate_profile_teams(data, user_id):
 
     teams = list()
 
@@ -79,8 +80,11 @@ def manipulate_profile_teams(data):
         team["name"] = row[0].title()
         team["team_id"] = row[1]
         team["team_score"] = row[2]
-        team["sport_id"] = row[3]
-
+        team["sport_type"] = row[3]
+        team["sport_id"] = row[4]
+        team["captain_id"] = row[5]
+        team["name"] += " (C)" if team["captain_id"] == int(user_id) else ""
+        
         teams.append(team)
 
     return teams

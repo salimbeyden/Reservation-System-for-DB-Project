@@ -173,7 +173,7 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
 
     if request.method == 'POST':
         selected_sport = request.form['sports']
-        selected_campus = request.form['campus']
+        selected_campus = request.form['campuses']
         selected_area = request.form['area']
 
         # Store the selected date in the session
@@ -188,29 +188,43 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         cursor.execute('SELECT campus_id, name FROM campus')
         campuses = cursor.fetchall()
     else:
-        query = """SELECT DISTINCT c.campus_id, c.name FROM campus c 
-                    JOIN facility f ON c.campus_id = f.campus_id
-                    JOIN facility_for_sport fs ON f.facility_id = fs.facility_id
-                    WHERE fs.sport_id = {}""".format(selected_sport)
-        cursor.execute(query, (selected_sport,))
+        query = """SELECT DISTINCT c.campus_id, c.name FROM facility as f
+                    join facility_for_sport as fps on f.facility_id = fps.facility_id
+                    join campus as c on c.campus_id = f.campus_id
+                    join sport as s on s.sport_id = fps.sport_id
+                    where fps.current < fps.capacity and fps.sport_id = {}""".format(selected_sport)
+        cursor.execute(query)
         campuses = cursor.fetchall()
-
     
     if selected_campus == "*":
         cursor.execute('SELECT facility_id, name FROM facility')
         area = cursor.fetchall()
     else:
-        query = 'SELECT facility_id, name FROM facility WHERE campus_id = {}'.format(selected_campus)
-        cursor.execute(query, (selected_campus,))
+        query = """SELECT DISTINCT c.campus_id, c.name FROM facility as f
+                    join facility_for_sport as fps on f.facility_id = fps.facility_id
+                    join campus as c on c.campus_id = f.campus_id
+                    join sport as s on s.sport_id = fps.sport_id
+                    where fps.current < fps.capacity and fps.sport_id = {} and f.facility_id = {}""".format(selected_sport, selected_campus)
+        cursor.execute(query)
         area = cursor.fetchall()
 
-    query = """SELECT DISTINCT c.name, f.name, s.sport_type, f.email, fps.current, fps.capacity FROM facility as f
-                join facility_for_sport as fps on f.facility_id = fps.facility_id
-                join campus as c on c.campus_id = f.campus_id
-                join sport as s on s.sport_id = fps.sport_id
-                where fps.current < fps.capacity;"""
+    base_query = """SELECT DISTINCT c.name, f.name, s.sport_type, f.email, fps.current, fps.capacity FROM facility as f
+                JOIN facility_for_sport as fps on f.facility_id = fps.facility_id
+                JOIN campus as c on c.campus_id = f.campus_id
+                JOIN sport as s on s.sport_id = fps.sport_id
+                WHERE fps.current < fps.capacity"""
     
-    cursor.execute(query)
+    # Apply filters based on form data
+    if selected_sport != "*":
+        base_query += f" AND s.sport_id = {selected_sport}"
+
+    if selected_campus != "*":
+        base_query += f" AND c.campus_id = {selected_campus}"
+
+    # Print the final SQL query for debugging
+    print("Final SQL Query:", base_query)
+    
+    cursor.execute(base_query)
     data = cursor.fetchall()
     data, title = manipulate_reservation_data(data)
 

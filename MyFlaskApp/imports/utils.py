@@ -113,7 +113,6 @@ def manipulate_facility_info(data):
 def manipulate_campus_info(data):
     campus = dict()
 
-<<<<<<< Updated upstream
     campus["campus_id"] = data[0]
     campus["name"] = data[1]
     campus["address"] = data[2]
@@ -122,10 +121,8 @@ def manipulate_campus_info(data):
 
 
     
-=======
     return team
    
->>>>>>> Stashed changes
 def manipulate_campus_dropdown():
     cursor = mysql.connection.cursor()
     
@@ -137,7 +134,6 @@ def manipulate_campus_dropdown():
     campus_dropdown = [{"id": campus[0], "name": campus[1]} for campus in campuses]
     return campus_dropdown
 
-<<<<<<< Updated upstream
 def manipulate_sports_dropdown():
     cursor = mysql.connection.cursor()
     
@@ -148,7 +144,6 @@ def manipulate_sports_dropdown():
     
     sports_dropdown = [{"id": sport[0], "name": sport[1]} for sport in sports]
     return sports_dropdown
-=======
 def manipulate_reservation_data(data):
 
     title = ['Campus', 'Saloon', 'Sport', 'Mail Address', 'Current', 'Capacity']
@@ -168,4 +163,3 @@ def manipulate_reservation_data(data):
         rows.append(line)
     
     return rows, title
->>>>>>> Stashed changes

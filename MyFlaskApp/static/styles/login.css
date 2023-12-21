@@ -16,14 +16,23 @@ body {
     max-width: 300px;
 }
 
+.form-container .form-signin *{
+    border: none;
+    margin: 20px;
+}
+
 .button-container {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    margin: 0px;
+}
+
+.button-container * {
+    margin: 0px;
 }
 
 .flash-messages {
     color: red;
     list-style-type: square;
     text-align: left;
-} 
+}

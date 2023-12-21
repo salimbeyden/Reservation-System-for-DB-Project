@@ -74,12 +74,12 @@ header .separator {
 
 /* Links */
 a {
-    color: #e5e2df;
+    color: #051626;
     text-decoration: none;
 }
 
 a:hover {
-    color: #051626;
+    color:#0a2c4d
 }
 
 /* Buttons */
@@ -97,19 +97,20 @@ button {
     display: inline-block;
     transition: background-color 0.3s;
     font-weight: 600;
+    cursor: pointer;
 }
 
 button:hover {
     background-color: #e5e5e5;
 }
 
-button #fill {
+button.fill {
     background-color: #051626;
     color: #e5e2df;
     border-color: #051626;
 }
 
-button #fill :hover {
+button .fill :hover {
     background-color: #0a2c4d;
 }
 

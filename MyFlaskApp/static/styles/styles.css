@@ -15,6 +15,8 @@
     flex-direction: row;
     justify-content: flex-start;
     height: 72vh;
+    max-height: 100%;
+    overflow-y: scroll;
 }
 
 #slideshow-box {
@@ -91,25 +93,6 @@
     max-height: 40px;
     width: 100%;
     padding: 40px;
-}
-
-#slideshow-links button {
-    font-size: 14px;
-    background-color: #f7f7f7;
-    border-style: solid;
-    border-color: #051626;
-    color: #051626;
-    text-transform: uppercase;
-    text-align: center;
-    padding: 10px;
-    margin: 10px;
-    display: inline-block;
-    transition: background-color 0.3s;
-    font-weight: 600;
-}
-
-#slideshow-links button:hover {
-    background-color: #e5e5e5;
 }
 
 #slideshow-buttons {

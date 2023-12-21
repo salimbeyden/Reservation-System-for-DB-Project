@@ -1,4 +1,6 @@
-/* Add this to your existing CSS or create a new CSS file */
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+}
 
 .container {
     width: 80%;
@@ -36,20 +38,3 @@
     border-radius: 5px;
     border: 1px solid #ccc;
   }
-  
-  button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Positioning the button to the bottom right */
-  button[type="submit"] {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
-  

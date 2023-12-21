@@ -22,25 +22,26 @@
     <div class="form-container" id="register-form">
         <i class="fa-solid fa-user"></i><h2>Register</h2>
         <form action="/register" method="POST" class="form-signin" style="color:white">
-            {{ register_form.hidden_tag() }}
-            <br>
-            {{ register_form.name(class="form-control", placeholder="Name") }}
-
-            {{ register_form.surname(class="form-control", placeholder="Surname") }}
-            {{ register_form.student_number(class="form-control", placeholder="Student Number") }}
-            {{ register_form.email_address(class="form-control", placeholder="Email") }}
-            {{ register_form.password(class="form-control", placeholder="Password") }}
-            {{ register_form.phone_number(class="form-control", placeholder="Phone Number") }}
-            {{ register_form.birth_date(class="form-control", placeholder="Birth Date") }}
-            {{ register_form.faculty(class="form-control", placeholder="Faculty") }}
-            {{ register_form.department(class="form-control", placeholder="Department") }}
-            {{ register_form.gender(class="form-control", placeholder="Gender (W/M)") }}
-            <br>
+            <div class="input-container">
+                {{ register_form.hidden_tag() }}
+                <br>
+                {{ register_form.name(class="form-control", placeholder="Name") }}
+                {{ register_form.surname(class="form-control", placeholder="Surname") }}
+                {{ register_form.student_number(class="form-control", placeholder="Student Number") }}
+                {{ register_form.email_address(class="form-control", placeholder="Email") }}
+                {{ register_form.password(class="form-control", placeholder="Password") }}
+                {{ register_form.phone_number(class="form-control", placeholder="Phone Number") }}
+                {{ register_form.birth_date(class="form-control", placeholder="Birth Date") }}
+                {{ register_form.faculty(class="form-control", placeholder="Faculty") }}
+                {{ register_form.department(class="form-control", placeholder="Department") }}
+                {{ register_form.gender(class="form-control", placeholder="Gender (W/M)") }}
+                <br>
+            </div>
 
             <div class="button-container">
                 <button class="fill" type="button" id="homepage-register"><i class="fa-solid fa-house"></i></button>
                 <button class="fill" type="button" id="show-login"><i class="fa-solid fa-arrow-left"></i></button>
-                {{ register_form.submit(class="fill") }}
+                {{ register_form.submit(class="submit-button") }}
             </div>
         </form>
     </div>

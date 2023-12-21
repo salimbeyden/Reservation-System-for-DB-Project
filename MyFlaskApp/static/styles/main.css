@@ -114,6 +114,23 @@ button .fill :hover {
     background-color: #0a2c4d;
 }
 
+.submit-button {
+    font-size: 14px;
+    border-style: solid;
+    background-color: #f7f7f7;
+    color: #051626;
+    border-color: #051626;
+    text-transform: uppercase;
+    display: inline-block;
+    transition: background-color 0.3s;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #e5e5e5;
+}
+
 /* Titles */
 
 h1 {
@@ -165,7 +182,11 @@ h2 {
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #051626;}
+.dropdown-content a:hover {
+    color: #8c734b;
+    text-decoration: none;
+    background-color: #051626;
+}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {

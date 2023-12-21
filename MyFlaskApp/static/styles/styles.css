@@ -134,19 +134,6 @@ a .reservation-link {
     display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #051626;}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Change dropdown button style on hover */
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-}
-
 .campus-link {
     color: #051626;
     font-size: 36px;

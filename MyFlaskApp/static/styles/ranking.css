@@ -1,3 +1,12 @@
+.elements {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20%;
+}
+
 form {
     padding-top: 25px;
     width : 100%;
@@ -6,14 +15,29 @@ form {
     border-radius: 5px;
     align-items: left;
     display: flex;
-
+    vertical-align: bottom;
+    height: 100px;
+    align-items: flex-end;
 }
 
 form div {
     flex: 1;
-    font-size: 14px;
-    font-family: 'Open Sans';
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: capitalize;
+    vertical-align: bottom;
+    margin-right: 40px;
 }
+
+form .submit-button {
+    padding: 20px;
+}
+
+form .dropdown {
+    padding: 20px;
+    background-color: #f7f7f7;
+}
+
 .ranking-table{
     padding-top: 10px;
     padding-bottom: 15%;
@@ -30,8 +54,11 @@ form div {
 
 div.ranking-title {
     display: block;
-    padding:50px;
-    width: 50%;
+    padding:0px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
 }
 
 .ranking-title h3 {
@@ -45,7 +72,6 @@ div.ranking-title {
     /*** Table Styles **/
 
 .ranking-title {
-    border-radius:3px;
     height: 320px;
     margin: auto;
     padding:8px;

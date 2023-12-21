@@ -21,20 +21,20 @@
 
     <div class="form-container" id="login-form">
         <i class="fa-solid fa-user"></i><h2>Login</h2>
-        <form action="/login" method="POST" class="form-signin" style="color:white">
-            {{ login_form.hidden_tag() }}
-            <br>
-            {{ login_form.email_address(class="form-control", placeholder="Email") }}
+        <form action="/login" method="POST" class="form-signin">
+            <div class="input-container">
+                {{ login_form.hidden_tag() }}
+                <br>
+                {{ login_form.email_address(class="form-control", placeholder="Email") }}
+                {{ login_form.password(class="form-control", placeholder="Password") }}
 
-            {{ login_form.password(class="form-control", placeholder="Password") }}
-
-            <br>
+                <br>
+            </div>
 
             <div class="button-container">
                 <button class="fill" type="button" id="homepage-login"><i class="fa-solid fa-house"></i></button>
                 <button class="fill" type="button" id="show-register">Register</button>
-                {{ login_form.submit(class="fill") }}
-                <!--<button type="submit" id="login">Login</button>-->
+                {{ login_form.submit(class="submit-button") }}
             </div>
             <script type="text/javascript">
                 var registerUrl = "{{ url_for('register_page') }}";

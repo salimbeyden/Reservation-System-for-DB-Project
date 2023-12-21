@@ -1,3 +1,9 @@
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 .campus-details {
     padding: 20px;
     display: flex;
@@ -54,23 +60,4 @@
     .sports-list a {
         flex: 0 1 100%;
     }
-}
-
-.reservation-link {
-    text-align: center;
-    padding-top: 20px;
-}
-
-.reservation-link a {
-    display: inline-block;
-    padding: 10px 25px;
-    background-color: #28a745;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.reservation-link a:hover {
-    background-color: #218838;
 }

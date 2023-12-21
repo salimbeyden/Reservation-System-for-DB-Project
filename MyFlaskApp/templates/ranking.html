@@ -58,51 +58,51 @@
             </div>
         </nav>
     </header>
+    <div class="elements">
+        <div class="ranking-title">
 
-    <div class="ranking-title">
+        
+        <form class = form method="post" action="{{ url_for('rank_page') }}">
+            <div>
+                Select Sport: <br>
+                {{ rank_form.sports(class="dropdown") }}
+            </div>
+            <div>
+                Order by: <br>
+                {{ rank_form.order(class="dropdown") }}
+            </div>
+            <div>
+                {{ rank_form.hidden_tag() }}
+                {{ rank_form.submit_button(class="submit-button") }}
+            </div>
 
-    
-    <form class = form method="post" action="{{ url_for('rank_page') }}">
-        <div>
-            Select Sport: <br>
-            {{ rank_form.sports(class="dropdown") }}
+        </form>
+
+        
+        <table class = ranking-table>
+            <thead>
+                
+                {% for column in title %}
+                    <th> {{ column }}</th>
+                {% endfor %}
+
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                    <tr>
+
+                        <td><a href="{{ url_for('team_profile', selected_team = row['team_id']) }}">{{ row["name"] }}</a></td>
+                        <td><a href="{{ url_for('profile_page', selected_user = row['captain_id']) }}">{{ row["captain"] }}</a></td>
+                        <td><a href="{{ url_for('sports_page', selected_sport = row['sport_id']) }}">{{ row["sport"] }}</a></td>
+                        <td>{{ row["total_score"] }}</td>
+                        <td>{{ row["#_matches"] }}</td>
+                        <td>{{ row["avrg_score"] }}</td>
+                        <td>{{ row["foundation_date"] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <div>
-            Order by: <br>
-            {{ rank_form.order(class="dropdown") }}
-        </div>
-        <div>
-            {{ rank_form.hidden_tag() }}
-            {{ rank_form.submit_button(class="fill") }}
-        </div>
-
-    </form>
-
-    
-    <table class = ranking-table>
-        <thead>
-            
-            {% for column in title %}
-                <th> {{ column }}</th>
-            {% endfor %}
-
-        </thead>
-        <tbody>
-            {% for row in table_data %}
-                <tr>
-
-                    <td><a href="{{ url_for('team_profile', selected_team = row['team_id']) }}">{{ row["name"] }}</a></td>
-                    <td><a href="{{ url_for('profile_page', selected_user = row['captain_id']) }}">{{ row["captain"] }}</a></td>
-                    <td><a href="{{ url_for('sports_page', selected_sport = row['sport_id']) }}">{{ row["sport"] }}</a></td>
-                    <td>{{ row["total_score"] }}</td>
-                    <td>{{ row["#_matches"] }}</td>
-                    <td>{{ row["avrg_score"] }}</td>
-                    <td>{{ row["foundation_date"] }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-</div>
-
+    </div>
 
 </html>

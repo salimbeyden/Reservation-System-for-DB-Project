@@ -71,14 +71,14 @@
 
             <form action="{{ url_for('update_profile') }}" method="POST" class="update-form">
                 <div class="user-info">
-                    New e-mail: <br>
+                    E-Mail: <br>
                     {{ form.email_address(class="email-textbox") }}
                     {{ form.hidden_tag() }}
-                    New phone number: <br>
+                    Phone Number: <br>
                     {{ form.tel_no(class="email-textbox") }}
-                    New password: <br>
+                    Password: <br>
                     {{ form.password(class="password-textbox") }}
-                    {{ form.submit(class="submit-textbox") }}
+                    {{ form.submit(class="submit-button") }}
                 </div>
                 <button type="submit">Update Profile</button>
             </form>

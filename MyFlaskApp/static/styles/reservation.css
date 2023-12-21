@@ -18,3 +18,16 @@ form {
     height: 100px;
     align-items: flex-end;
 }
+
+.reservation-title div.dropdown {
+    border: none;
+}
+
+.reservation-title div.dropdown .dropdown {
+    padding: 20px;
+    background-color: f7f7f7;
+}
+
+.reservation-title .submit-button {
+    padding: 20px;
+}

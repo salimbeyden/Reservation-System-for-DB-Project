@@ -8,13 +8,6 @@ html, body, header {
     background-color: #f7f7f7;
 }
 
-html, body, header {
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-weight: 500;
-}
-
 /* Header */
 
 header {
@@ -57,7 +50,7 @@ nav a:hover {
     background-color: #8c734b;
 }
 
-.separator {
+header .separator {
     height: 20px;
     width: 1px;
     background-color: #8c734b;
@@ -77,12 +70,26 @@ nav a:hover {
     margin-left: 15px;
 }
 
+/* General Styles */
+
+/* Links */
+a {
+    color: #e5e2df;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #051626;
+}
+
+/* Buttons */
+
 button {
     font-size: 14px;
-    background-color: #f7f7f7;
     border-style: solid;
-    border-color: #051626;
+    background-color: #f7f7f7;
     color: #051626;
+    border-color: #051626;
     text-transform: uppercase;
     text-align: center;
     padding: 10px;
@@ -90,6 +97,34 @@ button {
     display: inline-block;
     transition: background-color 0.3s;
     font-weight: 600;
+}
+
+button:hover {
+    background-color: #e5e5e5;
+}
+
+button #fill {
+    background-color: #051626;
+    color: #e5e2df;
+    border-color: #051626;
+}
+
+button #fill :hover {
+    background-color: #0a2c4d;
+}
+
+/* Titles */
+
+h1 {
+    font-size: 40px;
+    font-weight: 500;
+    color: #051626;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: 500;
+    color: #051626;
 }
 
 /* Style for dropdown */

@@ -27,7 +27,6 @@ def manipulate_hist_data(data, type):
 
     return hists ,title
 
-
 def manipulate_rank_data(data):
     title = ["Team name", "Captain", "Sport", "Total Score", "Total matches", "Average Score", "Foundation Date"]
 
@@ -125,13 +124,11 @@ def manipulate_campus_info(data):
 
     return campus
 
-
-    
 def manipulate_campus_dropdown():
     cursor = mysql.connection.cursor()
     
     # to get campus names
-    cursor.execute("SELECT * FROM campus")  # Adjust the query as needed
+    cursor.execute("SELECT * FROM campus")
     campuses = cursor.fetchall()
     cursor.close()
     
@@ -142,9 +139,29 @@ def manipulate_sports_dropdown():
     cursor = mysql.connection.cursor()
     
     # to get sports names
-    cursor.execute("SELECT * FROM sport")  # Adjust the query as needed
+    cursor.execute("SELECT * FROM sport")
     sports = cursor.fetchall()
     cursor.close()
     
     sports_dropdown = [{"id": sport[0], "name": sport[1]} for sport in sports]
     return sports_dropdown
+
+def manipulate_reservation_data(data):
+
+    title = ['Campus', 'Saloon', 'Sport', 'Mail Address', 'Current', 'Capacity']
+
+    rows = list()
+
+    for row in data:
+        line = dict()
+
+        line['campus'] = row[0]
+        line['saloon'] = row[1]
+        line['sport'] = row[2]
+        line['mail'] = row[3]
+        line['current'] = row[4]
+        line['capacity'] = row[5]
+
+        rows.append(line)
+    
+    return rows, title

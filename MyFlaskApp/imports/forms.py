@@ -73,10 +73,9 @@ class ReservationForm(FlaskForm):
     campuses = SelectField(label='campus', choices=[], validators=[DataRequired()])
     area = SelectField(label='area', choices=[], validators=[DataRequired()])
     set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
-    order = SelectField(label='order', choices=[])
     submit_button = SubmitField(label = 'See Results')  
 
-    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
+    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, *args, **kwargs):
         super(ReservationForm, self).__init__(*args, **kwargs)
         self.sports.choices = [(str(s[0]), s[1]) for s in sports]
         self.campuses.choices = [(str(c[0]), c[1]) for c in campuses]
@@ -86,30 +85,33 @@ class ReservationForm(FlaskForm):
         if default_sport == "*":
             self.sports.choices.insert(0, ("*", "All Sports"))
         else:
-            default_sport = next((tup for tup in sports if str(tup[0]) == default_sport), None)
-            if default_sport:
-                self.sports.choices.remove(default_sport)
-                self.sports.choices.insert(0, (str(default_sport[0]), default_sport[1]))
+            default_sport_tuple = next((tup for tup in sports if str(tup[0]) == default_sport), None)
+            if default_sport_tuple:
+                if default_sport_tuple in self.sports.choices:
+                    self.sports.choices.remove(default_sport_tuple)
+                self.sports.choices.insert(0, (str(default_sport_tuple[0]), default_sport_tuple[1]))
                 self.sports.choices.insert(1, ("*", "All Sports"))
 
         # Dropdown campus
         if default_campus == "*":
             self.campuses.choices.insert(0, ("*", "All Campuses"))
         else:
-            default_campus = next((tup for tup in campuses if str(tup[0]) == default_campus), None)
-            if default_campus:
-                self.campuses.choices.remove(default_campus)
-                self.campuses.choices.insert(0, (str(default_campus[0]), default_campus[1]))
+            default_campus_tuple = next((tup for tup in campuses if str(tup[0]) == default_campus), None)
+            if default_campus_tuple:
+                if default_campus_tuple in self.campuses.choices:
+                    self.campuses.choices.remove(default_campus_tuple)
+                self.campuses.choices.insert(0, (str(default_campus_tuple[0]), default_campus_tuple[1]))
                 self.campuses.choices.insert(1, ("*", "All Campuses"))
 
         # Dropdown area
         if default_area == "*":
             self.area.choices.insert(0, ("*", "All Saloons"))
         else:
-            default_area = next((tup for tup in area if str(tup[0]) == default_area), None)
-            if default_area:
-                self.area.choices.remove(default_area)
-                self.area.choices.insert(0, (str(default_area[0]), default_area[1]))
+            default_area_tuple = next((tup for tup in area if str(tup[0]) == default_area), None)
+            if default_campus_tuple:
+                if default_area_tuple in self.area.choices:
+                        self.area.choices.remove(default_area_tuple)
+                self.area.choices.insert(0, (str(default_area_tuple[0]), default_area_tuple[1]))
                 self.area.choices.insert(1, ("*", "All Saloons"))
 
                 

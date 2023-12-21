@@ -66,7 +66,7 @@ function updateSlideshow() {
     slideshowText.appendChild(transportationHeading);
     
     var transportationParagraph = document.createElement('p');
-    transportationParagraph.innerHTML = item.transportation; // Assuming transportation contains HTML content
+    transportationParagraph.innerHTML = item.transportation;
     slideshowText.appendChild(transportationParagraph);
     
     // Add the sports available heading

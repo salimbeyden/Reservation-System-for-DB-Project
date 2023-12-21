@@ -60,7 +60,6 @@
         </nav>
     </header>
 
-
     <div class="reservation-title">
         <form class = form method="post" action="{{ url_for('reservation_page')}}">
             <div class="dropdown">
@@ -83,7 +82,41 @@
             {{ reservation_form.submit_button(class="submit-button") }}
         </form>
     </div>
+    
+    <table class = ranking-table>
+        <thead>
+            
+            {% for column in title %}
+                <th> {{ column }}</th>
+            {% endfor %}
 
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row["campus"] }}</td>
+                    <td>{{ row["saloon"] }}</td>
+                    <td>{{ row["sport"] }}</td>
+                    <td>{{ row["mail"] }}</td>
+                    <td>{{ row["current"] }}</td>
+                    <td>{{ row["capacity"] }}</td>
+                    <td>
+                        <form method="post" action="{{ url_for('reservation_result')}}">
+                            {{ reservation_form.hidden_tag() }}
+                            <!-- Gizli alanlar ekleniyor -->
+                            <input type="hidden" name="campus" value="{{ row['campus'] }}">
+                            <input type="hidden" name="saloon" value="{{ row['saloon'] }}">
+                            <input type="hidden" name="sport" value="{{ row['sport'] }}">
+                            <input type="hidden" name="mail" value="{{ row['mail'] }}">
+                            <input type="hidden" name="current" value="{{ row['current'] }}">
+                            <input type="hidden" name="capacity" value="{{ row['capacity'] }}">
+                            <button type="submit">BANA BAS</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+    </table>
 
     
 </body>

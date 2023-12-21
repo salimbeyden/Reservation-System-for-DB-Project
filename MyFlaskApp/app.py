@@ -400,7 +400,7 @@ def team_profile(selected_team):
                     base_query += " SET team_id_basketball = NULL"
                 case 5:
                     base_query += " SET team_id_tennis = NULL"
-                case 5:
+                case 9:
                     base_query += " SET team_id_pingpong = NULL"
 
             base_query += " WHERE school_id = {};".format(current_user.school_id)
@@ -448,7 +448,7 @@ def team_profile(selected_team):
                     base_query += " SET team_id_basketball = {}".format(team_info["team_id"])
                 case 5:
                     base_query += " SET team_id_tennis = {}".format(team_info["team_id"])
-                case 5:
+                case 9:
                     base_query += " SET team_id_pingpong = {}".format(team_info["team_id"])
 
             base_query += " WHERE school_id = {};".format(current_user.school_id)

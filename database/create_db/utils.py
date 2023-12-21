@@ -132,15 +132,12 @@ def random_date_in_next_month():
     Returns a random date within the next one month from today.
     """
     today = datetime.now()
-    one_month_later = today + timedelta(days=30)
     random_days = np.random.randint(0, 30)
 
     return today + timedelta(days=random_days)
 
 def generate_ind_reservation(cursor, reservation_count):
 
-    #faker to create date
-    fake = Faker()
 
     #get campus_id's from campus table
     query_campus = "select campus_id from campus"
@@ -196,58 +193,7 @@ def generate_ind_reservation(cursor, reservation_count):
     print("Values inserted into 'reservation_individual' table successfully!")
 
 def generate_ind_match_reservation(cursor, reservation_count):
-
-    # #faker to create date
-    # fake = Faker()
     
-    # #get sport_id's from sport table
-    # query_sport = "select sport_id from sport"
-    # cursor.execute(query_sport)
-    # result_sport = cursor.fetchall()
-    # sport_ids = [row[0] for row in result_sport]
-
-    # #get campus_id's from campus table
-    # query_campus = "select campus_id from campus"
-    # cursor.execute(query_campus)
-    # result_campus = cursor.fetchall()
-    # campus_ids = [row[0] for row in result_campus]
-    
-    # #get facility_id's from facility table
-    # query_facility = "select facility_id from facility"
-    # cursor.execute(query_facility)
-    # result_facility = cursor.fetchall()
-    # facility_ids = [row[0] for row in result_facility]
-
-    # #get user_id's from user table
-    # query_user = "select school_id from user"
-    # cursor.execute(query_user)
-    # result_user = cursor.fetchall()
-    # user_ids = [row[0] for row in result_user]
-
-    # #choose randomly id's
-    # sports = np.random.choice(sport_ids, reservation_count, replace=True)
-    # campuses = np.random.choice(campus_ids, reservation_count, replace=True)
-    # facilities = np.random.choice(facility_ids, reservation_count, replace=True)
-    
-    # reservation_id = 0
-    # idx = 0
-    # for i in range(reservation_count):
-    #     reservation_id += 1
-        
-    #     #generate random date
-    #     date = random_date_in_next_month()
-        
-    #     #get two different users
-    #     users = np.random.choice(user_ids, 2, replace=False)
-
-    #     query = f"""insert into reservation_individual_match (reservation_id, sport_id, campus_id, facility_id, date, user_1, user_2)
-    #     values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, '{date}', {users[0]} , {users[1]})"""
-
-    #     cursor.execute(query)
-
-    #     #increase index one
-    #     idx += 1
-
     query = "select date, user_1, user_2, sport_id, campus_id, facility_id from individuals_match_history"
     cursor.execute(query)
     results = cursor.fetchall()
@@ -266,57 +212,6 @@ def generate_ind_match_reservation(cursor, reservation_count):
     print("Values inserted into 'reservation_individual_match' table successfully!")
 
 def generate_team_reservation(cursor, reservation_count):
-
-    # #faker to create date
-    # fake = Faker()
-    
-    # #get sport_id's from sport table
-    # query_sport = "select sport_id from sport"
-    # cursor.execute(query_sport)
-    # result_sport = cursor.fetchall()
-    # sport_ids = [row[0] for row in result_sport]
-
-    # #get campus_id's from campus table
-    # query_campus = "select campus_id from campus"
-    # cursor.execute(query_campus)
-    # result_campus = cursor.fetchall()
-    # campus_ids = [row[0] for row in result_campus]
-    
-    # #get facility_id's from facility table
-    # query_facility = "select facility_id from facility"
-    # cursor.execute(query_facility)
-    # result_facility = cursor.fetchall()
-    # facility_ids = [row[0] for row in result_facility]
-
-    # #get user_id's from user table
-    # query_user = "select team_id from team"
-    # cursor.execute(query_user)
-    # result_team = cursor.fetchall()
-    # team_ids = [row[0] for row in result_team]
-
-    # #choose randomly id's
-    # sports = np.random.choice(sport_ids, reservation_count, replace=True)
-    # campuses = np.random.choice(campus_ids, reservation_count, replace=True)
-    # facilities = np.random.choice(facility_ids, reservation_count, replace=True)
-    
-    # reservation_id = 0
-    # idx = 0
-    # for i in range(reservation_count):
-    #     reservation_id += 1
-        
-    #     #generate random date
-    #     date = random_date_in_next_month()
-
-    #     #get two different teams
-    #     teams = np.random.choice(team_ids, 2, replace=False)
-
-    #     query = f"""insert into reservation_team (reservation_id, sport_id, campus_id, facility_id, date, team_1, team_2)
-    #     values ({reservation_id}, {sports[idx]}, {campuses[idx]}, {facilities[idx]}, '{date}', {teams[0]}, {teams[1]})"""
-
-    #     cursor.execute(query)
-
-    #     #increase index one
-    #     idx += 1
 
     query = "select date, team_1, team_2, sport_id, campus_id, facility_id from team_match_history"
     cursor.execute(query)
@@ -439,7 +334,6 @@ def generate_individuals_match_history(cursor, hist_count):
         facilities = [i[0] for i in cursor.fetchall()]
 
         for i in range(hist_count):
-            print(sport)
             user1 ,user2 = user_ids[np.random.choice(num_of_users, 2, replace=False)]
             score1, score2, point = random_score(sport[1])
             facility_id = np.random.choice(facilities) # facility_for_sporta göre

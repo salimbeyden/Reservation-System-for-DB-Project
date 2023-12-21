@@ -75,7 +75,7 @@ class ReservationForm(FlaskForm):
     set_time = DateField(label='res_time', format='%Y-%m-%d', validators=[DataRequired()])
     submit_button = SubmitField(label = 'See Results')  
 
-    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, default_ord, *args, **kwargs):
+    def __init__(self, sports, campuses, area, default_sport, default_campus, default_area, *args, **kwargs):
         super(ReservationForm, self).__init__(*args, **kwargs)
         self.sports.choices = [(str(s[0]), s[1]) for s in sports]
         self.campuses.choices = [(str(c[0]), c[1]) for c in campuses]

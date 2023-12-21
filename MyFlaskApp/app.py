@@ -200,7 +200,7 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         cursor.execute('SELECT facility_id, name FROM facility')
         area = cursor.fetchall()
     else:
-        query = """SELECT DISTINCT c.campus_id, c.name FROM facility as f
+        query = """SELECT DISTINCT f.facility_id, f.name FROM facility as f
                     join facility_for_sport as fps on f.facility_id = fps.facility_id
                     join campus as c on c.campus_id = f.campus_id
                     join sport as s on s.sport_id = fps.sport_id
@@ -213,22 +213,19 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
                 JOIN campus as c on c.campus_id = f.campus_id
                 JOIN sport as s on s.sport_id = fps.sport_id
                 WHERE fps.current < fps.capacity"""
-    
-    # Apply filters based on form data
+
+    #add necessary additions
     if selected_sport != "*":
         base_query += f" AND s.sport_id = {selected_sport}"
 
     if selected_campus != "*":
         base_query += f" AND c.campus_id = {selected_campus}"
 
-    # Print the final SQL query for debugging
-    print("Final SQL Query:", base_query)
-    
     cursor.execute(base_query)
     data = cursor.fetchall()
     data, title = manipulate_reservation_data(data)
 
-    reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area, order_by)
+    reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area)
 
     cursor.close()
     return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form,
@@ -254,12 +251,13 @@ def reservation_result():
     query = """SELECT is_competitive,is_ind FROM sport WHERE sport_type = '{}'""".format(sport)
     cursor.execute(query)
     res_table = cursor.fetchall()
-    
+    print(res_table)
+
     #get sport id
     query = """SELECT sport_id FROM sport WHERE sport_type = '{}'""".format(sport)
     cursor.execute(query)
     sport_id = cursor.fetchall()[0][0]
-    
+    print(sport_id)
 
     #get campus id
     query = """SELECT campus_id FROM campus WHERE name = '{}'""".format(campus)
@@ -272,19 +270,28 @@ def reservation_result():
     facility_id = cursor.fetchall()[0][0]
 
     #individual sports
-    if(res_table[0] == "1" and res_table[1] == "0"):
+    if(res_table[0][0] == 1 and res_table[0][1] == 0):
         #append reservation_team
-
         #decide the sport type of user
-        if(sport_id == "1"):
+
+        #check if the user has a team
+        has_team = False  #assume the user doesn't have a team by default
+
+        if(current_user.f_team_id or current_user.v_team_id or current_user.b_team_id or current_user.t_team_id or current_user.p_team_id != None):
+            has_team = True
+        else:
+            flash("You cannot make a reservation for a team sport because you don't have a team.")
+            return redirect(url_for('reservation_page'))
+
+        if(sport_id == 1):
             team_1 = current_user.f_team_id
-        elif(sport_id == "2"):
+        elif(sport_id == 2):
             team_1 = current_user.v_team_id
-        elif(sport_id == "3"):
+        elif(sport_id == 3):
             team_1 = current_user.b_team_id
-        elif(sport_id == "5"):
+        elif(sport_id == 5):
             team_1 = current_user.t_team_id
-        elif(sport_id == "9"):
+        elif(sport_id == 9):
             team_1 = current_user.p_team_id
 
         print(team_1)
@@ -297,15 +304,14 @@ def reservation_result():
         query = """INSERT INTO reservation_team (sport_id, campus_id, facility_id, date, team_1, team_2)
                     VALUES (%s, %s, %s, %s, %s, %s)"""
         values = (sport_id, campus_id, facility_id, selected_date, team_1, team_2)
-        cursor.execute(query, values)
-        mysql.connection.commit()
-    elif(res_table[0] == "0" and res_table[1] == "1"):
+
+
+    elif(res_table[0][0] == 0 and res_table[0][1] == 1):
         #append individual reservation
         query = """INSERT INTO reservation_individual (sport_id, campus_id, facility_id, date, user)
                     VALUES (%s, %s, %s, %s, %s)"""
         values = (sport_id, campus_id, facility_id, selected_date, current_user.school_id)
-        cursor.execute(query, values)
-        mysql.connection.commit()
+        
     else:
         #append reservation individual_match
         query = """SELECT school_id FROM user"""
@@ -316,8 +322,8 @@ def reservation_result():
         query = """INSERT INTO reservation_individual_match (sport_id, campus_id, facility_id, date, user_1, user_2)
                     VALUES (%s, %s, %s, %s, %s, %s)"""
         values = (sport_id, campus_id, facility_id, selected_date, current_user.school_id, user_2)
-        cursor.execute(query, values)
-        mysql.connection.commit()
+    cursor.execute(query, values)
+    mysql.connection.commit()
         
     return render_template("success_res.html", data=data)
 

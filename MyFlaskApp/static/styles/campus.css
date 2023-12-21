@@ -1,7 +1,11 @@
-body {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+.campus-title {
+    text-align: center;
+}
+
+.title-separator {
+    margin: 0 10%;
+    height: 0.2vh;
+    background-color: #051626;
 }
 
 .campus-details {
@@ -13,7 +17,6 @@ body {
 
 .facility {
     background-color: #f9f9f9;
-    border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     width: 80%;
@@ -27,37 +30,7 @@ body {
     margin-bottom: 10px;
 }
 
-.facility p {
-    margin: 5px 0;
-    font-size: 0.9em;
-    color: #666;
-}
-
-.sports-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.sports-list a {
-    padding: 5px 15px;
-    background-color: #eaeaea;
-    border-radius: 5px;
+.reservation-link button.fill a {
+    color: #e5e2df;
     text-decoration: none;
-    color: #333;
-    flex: 0 1 calc(33% - 30px);
-    text-align: center;
-    margin: 5px 0; /* Additional spacing for wrapped sports */
-}
-
-.sports-list a:hover {
-    background-color: #d0d0d0;
-}
-
-@media (max-width: 600px) {
-    .sports-list a {
-        flex: 0 1 100%;
-    }
 }

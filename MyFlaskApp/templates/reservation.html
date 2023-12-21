@@ -60,23 +60,24 @@
         </nav>
     </header>
 
+    <div class="elements">
     <div class="reservation-title">
         <form class = form method="post" action="{{ url_for('reservation_page')}}">
             <div class="dropdown">
                 <label for="sports">Select Sport:</label><br>
-                {{ reservation_form.sports(class="sport-dropdown") }}
+                {{ reservation_form.sports(class="dropdown") }}
             </div>
             <div class="dropdown">
                 <label for="campuses">Select Campus:</label><br>
-                {{ reservation_form.campuses(class="campus-dropdown") }}
+                {{ reservation_form.campuses(class="dropdown") }}
             </div>
             <div class="dropdown">
                 <label for="area">Select Saloon:</label><br>
-                {{ reservation_form.area(class="area-dropdown") }}
+                {{ reservation_form.area(class="dropdown") }}
             </div>
             <div class="dropdown">
                 <label for="set_time">Choose Time:</label><br>
-                {{ reservation_form.set_time(class="set-time") }}
+                {{ reservation_form.set_time(class="dropdown") }}
             </div>
             {{ reservation_form.hidden_tag() }}
             {{ reservation_form.submit_button(class="submit-button") }}
@@ -110,14 +111,14 @@
                             <input type="hidden" name="mail" value="{{ row['mail'] }}">
                             <input type="hidden" name="current" value="{{ row['current'] }}">
                             <input type="hidden" name="capacity" value="{{ row['capacity'] }}">
-                            <button type="submit">BANA BAS</button>
+                            <button type="submit">MAKE RESERVATION</button>
                         </form>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
     </table>
-
+    </div>
     
 </body>
 </html>

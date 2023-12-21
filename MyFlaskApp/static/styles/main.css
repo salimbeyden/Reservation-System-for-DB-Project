@@ -18,7 +18,7 @@ header {
     padding: 10px;
 }
 
-#itu_logo {
+header #itu_logo {
     height: 50px;
     margin: 2vh;
 }
@@ -50,23 +50,23 @@ nav a:hover {
     background-color: #8c734b;
 }
 
-header .separator {
+nav .separator {
     height: 20px;
     width: 1px;
     background-color: #8c734b;
     display: inline-block;
 }
 
-#loginSection {
+nav #loginSection {
     margin-left: auto;
 }
 
-#loginSection a {
+nav #loginSection a {
     display: inline-flex;
     align-items: center;
 }
 
-#loginSection a i {
+nav #loginSection a i {
     margin-left: 15px;
 }
 

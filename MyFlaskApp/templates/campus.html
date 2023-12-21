@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>selected_campus</title>
+    <title>Campuses</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/campus.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,7 +59,8 @@
         </nav>
     </header>
 
-    <h1 class="campus-title">{{ campus_name }} Kampüs Detayları</h1>
+    <h1 class="campus-title">{{ campus_name }} Campus</h1>
+    <div class="title-separator"></div>
 
     <div class="campus-details">
         {% for facility_name, facility_info in facilities_sports.items() %}
@@ -69,12 +70,12 @@
             <p>{{ facility_info[0].tel_no }}</p>
             <p>{{ facility_info[0].email }}</p>
             {% for sport in facility_info[1] %}
-            <a href="{{ url_for('reservation_page', selected_sport=sport[0], selected_campus=campus_id, selected_area=facility_info[0].facility_id) }}">{{ sport[1] }}</a>
+            <button><a href="{{ url_for('reservation_page', selected_sport=sport[0], selected_campus=campus_id, selected_area=facility_info[0].facility_id) }}">{{ sport[1] }}</a></button>
             {% endfor %}
         </div>
         {% endfor %}
         <div class="reservation-link">
-            <a href="{{ url_for('reservation_page', ) }}">Rezervasyon Al</a>
+            <button class="fill"><a href="{{ url_for('reservation_page', ) }}">Make Reservation</a></button>
         </div>
     </div>
 

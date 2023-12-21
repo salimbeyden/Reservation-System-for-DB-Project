@@ -121,5 +121,11 @@ class UpdateProfile(FlaskForm):
     tel_no = StringField(label='Tel_no:', validators=[])
     password = PasswordField(label='Password:', validators=[])
     submit = SubmitField(label='Update')
+
+class CreateTeam(FlaskForm):
+    sport = SelectField(label='Sport', choices=[], validators=[DataRequired()])
+    team_name = StringField(label='Team Name:', validators=[DataRequired()])
+    password = PasswordField(label='Password:', validators=[])
+    submit_button = SubmitField(label='Create New Team')
     
     

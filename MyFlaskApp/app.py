@@ -618,3 +618,40 @@ def sports_page(selected_sport):
         campus_facilities_dict[campus_info["name"]][1].append(facility_info)
     # Render template with facilities and associated sports
     return render_template('sports.html', campus_facilities_dict=campus_facilities_dict, sport_id=sport_id, sport_name=sport_name)
+
+
+@app.route("/create_team", methods=["GET", "POST"])
+def create_team():
+    form = CreateTeam()
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT sport_type FROM sport")
+    sports_choices = [row[0] for row in cursor.fetchall()]
+    form.sport.choices = [(sport, sport) for sport in sports_choices]
+
+    if form.validate_on_submit():
+        try:
+            team_name = form.team_name.data
+            selected_sport = form.sport.data
+            password = form.password.data
+        
+            query = "SELECT sport_id FROM sport WHERE sport_type = %s;"
+            cursor.execute(query, (selected_sport,))
+            sport_id = cursor.fetchone()
+
+            insert_query = """INSERT INTO team (name, captain_id, team_score, password_hash, sport_id) 
+                            VALUES (%s, %s, %s, %s, %s)"""
+            insert_values = (team_name, current_user.school_id, 0, password, sport_id[0])
+            cursor.execute(insert_query, insert_values)
+
+            # update 
+            cursor.execute("SELECT team_id FROM team WHERE name = %s", (team_name,))
+            team_id = cursor.fetchone()[0]
+            captain_query = "UPDATE user SET team_id_%s = %s WHERE school_id = %s"
+            formatted_captain_query = captain_query % (selected_sport.lower(), team_id, current_user.school_id)
+            cursor.execute(formatted_captain_query)
+            mysql.connection.commit()
+            cursor.close()
+            return redirect(url_for('profile_page', selected_user=current_user.school_id))
+        except Exception as e:
+            print("An error occurred: " + str(e))
+    return render_template("create_team.html", form=form)

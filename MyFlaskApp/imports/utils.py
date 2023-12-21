@@ -121,13 +121,15 @@ def manipulate_campus_info(data):
 
 
     
+=======
     return team
    
+>>>>>>> Stashed changes
 def manipulate_campus_dropdown():
     cursor = mysql.connection.cursor()
     
     # to get campus names
-    cursor.execute("SELECT * FROM campus")  # Adjust the query as needed
+    cursor.execute("SELECT * FROM campus")
     campuses = cursor.fetchall()
     cursor.close()
     
@@ -138,12 +140,13 @@ def manipulate_sports_dropdown():
     cursor = mysql.connection.cursor()
     
     # to get sports names
-    cursor.execute("SELECT * FROM sport")  # Adjust the query as needed
+    cursor.execute("SELECT * FROM sport")
     sports = cursor.fetchall()
     cursor.close()
     
     sports_dropdown = [{"id": sport[0], "name": sport[1]} for sport in sports]
     return sports_dropdown
+=======
 def manipulate_reservation_data(data):
 
     title = ['Campus', 'Saloon', 'Sport', 'Mail Address', 'Current', 'Capacity']
@@ -163,3 +166,4 @@ def manipulate_reservation_data(data):
         rows.append(line)
     
     return rows, title
+>>>>>>> Stashed changes

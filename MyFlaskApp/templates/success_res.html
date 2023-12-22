@@ -8,7 +8,8 @@
     </head>
 
     <body>
-        <!-- Header -->
+
+    <!-- Header -->
 
     <header>
         <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Istanbul Technical University" id="itu_logo">
@@ -22,11 +23,23 @@
                     <div class="dropdown">
                         <a href="#" class="dropbtn">Campuses</a>
                         <div class="dropdown-content">
-                            {% for item in dropdown_items %}
-                                <a href="{{ url_for('campus_page', selected_campus = item.name) }}">{{ item.name }}</a>
+                            {% for item in dropdown_campus_items %}
+                                <a href="{{ url_for('campus_page', selected_campus = item.id) }}">{{ item.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
+            </div>
+            <span class="separator"></span>
+            <div id="sportsSection">
+                <!-- Display all campuses -->
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Sports</a>
+                    <div class="dropdown-content">
+                        {% for item in dropdown_sport_items %}
+                            <a href="{{ url_for('sports_page', selected_sport = item.id) }}">{{ item.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             <span class="separator"></span>
             <div id="loginSection">
@@ -35,7 +48,7 @@
                     <div class="dropdown">
                         <a href="#" class="dropbtn">{{ current_user.name }}<i class="fa-solid fa-user"></i></a>
                         <div class="dropdown-content">
-                            <a href="{{ url_for('profile_page', selected_user = current_user) }}">Profile</a>url_for
+                            <a href="{{ url_for('profile_page', selected_user = current_user.school_id) }}">Profile</a>
                             <a href="{{ url_for('log_out') }}">Logout</a>
                         </div>
                     </div>
@@ -51,9 +64,8 @@
         <div id="message-container">
             <p>Your reservation has been received successfully.</p>
         </div>
-        {{ data[6] }}
         <div id="image-container">
-            <img src="{{ url_for('static', filename='images/user_icon/apo_sal.jpg') }}" alt="Your Image">
+            <img src="{{ url_for('static', filename='images/itu250.svg') }}" alt="Your Image">
         </div>
     </div>
 

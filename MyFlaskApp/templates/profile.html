@@ -103,7 +103,9 @@
                 </div>
                 {% if user["school_id"] == current_user.school_id %}
                     <div class="take-reservation">
-                        <button>Take Reservation</button>
+                        <a href="{{ url_for('reservation_page' )}}">
+                            <button>Take Reservation</button>
+                        </a>
                     </div>
                 {% endif %}
             </div>

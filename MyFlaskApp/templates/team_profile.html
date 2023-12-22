@@ -61,9 +61,10 @@
     <div class="container">
         <div class="top">
             <div class="team-info">
-                usable team keys: <br>
-                team["name"], team["team_id"],   team["captain"],   team["sport_type"],    team["sport_id"],   team["fuoundation_date"],  team["team_score"],   team["#_matches"], team["avrg"]
-                <h1>{{ team['name'] }}</h1>
+                <div class="name-type">
+                    <h1>{{ team['name'] }}</h1>
+                    <p>{{ team['sport_type'] }}</p>
+                </div>
                 <p>{{ team["captain"] }}</p>
                 <p>55p - 102 games</p>
             </div>
@@ -71,9 +72,11 @@
         <div class="bottom">
             <div class="team-players">
                 <h2>Team Players</h2>
+                <div class="player-names">
                 {% for player in players %}
                     <a href="{{ url_for('profile_page', selected_user = player['school_id']) }}">{{ player["name"] }}</a> <br>
                 {% endfor %}
+                </div>
             </div>
             <div class="prev-games">
                 <h2>Previous Games</h2>

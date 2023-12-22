@@ -45,7 +45,7 @@ body {
 
 .team-info h1 {
     font-size: 32px;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
     margin-top: 10px;
 }
 
@@ -53,6 +53,23 @@ body {
     font-size: 16px;
     color: #666;
     margin-bottom: 3px;
+    margin-top: 2px;
+}
+
+.name-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* Align the baseline of h1 and p elements */
+    margin-bottom: 5px; /* Margin between name/type and captain */
+}
+
+.name-type p {
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.sport-type {
+    font-size: 100px;
 }
 
 .prev-games {
@@ -65,8 +82,7 @@ body {
 }
 
 .prev-games h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #333;
 }
 
@@ -86,6 +102,11 @@ body {
     border-radius: 5px;
     margin-bottom: 15px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.player-names {
+    padding-left: 5px;
+    margin-top: 15px;
 }
 
 /* Join team button styles */

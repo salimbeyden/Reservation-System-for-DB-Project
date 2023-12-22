@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/create_team.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Create Team</title>
@@ -60,11 +61,17 @@
         <form action="{{ url_for('create_team') }}" method="POST" class="create-form">
             {{ form.hidden_tag() }}
             <br>
-            {{ form.team_name(class="form-control", placeholder="Team Name") }}
+            <div class="select-sport">
+                {{ form.sport(class="form-control", placeholder="Sport")}}
+            </div>
             <br>
-            {{ form.sport(class="form-control", placeholder="Sport")}}
+            <div class="select-name">
+                {{ form.team_name(class="form-control", placeholder="Team Name") }}
+            </div>
             <br>
-            {{ form.password(class="form-control", placeholder="Password")}}
+            <div class="select-password">
+                {{ form.password(class="form-control", placeholder="Password")}}
+            </div>
             <br>
             <div class="button-container">
                 {{ form.submit_button(class="submit-button") }}

@@ -391,17 +391,17 @@ def team_profile(selected_team):
 
             base_query = "UPDATE user"
             
-            match team_info["sport_id"]:
-                case 1:
-                    base_query += " SET team_id_football = NULL"
-                case 2:
-                    base_query += " SET team_id_volleyball = NULL"
-                case 3:
-                    base_query += " SET team_id_basketball = NULL"
-                case 5:
-                    base_query += " SET team_id_tennis = NULL"
-                case 9:
-                    base_query += " SET team_id_pingpong = NULL"
+            if team_info["sport_id"] == 1:
+                base_query += " SET team_id_football = NULL"
+            elif team_info["sport_id"] == 2:
+                base_query += " SET team_id_volleyball = NULL"
+            elif team_info["sport_id"] == 3:
+                base_query += " SET team_id_basketball = NULL"
+            elif team_info["sport_id"] == 5:
+                base_query += " SET team_id_tennis = NULL"
+            elif team_info["sport_id"] == 9:
+                base_query += " SET team_id_pingpong = NULL"
+
 
             base_query += " WHERE school_id = {};".format(current_user.school_id)
                 
@@ -439,17 +439,17 @@ def team_profile(selected_team):
 
             base_query = "UPDATE user"
             
-            match team_info["sport_id"]:
-                case 1:
-                    base_query += " SET team_id_football = {}".format(team_info["team_id"])
-                case 2:
-                    base_query += " SET team_id_volleyball = {}".format(team_info["team_id"])
-                case 3:
-                    base_query += " SET team_id_basketball = {}".format(team_info["team_id"])
-                case 5:
-                    base_query += " SET team_id_tennis = {}".format(team_info["team_id"])
-                case 9:
-                    base_query += " SET team_id_pingpong = {}".format(team_info["team_id"])
+            if team_info["sport_id"] == 1:
+                base_query += f" SET team_id_football = {team_info['team_id']}"
+            elif team_info["sport_id"] == 2:
+                base_query += f" SET team_id_volleyball = {team_info['team_id']}"
+            elif team_info["sport_id"] == 3:
+                base_query += f" SET team_id_basketball = {team_info['team_id']}"
+            elif team_info["sport_id"] == 5:
+                base_query += f" SET team_id_tennis = {team_info['team_id']}"
+            elif team_info["sport_id"] == 9:
+                base_query += f" SET team_id_pingpong = {team_info['team_id']}"
+
 
             base_query += " WHERE school_id = {};".format(current_user.school_id)
 
@@ -624,8 +624,17 @@ def sports_page(selected_sport):
 def create_team():
     form = CreateTeam()
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT sport_type FROM sport")
+    cursor.execute("SELECT sport_type FROM sport where is_ind = 0")
     sports_choices = [row[0] for row in cursor.fetchall()]
+    has_team_query = """select team_id_football, team_id_volleyball, team_id_basketball, team_id_tennis, team_id_pingpong from user
+                        where school_id = %s"""
+    cursor.execute(has_team_query, (current_user.school_id,))
+    sports_choices = [i[1] for i in zip(cursor.fetchone(),sports_choices) if i[0] is None]
+    if len(sports_choices) == 0:
+        flash("You have already a team for each sport types!")
+        return redirect(url_for('profile_page', selected_user=current_user.school_id))
+
+
     form.sport.choices = [(sport, sport) for sport in sports_choices]
 
     if form.validate_on_submit():
@@ -638,17 +647,17 @@ def create_team():
             cursor.execute(query, (selected_sport,))
             sport_id = cursor.fetchone()
 
-            insert_query = """INSERT INTO team (name, captain_id, team_score, password_hash, sport_id) 
-                            VALUES (%s, %s, %s, %s, %s)"""
+            insert_query = """INSERT INTO team (name, captain_id, team_score, foundation_date, password_hash, sport_id) 
+                            VALUES (%s, %s, %s, CURDATE(), %s, %s)"""
             insert_values = (team_name, current_user.school_id, 0, password, sport_id[0])
             cursor.execute(insert_query, insert_values)
 
             # update 
             cursor.execute("SELECT team_id FROM team WHERE name = %s", (team_name,))
             team_id = cursor.fetchone()[0]
-            captain_query = "UPDATE user SET team_id_%s = %s WHERE school_id = %s"
-            formatted_captain_query = captain_query % (selected_sport.lower(), team_id, current_user.school_id)
-            cursor.execute(formatted_captain_query)
+            print("team_id", team_id)
+            captain_query = f"UPDATE user SET team_id_{selected_sport.split()[0].lower()} = {team_id} WHERE school_id = {current_user.school_id}"
+            cursor.execute(captain_query,)
             mysql.connection.commit()
             cursor.close()
             return redirect(url_for('profile_page', selected_user=current_user.school_id))

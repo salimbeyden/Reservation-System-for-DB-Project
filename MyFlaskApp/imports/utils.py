@@ -65,7 +65,10 @@ def manipulate_team_info(data):
     team["team_score"] = data[8]
     team["capacity_max"] = data[9]
     team["#_matches"] = data[10]
-    team["avrg"] = round(int(data[8]) / int(data[10]), 2)
+    if int(data[10]) == 0:
+        team["avrg"] = 0
+    else:
+        team["avrg"] = round(int(data[8]) / int(data[10]), 2)
 
     return team
 

@@ -346,13 +346,15 @@ def reservation_result():
 def team_profile(selected_team):
     cursor = mysql.connection.cursor()
 
-    query = """select team.name, team.team_id, user.name, user.surname, user.school_id, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, sport.capacity_max, count(*) from team
-               join team_match_history as hist on team.team_id = hist.team_1 or team.team_id = hist.team_2
-               join user on user.school_id = team.captain_id
-               join sport on sport.sport_id = team.sport_id
-               where team_id = {}
-               group by team.name, team.team_id, user.name, user.surname, sport.sport_type, sport.sport_id ,team.foundation_date, team.team_score, sport.capacity_max;
-            """.format(selected_team)
+    query = """SELECT 
+    team.name, team.team_id, user.name, user.surname, user.school_id, 
+    sport.sport_type, sport.sport_id, team.foundation_date, team.team_score, 
+    sport.capacity_max, COUNT(hist.match_id) AS match_count
+    FROM team JOIN user ON user.school_id = team.captain_id JOIN sport 
+    ON sport.sport_id = team.sport_id LEFT JOIN team_match_history AS hist 
+    ON team.team_id = hist.team_1 OR team.team_id = hist.team_2 WHERE team.team_id = {}
+    GROUP BY team.name, team.team_id, user.name, user.surname, sport.sport_type, 
+    sport.sport_id, team.foundation_date, team.team_score, sport.capacity_max;""".format(selected_team)
     
     cursor.execute(query)
 
@@ -423,7 +425,7 @@ def team_profile(selected_team):
 
 
             if len(players) == 0:
-                query = "DELETE FROM team WHERE team_id = {});".format(team_info["team_id"])
+                query = "DELETE FROM team WHERE team_id = {};".format(team_info["team_id"])
                 cursor.execute(query)
                 mysql.connection.commit()
 

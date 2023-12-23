@@ -34,3 +34,12 @@
     color: #e5e2df;
     text-decoration: none;
 }
+
+.sport-name {
+    display: inline-block; /* or 'block' for a new line */
+    margin: 5px; /* Adjust as needed for spacing */
+    padding: 5px;
+    background-color: #e0e0e0; /* Light gray background */
+    border-radius: 4px; /* Rounded corners */
+    font-weight: bold; /* Makes text bold */
+}

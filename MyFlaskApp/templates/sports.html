@@ -69,7 +69,7 @@
             <h2>{{ campus[0].name }}</h2>
             <p>{{ campus[0].address }}</p>
             {% for facility_info in campus[1] %}
-            <button><a href="{{ url_for('reservation_page', selected_sport=sport_id, selected_campus=campus[0].campus_id, selected_area=facility_info.facility_id) }}">{{ facility_info.name }}</a></button>
+            <span class="sport-name">{{ facility_info.name  }}</span>
             {% endfor %}
         </div>
         {% endfor %}

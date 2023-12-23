@@ -70,7 +70,7 @@
             <p>{{ facility_info[0].tel_no }}</p>
             <p>{{ facility_info[0].email }}</p>
             {% for sport in facility_info[1] %}
-            <button><a href="{{ url_for('reservation_page', selected_sport=sport[0], selected_campus=campus_id, selected_area=facility_info[0].facility_id) }}">{{ sport[1] }}</a></button>
+            <span class="sport-name">{{ sport[1] }}</span>
             {% endfor %}
         </div>
         {% endfor %}

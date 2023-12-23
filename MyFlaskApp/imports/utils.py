@@ -148,7 +148,7 @@ def manipulate_sports_dropdown():
 
 def manipulate_reservation_data(data):
 
-    title = ['Campus', 'Saloon', 'Sport', 'Mail Address', 'Current', 'Capacity']
+    title = ['Campus', 'Saloon', 'Sport', 'Mail Address']
 
     rows = list()
 
@@ -159,8 +159,6 @@ def manipulate_reservation_data(data):
         line['saloon'] = row[1]
         line['sport'] = row[2]
         line['mail'] = row[3]
-        line['current'] = row[4]
-        line['capacity'] = row[5]
 
         rows.append(line)
     

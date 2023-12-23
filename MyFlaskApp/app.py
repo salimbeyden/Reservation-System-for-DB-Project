@@ -275,10 +275,23 @@ def reservation_result():
         #decide the sport type of user
 
         #check if the user has a team
-        has_team = False  #assume the user doesn't have a team by default
+        #assume the user doesn't have a team by default
+        has_team_f = False  
+        has_team_v = False
+        has_team_b = False
+        has_team_t = False
+        has_team_p = False
 
-        if(current_user.f_team_id or current_user.v_team_id or current_user.b_team_id or current_user.t_team_id or current_user.p_team_id != None):
-            has_team = True
+        if(current_user.f_team_id != None):
+           has_team_f = True
+        elif(current_user.v_team_id != None):
+           has_team_v = True
+        elif(current_user.b_team_id != None):
+           has_team_b = True
+        elif(current_user.t_team_id != None):
+           has_team_t = True
+        elif(current_user.p_team_id != None):
+           has_team_p = True
         else:
             flash("You cannot make a reservation for a team sport because you don't have a team.")
             return redirect(url_for('reservation_page'))

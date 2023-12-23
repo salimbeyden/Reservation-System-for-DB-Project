@@ -99,8 +99,6 @@
                     <td>{{ row["saloon"] }}</td>
                     <td>{{ row["sport"] }}</td>
                     <td>{{ row["mail"] }}</td>
-                    <td>{{ row["current"] }}</td>
-                    <td>{{ row["capacity"] }}</td>
                     <td>
                         <form method="post" action="{{ url_for('reservation_result')}}">
                             {{ reservation_form.hidden_tag() }}
@@ -109,8 +107,6 @@
                             <input type="hidden" name="saloon" value="{{ row['saloon'] }}">
                             <input type="hidden" name="sport" value="{{ row['sport'] }}">
                             <input type="hidden" name="mail" value="{{ row['mail'] }}">
-                            <input type="hidden" name="current" value="{{ row['current'] }}">
-                            <input type="hidden" name="capacity" value="{{ row['capacity'] }}">
                             <button type="submit">MAKE RESERVATION</button>
                         </form>
                     </td>

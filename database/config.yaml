@@ -3,6 +3,5 @@ user: root
 passwd:  
 database : reservations
 
-sqldb_path : commands\create_database.sql
-sqltables_path: commands\create_tables.sql
+sqldb_path : commands\SCHEMA.sql
 stabletables_path: commands\stable_tables.sql

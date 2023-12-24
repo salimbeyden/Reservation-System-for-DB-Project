@@ -15,19 +15,16 @@ def read_config():
 def create_db(cursor, config):
     
     db_script = config["sqldb_path"] # path to sql commands that creates 'reservation' database
-    table_script = config["sqltables_path"] # path to sql commands that creates tables for our database
     db = config["database"]
 
-    with open(db_script, "r") as db_file: # reads .sql scripts
-        db_command = db_file.read().split(";")
-
-    cursor.execute(db_command[0]) 
 
     print("Database created successfully!")
-    with open(table_script, "r") as tables_file: # reads the .sql scripts to create necessary tables
+    with open(db_script, "r") as tables_file: # reads the .sql scripts to create necessary tables
         tables_commands = tables_file.read().split(";")
 
-    for table_command in tables_commands: # block to create each tables
+    cursor.execute(tables_commands[0]) 
+
+    for table_command in tables_commands[1:]: # block to create each tables
         if table_command.strip():
             cursor.execute(table_command)
     print("Tables created successfully!")

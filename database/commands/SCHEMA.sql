@@ -1,3 +1,5 @@
+CREATE DATABASE reservations;
+
 USE reservations;
 
 CREATE TABLE user (

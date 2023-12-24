@@ -125,7 +125,6 @@ class UpdateProfile(FlaskForm):
 class CreateTeam(FlaskForm):
     sport = SelectField(label='Sport', choices=[], validators=[DataRequired()])
     team_name = StringField(label='Team Name:', validators=[DataRequired()])
-    password = PasswordField(label='Password:', validators=[])
     submit_button = SubmitField(label='Create New Team')
     
     

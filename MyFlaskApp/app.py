@@ -653,15 +653,14 @@ def create_team():
         try:
             team_name = form.team_name.data
             selected_sport = form.sport.data
-            password = form.password.data
         
             query = "SELECT sport_id FROM sport WHERE sport_type = %s;"
             cursor.execute(query, (selected_sport,))
             sport_id = cursor.fetchone()
 
-            insert_query = """INSERT INTO team (name, captain_id, team_score, foundation_date, password_hash, sport_id) 
-                            VALUES (%s, %s, %s, CURDATE(), %s, %s)"""
-            insert_values = (team_name, current_user.school_id, 0, password, sport_id[0])
+            insert_query = """INSERT INTO team (name, captain_id, team_score, foundation_date, sport_id) 
+                            VALUES (%s, %s, %s, CURDATE(), %s)"""
+            insert_values = (team_name, current_user.school_id, 0, sport_id[0])
             cursor.execute(insert_query, insert_values)
 
             # update 

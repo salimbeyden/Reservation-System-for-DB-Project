@@ -73,11 +73,17 @@
             <div class="user-info">
                 <h1>{{ user["name"] }}</h1>
                 <p>{{ user["mail"] }}</p>
-                <p>{{ user["tel_no"] }}</p>
                 <p> {{ user["faculty"] }} </p>
                 <p> {{ user["department"] }} </p>
                 <p> {{ user["birth_date"] }} </p>
-                <p> {{ user["gender"] }} </p>
+                <p>
+                    {% if user["gender"] == "m" %}
+                      Male
+                    {% else %}
+                      Female
+                    {% endif %}
+                  </p>
+                  
             </div>
         </div>
         <div class="bottom">

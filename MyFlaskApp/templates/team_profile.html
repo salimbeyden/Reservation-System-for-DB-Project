@@ -63,10 +63,15 @@
             <div class="team-info">
                 <div class="name-type">
                     <h1>{{ team['name'] }}</h1>
-                    <p>{{ team['sport_type'] }}</p>
+                    <p> <a href="{{ url_for('sports_page', selected_sport = team['sport_id']) }}"> {{ team['sport_type'] }} </a></p>
                 </div>
-                <p>{{ team["captain"] }}</p>
-                <p>{{ team["team_score"]}} - {{ team["#_matches"]}}</p>
+                <p>Captain: <a href="{{ url_for('profile_page', selected_user = team['captain_id']) }}">{{ team["captain"] }}</a></p> 
+                <br>
+                <p>
+                    Total matches: {{ team["#_matches"]}} 
+                    <br>
+                    Total score: {{ team["team_score"]}}
+                </p>
             </div>
         </div>
         <div class="bottom">
@@ -81,7 +86,8 @@
             <div class="prev-games">
                 <h2>Previous Games</h2>
                 {% for match in match_hist %}
-                    {{ match[0] }} {{ match[1] }} {{ match[2] }} {{ match[3] }} <br>
+                    <a href="{{ url_for('team_profile', selected_team = match['team1_id']) }}">{{ match["team1"] }}</a> {{ match["score"] }} 
+                    <a href="{{ url_for('team_profile', selected_team = match['team2_id']) }}">{{ match["team2"] }}</a> {{ match["date"] }} <br>
                 {% endfor %}
             </div>
             <div class="others">

@@ -61,59 +61,54 @@
     </header>
 
     <div class="elements">
-    <div class="reservation-title">
-        <form class = form method="post" action="{{ url_for('reservation_page')}}">
-            <div class="dropdown">
-                <label for="sports">Select Sport:</label><br>
-                {{ reservation_form.sports(class="dropdown") }}
-            </div>
-            <div class="dropdown">
-                <label for="campuses">Select Campus:</label><br>
-                {{ reservation_form.campuses(class="dropdown") }}
-            </div>
-            <div class="dropdown">
-                <label for="area">Select Saloon:</label><br>
-                {{ reservation_form.area(class="dropdown") }}
-            </div>
-            <div class="dropdown">
-                <label for="set_time">Choose Time:</label><br>
-                {{ reservation_form.set_time(class="dropdown") }}
-            </div>
-            {{ reservation_form.hidden_tag() }}
-            {{ reservation_form.submit_button(class="submit-button") }}
-        </form>
-    </div>
-    
-    <table class = ranking-table>
-        <thead>
-            
-            {% for column in title %}
-                <th> {{ column }}</th>
-            {% endfor %}
+        <div class="reservation-title">
+            <form class = form method="post" action="{{ url_for('reservation_page')}}">
+                <div class="dropdown">
+                    <label for="sports">Select Sport:</label><br>
+                    {{ reservation_form.sports(class="dropdown") }}
+                </div>
+                <div class="dropdown">
+                    <label for="campuses">Select Campus:</label><br>
+                    {{ reservation_form.campuses(class="dropdown") }}
+                </div>
+                <div class="dropdown">
+                    <label for="area">Select Saloon:</label><br>
+                    {{ reservation_form.area(class="dropdown") }}
+                </div>
+                <div class="dropdown">
+                    <label for="set_time">Choose Time:</label><br>
+                    {{ reservation_form.set_time(class="dropdown") }}
+                </div>
+                {{ reservation_form.hidden_tag() }}
+                {{ reservation_form.submit_button(class="submit-button") }}
+            </form>
+        </div>
+        
+        <table class = ranking-table>
+            <thead>
+                
+                {% for column in title %}
+                    <th> {{ column }}</th>
+                {% endfor %}
 
-        </thead>
-        <tbody>
-            {% for row in data %}
-                <tr>
-                    <td>{{ row["campus"] }}</td>
-                    <td>{{ row["saloon"] }}</td>
-                    <td>{{ row["sport"] }}</td>
-                    <td>{{ row["mail"] }}</td>
-                    <td>
-                        <form method="post" action="{{ url_for('reservation_result')}}">
-                            {{ reservation_form.hidden_tag() }}
-                            <!-- Gizli alanlar ekleniyor -->
-                            <input type="hidden" name="campus" value="{{ row['campus'] }}">
-                            <input type="hidden" name="saloon" value="{{ row['saloon'] }}">
-                            <input type="hidden" name="sport" value="{{ row['sport'] }}">
-                            <input type="hidden" name="mail" value="{{ row['mail'] }}">
-                            <button type="submit">MAKE RESERVATION</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        <td> <a href="{{ url_for('campus_page', selected_campus = row['campus_id'])}}">{{ row["campus"] }}</a> </td>
+                        <td>{{ row["facility"] }}</td>
+                        <td> <a href="{{ url_for('sports_page', selected_sport = row['sport_id'])}}">{{ row["sport"] }}</a> </td>
+                        <td>{{ row["mail"] }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('reservation_result')}}">
+                                {{ reservation_form.hidden_tag() }}
+                                <button type="submit">MAKE RESERVATION</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
-    </table>
+        </table>
     </div>
     
 </body>

@@ -25,9 +25,20 @@ form {
 
 .reservation-title div.dropdown .dropdown {
     padding: 20px;
-    background-color: f7f7f7;
+    background-color: #f7f7f7;
 }
 
 .reservation-title .submit-button {
     padding: 20px;
+}
+
+.form{
+    margin: 0;
+}
+.form .dropdown{
+    width:175px
+}
+
+.ranking-table{
+    width: 850px;
 }

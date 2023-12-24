@@ -13,7 +13,7 @@ class RegisterForm(FlaskForm):
     surname = StringField(label='Surname:', validators=[Length(min=2, max=20), DataRequired()])
     student_number = IntegerField(label='Student Number:', validators=[DataRequired()])
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()], render_kw={"id": "register_email"})    
-    password = StringField(label='Password:', validators=[DataRequired()], render_kw={"id": "register_passw"})    
+    password = PasswordField(label='Password:', validators=[DataRequired()], render_kw={"id": "register_passw"})    
     phone_number = StringField(label='Phone Number:', validators=[Length(min=2, max=18), DataRequired()])    
     birth_date = DateField(label='Birth Date:', validators=[DataRequired()])
     faculty = StringField(label='Faculty:', validators=[Length(min=2, max=50), DataRequired()])

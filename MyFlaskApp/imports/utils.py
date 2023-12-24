@@ -14,9 +14,9 @@ def manipulate_hist_data(data, type):
             hist["score"] = f"{row[3]} - {row[4]}"
             hist["u2_name"] = f"{row[5]} {row[6]}".title()
             hist["u2_id"] = row[7]
-            hist["campus_name"] = row[8]
+            hist["campus_name"] = row[8].title()
             hist["campus_id"] = row[9]
-            hist["facility_name"] = row[10].split(" ")[0]
+            hist["facility_name"] = row[10].title()
             hist["facility_id"] = row[11]
             hist["sport_type"] = row[12]
             hist["sport_id"] = row[13]
@@ -41,8 +41,8 @@ def manipulate_rank_data(data):
         team["captain_id"] = row[4]
         team["sport"] = row[5].split(" ")[0]
         team["sport_id"] = row[6]
-        team["#_matches"] = row[7]
-        team["total_score"] = row[8]
+        team["total_score"] = row[7]
+        team["#_matches"] = row[8]
         team["avrg_score"] = round(row[9], 1)
         team["foundation_date"] = row[10]
 
@@ -159,9 +159,11 @@ def manipulate_reservation_data(data):
         line = dict()
 
         line['campus'] = row[0]
-        line['saloon'] = row[1]
-        line['sport'] = row[2]
-        line['mail'] = row[3]
+        line['campus_id'] = row[1]
+        line['facility'] = row[2]
+        line['sport'] = row[3]
+        line['sport_id'] = row[4]
+        line['mail'] = row[5]
 
         rows.append(line)
     

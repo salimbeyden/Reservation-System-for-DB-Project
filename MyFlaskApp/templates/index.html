@@ -72,7 +72,11 @@
         </div>
         <div id="slideshow-buttons">
             <button id="prev" class="fill"><i class="fa-solid fa-caret-left"></i></button>
-            <button id="reservation"><a id="reservation-link" href="{{ url_for('reservation_page') }}">Make Reservation</a></button>
+            {% if current_user.is_authenticated %}
+                <button id="reservation"><a id="reservation-link" href="{{ url_for('reservation_page') }}">Make Reservation</a></button>
+            {% else %}
+                <button id=" reservation"><a id="reservation-link" href="{{ url_for('login_page') }}">Make Reservation</a></button>
+            {% endif %}
             <button id="next" class="fill"><i class="fa-solid fa-caret-right"></i></button>
         </div>
     </div>

@@ -74,7 +74,11 @@
         </div>
         {% endfor %}
         <div class="reservation-link">
-            <button class="fill"><a href="{{ url_for('reservation_page') }}">Make Reservaiton</a></button>
+            {% if current_user.is_authenticated %}
+                <button class="fill"><a href="{{ url_for('reservation_page' ) }}">Make Reservation</a></button>
+                {% else %}
+                <button class="fill"><a href="{{ url_for('login_page' ) }}">Make Reservation</a></button>
+            {% endif %}
         </div>
     </div>
 

@@ -37,11 +37,6 @@ function updateSlideshow() {
     if (!slideContent || slideContent.length === 0) return;
     var item = slideContent[currentIndex];
 
-    // Find the reservation link
-    var reservationLink = document.getElementById('reservation-link');
-
-    // Set the href attribute with the current item's details
-    reservationLink.href = "reservation/" + item.id;
     // Assuming you have a route or a URL pattern to follow, for example:
     var campusInfoUrl = "/campus/" + item.id; 
     

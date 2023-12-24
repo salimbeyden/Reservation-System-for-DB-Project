@@ -80,13 +80,13 @@
             <tbody>
                 {% for row in data %}
                 <tr>
-                    <td>{{ row["u1_name"] }}</td>
-                    <td>{{ row["score"] }}</td>
-                    <td>{{ row["u2_name"] }}</td>
-                    <td>{{ row["campus_name"] }}</td>
-                    <td>{{ row["facility_name"] }}</td>
-                    <td>{{ row["sport_type"] }}</td>
-                    <td>{{ row["date"] }}</td>
+                    <td> <a href="{{ url_for('profile_page', selected_user = row['u1_id']) }}"> {{ row["u1_name"] }} </a> </td>
+                    <td> {{ row["score"] }} </td>
+                    <td> <a href="{{ url_for('profile_page', selected_user = row['u2_id']) }}"> {{ row["u2_name"] }} </a> </td>
+                    <td> <a href="{{ url_for('campus_page', selected_campus = row['campus_id']) }}"> {{ row["campus_name"] }} </a> </td>
+                    <td> {{ row["facility_name"] }} </td>
+                    <td> <a href="{{ url_for('sports_page', selected_sport = row['sport_id']) }}"> {{ row["sport_type"] }} </a> </td>
+                    <td> {{ row["date"] }} </td>
                 </tr>
                     {% endfor %}
                 </tbody>

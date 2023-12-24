@@ -88,7 +88,7 @@ def register_page():
 
 @app.route('/matchhist/', methods = ["GET","POST"])
 @app.route('/matchhist/<selected_user>', methods = ["GET","POST"])
-def match_hist(selected_user, selected_sport = "*", selected_team_sport = "*"):
+def match_hist(selected_user, selected_sport = "*"):
     cursor = mysql.connection.cursor()
 
     if request.method == 'POST':
@@ -208,7 +208,7 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
         cursor.execute(query)
         area = cursor.fetchall()
 
-    base_query = """SELECT DISTINCT c.name, f.name, s.sport_type, f.email, fps.current, fps.capacity FROM facility as f
+    base_query = """SELECT DISTINCT c.name, c.campus_id, f.name, s.sport_type, s.sport_id, f.email, fps.current, fps.capacity FROM facility as f
                 JOIN facility_for_sport as fps on f.facility_id = fps.facility_id
                 JOIN campus as c on c.campus_id = f.campus_id
                 JOIN sport as s on s.sport_id = fps.sport_id
@@ -374,14 +374,14 @@ def team_profile(selected_team):
 
     players = [{"name": f"{row[0]} {row[1]}".title(), "school_id": row[2]} for row in cursor.fetchall()]
     
-    query = """select team1.name, score_1, score_2, team2.name, hist.date from team_match_history as hist
+    query = """select team1.name, team1.team_id, score_1, score_2, team2.name, team2.team_id, hist.date from team_match_history as hist
                join team as team1 on team1.team_id = hist.team_1
                join team as team2 on team2.team_id = hist.team_2
                where team_1 = {team} or team_2 = {team};
             """.format(team = selected_team)
 
     cursor.execute(query)
-    match_hist = [[row[0], f"{row[1]} - {row[2]}", row[3], row[4]] for row in cursor.fetchall()]
+    match_hist = [{"team1": row[0], "team1_id": row[1], "score": f"{row[2]} - {row[3]}", "team2": row[4], "team2_id": row[5], "date": row[6]} for row in cursor.fetchall()]
 
     
     no_teams = False
@@ -393,7 +393,6 @@ def team_profile(selected_team):
                        where team.team_id = {};""".format(team_info["team_id"])
             
     cursor.execute(query)
-    max_player = cursor.fetchone()[0]
     
     if request.method == 'POST':
         print("Takimdan cikma-girme fonkisyonu calistirildi")

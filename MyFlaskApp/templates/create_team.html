@@ -60,6 +60,7 @@
     <div class="container">
         <form action="{{ url_for('create_team') }}" method="POST" class="create-form">
             {{ form.hidden_tag() }}
+            <h2>NEW TEAM</h2>
             <br>
             <div class="select-sport">
                 {{ form.sport(class="form-control", placeholder="Sport")}}

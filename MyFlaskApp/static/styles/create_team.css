@@ -11,6 +11,17 @@ body {
     padding: 0 20px;
 }
 
+h2 {
+
+    text-align: center;
+    color: #173046;
+    font-size: 2em; 
+    margin-top: 10px; 
+    text-transform: uppercase; 
+    font-weight: bold;
+
+}
+
 .create-form {
     background-color: #fff;
     padding: 20px;

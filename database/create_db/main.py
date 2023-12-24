@@ -42,6 +42,6 @@ generate_ind_reservation(cursor, c.RESERVATION_COUNT)
 
 generate_ind_match_reservation(cursor, c.RESERVATION_COUNT)
 
-generate_team_reservation(cursor, c.RESERVATION_COUNT)
+generate_team_reservation(cursor, c.RESERVATION_COUNT) 
 
 mydb.commit()

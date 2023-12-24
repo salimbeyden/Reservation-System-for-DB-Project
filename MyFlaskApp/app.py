@@ -169,7 +169,7 @@ def rank_page(selected_sport = "*", order_by = "score"):
 #RESERVATION PAGE(processing...)
 @app.route('/reservation/', methods = ["GET","POST"])
 @app.route('/reservation/<selected_sport><selected_campus><selected_area><order_by>', methods = ["GET","POST"])
-def reservation_page(selected_sport="*", selected_campus="*", selected_area="*", order_by="campus"):
+def reservation_page(selected_sport="*", selected_campus="*", selected_area="*"):
 
     if request.method == 'POST':
         selected_sport = request.form['sports']
@@ -228,7 +228,7 @@ def reservation_page(selected_sport="*", selected_campus="*", selected_area="*",
     reservation_form = ReservationForm(sports, campuses, area, selected_sport, selected_campus, selected_area)
 
     cursor.close()
-    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, order_by=order_by, reservation_form=reservation_form,
+    return render_template("reservation.html", selected_sport=selected_sport, selected_campus=selected_campus, selected_area=selected_area, reservation_form=reservation_form,
                            data=data, title=title)
 
 
@@ -251,11 +251,11 @@ def reservation_result():
     query = """SELECT is_competitive,is_ind FROM sport WHERE sport_type = '{}'""".format(sport)
     cursor.execute(query)
     res_table = cursor.fetchall()
-    print(res_table)
 
     #get sport id
     query = """SELECT sport_id FROM sport WHERE sport_type = '{}'""".format(sport)
     cursor.execute(query)
+    print(sport)
     sport_id = cursor.fetchall()[0][0]
     print(sport_id)
 
@@ -306,8 +306,6 @@ def reservation_result():
             team_1 = current_user.t_team_id
         elif(sport_id == 9):
             team_1 = current_user.p_team_id
-
-        print(team_1)
 
         query = """SELECT team_id FROM team"""
         cursor.execute(query)

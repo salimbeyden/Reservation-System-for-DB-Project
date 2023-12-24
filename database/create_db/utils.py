@@ -197,7 +197,7 @@ def generate_ind_match_reservation(cursor, reservation_count):
     query = "select date, user_1, user_2, sport_id, campus_id, facility_id from individuals_match_history"
     cursor.execute(query)
     results = cursor.fetchall()
-
+    
     reservation_id = 0
     for result in results:
         reservation_id += 1

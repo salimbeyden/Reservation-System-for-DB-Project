@@ -102,6 +102,11 @@
                         <td>
                             <form method="post" action="{{ url_for('reservation_result')}}">
                                 {{ reservation_form.hidden_tag() }}
+                                <!-- Gizli alanlar ekleniyor -->
+                                <input type="hidden" name="campus" value="{{ row['campus'] }}">
+                                <input type="hidden" name="saloon" value="{{ row['facility'] }}">
+                                <input type="hidden" name="sport" value="{{ row['sport'] }}">
+                                <input type="hidden" name="mail" value="{{ row['mail'] }}">
                                 <button type="submit">MAKE RESERVATION</button>
                             </form>
                         </td>
